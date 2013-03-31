@@ -11,6 +11,7 @@ namespace BBTA
 {
     public class Carte
     {
+        //Je provoque un conflit de merge.
         private Texture2D arrierePlan;
         private Texture2D texturesBlocs;
 
