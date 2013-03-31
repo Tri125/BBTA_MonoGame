@@ -18,6 +18,7 @@ namespace BBTA
         private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
 
+        //Un autre conflit de merging provoqué
         private Body[] blocs;
         private const float TAILLE_BLOC = 1f;
         private const float DENSITE = 1f;
