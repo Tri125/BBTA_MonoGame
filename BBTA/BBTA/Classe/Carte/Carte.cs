@@ -6,6 +6,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using BBTA.Elements
 
 namespace BBTA
 {
@@ -17,21 +18,16 @@ namespace BBTA
         private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
 
-        private Body[] blocs;
-        private const float TAILLE_BLOC = 1f;
-        private const float DENSITE = 1f;
+        private Bloc[] blocs;
         public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique)
         {
             this.textureArrierePlan = arrierePlan;
             this.texturesBlocs = texturesBlocs;
 
-            blocs = new Body[donneesBlocs.Length];
+            blocs = new Bloc[donneesBlocs.Length];
             for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
             {
-                blocs[compteurBlocs] = BodyFactory.CreateRectangle(mondePhysique, TAILLE_BLOC, TAILLE_BLOC, DENSITE,
-                                                   new Vector2(compteurBlocs * TAILLE_BLOC, compteurBlocs / largeurCarte * TAILLE_BLOC));
-                blocs[compteurBlocs].IsStatic = true;
-                blocs[compteurBlocs].Friction = 0.5f;
+                blocs[compteurBlocs] = new Bloc(mondePhysique, new Vector2(compteurBlocs * TAILLE_BLOC, compteurBlocs / largeurCarte * TAILLE_BLOC)
             }
         }
 
