@@ -8,7 +8,9 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using FarseerPhysics.Dynamics;
 using XNATileMapEditor;
+using BBTA.Elements;
 
 namespace BBTA
 {
@@ -23,7 +25,10 @@ namespace BBTA
         private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        Carte carte;
+        int[] blocs = new int[49] { 0, 1, 1, 1, 0, 1, 0, 1, 1, 0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,1,1,1,1,0,0};
+        World monde = new World(new Vector2(0, 9.81f));
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -70,7 +75,7 @@ namespace BBTA
             }
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            carte = new Carte(blocs, 20, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
 
@@ -95,7 +100,7 @@ namespace BBTA
                 this.Exit();
 
             // TODO: Add your update logic here
-
+            monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             base.Update(gameTime);
         }
 
@@ -108,7 +113,9 @@ namespace BBTA
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            carte.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
