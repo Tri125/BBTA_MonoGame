@@ -29,17 +29,33 @@ namespace XNATileMapEditor
 
         public void EcritureCarte(string FichierSortie, BBTA_Map carte)
         {
+            try
+            {
+                ecriveur = new XmlTextWriter(FichierSortie, null);
+                //ecriveur.Formatting = Formatting.Indented;
+                //ecriveur.Indentation = 4;
+                ecriveur.WriteStartDocument();
 
-            ecriveur = new XmlTextWriter(FichierSortie, null);
-            //ecriveur.Formatting = Formatting.Indented;
-            //ecriveur.Indentation = 4;
-            ecriveur.WriteStartDocument();
-
-            serializer.Serialize(ecriveur, carte);
+                serializer.Serialize(ecriveur, carte);
 
 
-            ecriveur.WriteEndDocument();
-            ecriveur.Close();
+                ecriveur.WriteEndDocument();
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            finally
+            {
+                if (ecriveur != null)
+                {
+                    ecriveur.Close();
+                }
+            }
+            
         }
 
         public void LectureCarte(string FichierEntre)
