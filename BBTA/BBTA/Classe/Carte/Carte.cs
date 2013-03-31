@@ -6,6 +6,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using BBTA.Elements
 
 namespace BBTA
 {
@@ -14,33 +15,43 @@ namespace BBTA
     /// </summary>
     public class Carte
     {
-        //Je provoque un conflit de merge.
         private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
-
         //Un autre conflit de merging provoqué
-        private Body[] blocs;
         private const float TAILLE_BLOC = 1f;
-        private const float DENSITE = 1f;
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique)
+        private Bloc[] blocs;
+        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique, float MetrePixel)
         {
             this.textureArrierePlan = arrierePlan;
             this.texturesBlocs = texturesBlocs;
 
-            blocs = new Body[donneesBlocs.Length];
+            blocs = new Bloc[donneesBlocs.Length];
             for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
             {
-                blocs[compteurBlocs] = BodyFactory.CreateRectangle(mondePhysique, TAILLE_BLOC, TAILLE_BLOC, DENSITE,
-                                                   new Vector2(compteurBlocs * TAILLE_BLOC, compteurBlocs / largeurCarte * TAILLE_BLOC));
-                blocs[compteurBlocs].IsStatic = true;
-                blocs[compteurBlocs].Friction = 0.5f;
+                if(donneesBlocs[compteurBlocs] != 0)
+                {
+                    Vector2 positionBloc = new Vector2(compteurBlocs%largeurCarte*MetrePixel, compteurBlocs/largeurCarte*MetrePixel);
+                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, texturesBlocs, TAILLE_BLOC);
+                }                
             }
+        }
+
+        public void Explosion(Vector2 lieu, float rayon, float puissance)
+        {
+            float pente = -puissance/rayon;
+            for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
+	        {
+                if(blocs[compteurBloc].Explosetil(puissance, rayon, lieu))
+                {
+                    blocs[compteurBloc] = null;
+                }
+	        }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(textureArrierePlan, Vector2.Zero, Color.White);
-            foreach (Body item in blocs)
+            foreach (Bloc item in blocs)
             {
                 spriteBatch.Draw(texturesBlocs, item.Position, Color.White);
             }
