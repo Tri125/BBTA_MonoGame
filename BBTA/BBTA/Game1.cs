@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using XNATileMapEditor;
 
 namespace BBTA
 {
@@ -16,9 +17,13 @@ namespace BBTA
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        private BBTA_MapFileBuilder chargeurCarte;
+        private int[] carte1;
+        private int[] carte2;
+        private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,6 +49,25 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
+            //Instantiation du chargeur de carte
+            chargeurCarte = new BBTA_MapFileBuilder();
+            chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                carte1 = chargeurCarte.InfoTuileTab();
+            }
+
+            chargeurCarte.LectureCarte(@"Carte Jeu\escalator.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                carte2 = chargeurCarte.InfoTuileTab();
+            }
+
+            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                carte3 = chargeurCarte.InfoTuileTab();
+            }
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 

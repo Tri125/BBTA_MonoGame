@@ -17,7 +17,6 @@ namespace BBTA
     {
         private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
-        //Un autre conflit de merging provoqué
         private const float TAILLE_BLOC = 1f;
         private Bloc[] blocs;
         public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique, float MetrePixel)
