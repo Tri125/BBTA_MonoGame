@@ -8,18 +8,32 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 namespace BBTA.Elements
 {
-    public class Bloc: SpriteAnimer
+    public class Bloc: Sprite
     {
         private Body corpsPhysique;
-        private const float DENSITE = 1f;
+        private const float DENSITE = 0;
+        private const float seuilResistance = 45;
 
-        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            :base(texture, nbColonnes, nbRangees, milliSecParImage) 
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote)
+            :base(texture, position)
         {
-            this.Position = position;
             corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE);
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
+        }
+
+        public bool Explosetil(float puissance, float rayon, Vector2 lieu)
+        {
+            float pente = -puissance/rayon;            
+            float distance = Vector2.Distance(lieu, Position);
+            if (pente * distance + puissance > seuilResistance)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }	        
         }
     }
 }

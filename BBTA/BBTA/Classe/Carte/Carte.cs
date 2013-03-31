@@ -15,12 +15,11 @@ namespace BBTA
     /// </summary>
     public class Carte
     {
-        //Je provoque un conflit de merge.
         private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
-
+        private const float TAILLE_BLOC = 1f;
         private Bloc[] blocs;
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique)
+        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique, float MetrePixel)
         {
             this.textureArrierePlan = arrierePlan;
             this.texturesBlocs = texturesBlocs;
@@ -28,14 +27,30 @@ namespace BBTA
             blocs = new Bloc[donneesBlocs.Length];
             for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
             {
-                blocs[compteurBlocs] = new Bloc(mondePhysique, new Vector2(compteurBlocs * TAILLE_BLOC, compteurBlocs / largeurCarte * TAILLE_BLOC)
+                if(donneesBlocs[compteurBlocs] != 0)
+                {
+                    Vector2 positionBloc = new Vector2(compteurBlocs%largeurCarte*MetrePixel, compteurBlocs/largeurCarte*MetrePixel);
+                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, texturesBlocs, TAILLE_BLOC);
+                }                
             }
+        }
+
+        public void Explosion(Vector2 lieu, float rayon, float puissance)
+        {
+            float pente = -puissance/rayon;
+            for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
+	        {
+                if(blocs[compteurBloc].Explosetil(puissance, rayon, lieu))
+                {
+                    blocs[compteurBloc] = null;
+                }
+	        }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(textureArrierePlan, Vector2.Zero, Color.White);
-            foreach (Body item in blocs)
+            foreach (Bloc item in blocs)
             {
                 spriteBatch.Draw(texturesBlocs, item.Position, Color.White);
             }
