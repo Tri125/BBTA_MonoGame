@@ -6,7 +6,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Elements
+using BBTA.Elements;
 
 namespace BBTA
 {
@@ -52,7 +52,10 @@ namespace BBTA
             spriteBatch.Draw(textureArrierePlan, Vector2.Zero, Color.White);
             foreach (Bloc item in blocs)
             {
-                spriteBatch.Draw(texturesBlocs, item.Position, Color.White);
+                if (item != null)
+                {
+                    spriteBatch.Draw(texturesBlocs, item.Position, Color.White);
+                }
             }
         }
     }
