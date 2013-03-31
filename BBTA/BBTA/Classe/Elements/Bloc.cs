@@ -19,7 +19,6 @@ namespace BBTA.Elements
     {
         //Variables-----------------------------------------------------------------------------------------------
         private Body corpsPhysique;
-
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
         private const float seuilResistance = 45;
