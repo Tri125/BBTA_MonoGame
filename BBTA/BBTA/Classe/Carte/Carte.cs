@@ -9,10 +9,13 @@ using Microsoft.Xna.Framework;
 
 namespace BBTA
 {
+    /// <summary>
+    /// La classe contient
+    /// </summary>
     public class Carte
     {
         //Je provoque un conflit de merge.
-        private Texture2D arrierePlan;
+        private Texture2D textureArrierePlan;
         private Texture2D texturesBlocs;
 
         private Body[] blocs;
@@ -20,7 +23,7 @@ namespace BBTA
         private const float DENSITE = 1f;
         public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D texturesBlocs, World mondePhysique)
         {
-            this.arrierePlan = arrierePlan;
+            this.textureArrierePlan = arrierePlan;
             this.texturesBlocs = texturesBlocs;
 
             blocs = new Body[donneesBlocs.Length];
@@ -35,6 +38,7 @@ namespace BBTA
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(textureArrierePlan, Vector2.Zero, Color.White);
             foreach (Body item in blocs)
             {
                 spriteBatch.Draw(texturesBlocs, item.Position, Color.White);
