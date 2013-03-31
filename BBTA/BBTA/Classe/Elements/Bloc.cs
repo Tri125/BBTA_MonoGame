@@ -12,7 +12,7 @@ namespace BBTA.Elements
     /// Les objets issus de la classe Bloc agissent comme blocs au sein de la carte.
     /// -----------------------------------------------------------------------------------------------
     /// Instancie ledit bloc au sein de l'environnement physique Farseer.
-    /// Détermine, en vertu des informations provement d'une explosion, si le bloc existe toujours
+    /// Détermine, en vertu des informations provenent d'une explosion, si le bloc existe toujours
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
     public class Bloc: Sprite
