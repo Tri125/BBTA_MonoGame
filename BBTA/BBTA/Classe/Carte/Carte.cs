@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework;
 
 namespace BBTA
 {
+    /// <summary>
+    /// La classe contient
+    /// </summary>
     public class Carte
     {
         private Texture2D textureArrierePlan;
