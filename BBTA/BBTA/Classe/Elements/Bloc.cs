@@ -34,7 +34,7 @@ namespace BBTA.Elements
         public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote)
             :base(texture, position)
         {
-            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE);
+            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, Position);
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
         }
@@ -51,7 +51,7 @@ namespace BBTA.Elements
             /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
              * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
-            float pente = -puissance/rayon;            
+            float pente = -puissance / rayon;
             float distance = Vector2.Distance(lieu, Position);
             if (pente * distance + puissance > seuilResistance)
             {
@@ -60,7 +60,7 @@ namespace BBTA.Elements
             else
             {
                 return false;
-            }	        
+            }
         }
     }
 }
