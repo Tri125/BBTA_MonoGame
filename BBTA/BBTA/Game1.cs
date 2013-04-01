@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
 using XNATileMapEditor;
 using BBTA.Elements;
+using FarseerPhysics.Factories;
 
 namespace BBTA
 {
@@ -22,11 +23,12 @@ namespace BBTA
         private BBTA_MapFileBuilder chargeurCarte;
         private int[] carte1;
         private int[] carte2;
-        private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Carte carte;        
-        World monde = new World(new Vector2(0, 9.81f));
+        World monde = new World(new Vector2(0, 20));
+        private Texture2D _circleSprite;
+        private Body _circleBody;
 
         public Game1()
         {
@@ -56,6 +58,19 @@ namespace BBTA
         protected override void LoadContent()
         {
             //Instantiation du chargeur de carte
+            _circleSprite = Content.Load<Texture2D>(@"Ressources\circleSprite"); //  96px x 96px => 1.5m x 1.5m
+            /* Circle */
+            // Convert screen center from pixels to meters
+            Vector2 circlePosition = new Vector2(17, 0);
+
+            // Create the circle fixture
+            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f, circlePosition);
+            _circleBody.BodyType = BodyType.Dynamic;
+
+            // Give it some bounce and friction
+            _circleBody.Restitution = 0.3f;
+            _circleBody.Friction = 0.5f;
+
             chargeurCarte = new BBTA_MapFileBuilder();
             chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
             if (chargeurCarte.ChargementReussis)
@@ -69,14 +84,10 @@ namespace BBTA
                 carte2 = chargeurCarte.InfoTuileTab();
             }
 
-            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte3 = chargeurCarte.InfoTuileTab();
-            }
+           
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
 
@@ -112,10 +123,15 @@ namespace BBTA
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            /* Circle position and rotation */
+            // Convert physics position (meters) to screen coordinates (pixels)
+            Vector2 circlePos = _circleBody.Position * 40;
+            Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
+            float circleRotation = _circleBody.Rotation;
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             carte.Draw(spriteBatch);
+            spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
             spriteBatch.End();
             base.Draw(gameTime);
         }

@@ -19,6 +19,7 @@ namespace BBTA.Elements
     {
         //Variables-----------------------------------------------------------------------------------------------
         private Body corpsPhysique;
+        private float metrePixel;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
         private const float seuilResistance = 45;
@@ -30,10 +31,11 @@ namespace BBTA.Elements
         /// <param name="position">Position du bloc à l'écran (Coordonnées)</param>
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
-        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote)
-            :base(texture, position)
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel)
+            :base(texture, position*metrePixel)
         {
-            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, Position);
+            this.metrePixel = metrePixel;
+            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
         }
@@ -60,6 +62,14 @@ namespace BBTA.Elements
             {
                 return false;
             }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Vector2 pointCentral = new Vector2(largeur / 2f, hauteur / 2f);
+            spriteBatch.Draw(texture, corpsPhysique.Position*metrePixel, null,
+                             Color.White, angleRotation, pointCentral, echelle, 
+                             SpriteEffects.None, 0);
         }
     }
 }

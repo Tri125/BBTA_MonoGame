@@ -36,7 +36,7 @@ namespace BBTA
         /// <param name="textureBlocs">Texture des blocs</param>
         /// <param name="mondePhysique">World Farseer</param>
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float MetrePixel)
+        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
             this.textureArrierePlan = arrierePlan;
             blocs = new Bloc[donneesBlocs.Length];
@@ -45,8 +45,9 @@ namespace BBTA
                 //Par convention, une case avec comme donnée "0" signifie une case vide.  En somme, il n'y a aucun bloc.
                 if(donneesBlocs[compteurBlocs] != 0)
                 {
-                    Vector2 positionBloc = new Vector2(compteurBlocs%largeurCarte*MetrePixel, compteurBlocs/largeurCarte*MetrePixel);
-                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC);
+                    //Position en mètres
+                    Vector2 positionBloc = new Vector2(compteurBlocs%largeurCarte*TAILLE_BLOC+TAILLE_BLOC*0.5f, compteurBlocs/largeurCarte*TAILLE_BLOC+TAILLE_BLOC*0.5f);
+                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel);
                 }                
             }
         }
