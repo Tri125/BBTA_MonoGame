@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Classe\Carte\BBTA_Map.cs" />
     <Compile Include="Classe\Carte\BBTA_MapFileBuilder.cs" />
+    <Compile Include="Classe\Elements\Acteur.cs" />
     <Compile Include="Classe\Elements\Bloc.cs" />
     <Compile Include="Classe\Carte\Carte.cs" />
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
