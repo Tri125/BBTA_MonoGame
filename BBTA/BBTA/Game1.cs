@@ -25,13 +25,14 @@ namespace BBTA
         private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Carte carte;
-        int[] blocs = new int[49] { 0, 1, 1, 1, 0, 1, 0, 1, 1, 0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,1,1,1,1,0,0};
+        Carte carte;        
         World monde = new World(new Vector2(0, 9.81f));
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = 1000;
             Content.RootDirectory = "Content";
         }
 
@@ -75,7 +76,7 @@ namespace BBTA
             }
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            carte = new Carte(blocs, 20, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+            carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
 
