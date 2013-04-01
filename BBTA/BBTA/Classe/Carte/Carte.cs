@@ -60,7 +60,7 @@ namespace BBTA
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
 	        {
-                if(blocs[compteurBloc].Explosetil(puissance, rayon, lieu))
+                if(blocs[compteurBloc].ExplosetIl(puissance, rayon, lieu))
                 {
                     //Destruction du bloc
                     blocs[compteurBloc] = null;
