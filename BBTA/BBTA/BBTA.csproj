@@ -118,6 +118,7 @@
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\Elements\SpriteAnimer.cs" />
+    <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

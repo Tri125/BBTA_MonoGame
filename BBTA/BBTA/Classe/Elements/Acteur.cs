@@ -11,14 +11,11 @@ using FarseerPhysics.Factories;
 
 namespace BBTA.Classe.Elements
 {
-    public class Acteur:SpriteAnimer
+    public abstract class Acteur:SpriteAnimer
     {
         //Variables-----------------------------------------------------------------------------------------------
-        private Body corpsPhysique;        
+        private Body corpsPhysique;
         private float pointDeVie = 100;
-
-        private KeyboardState previousKeyboardState;
-        private KeyboardState currentKeyboardState;
 
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
