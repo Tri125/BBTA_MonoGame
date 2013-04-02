@@ -95,8 +95,9 @@ namespace BBTA
                 carte2 = chargeurCarte.InfoTuileTab();
             }
 
-                // Create a new SpriteBatch, which can be used to draw textures.
-                spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
