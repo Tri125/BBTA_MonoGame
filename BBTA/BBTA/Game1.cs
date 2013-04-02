@@ -14,6 +14,8 @@ using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
+using BBTA.Classe.Partie_de_Jeu;
+using IndependentResolutionRendering;
 
 namespace BBTA
 {
@@ -22,29 +24,27 @@ namespace BBTA
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        private BBTA_MapFileBuilder chargeurCarte;
-        private int[] carte1;
-        private int[] carte2;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Carte carte;        
-        World monde = new World(new Vector2(0, 20));
-        private Texture2D _circleSprite;
-        private Body _circleBody;
+        
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
 
+        private PartieJeu partie;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 900;
-            graphics.PreferredBackBufferWidth = 1440;
+            Resolution.Init(ref graphics);
+            Resolution.SetVirtualResolution(1280, 720);
+            Resolution.SetResolution(800, 600, false);
+            //graphics.PreferredBackBufferHeight = 720;
+            //graphics.PreferredBackBufferWidth = 1280;
             this.IsMouseVisible = true;
-            graphics.IsFullScreen = true;
-            //acc = new Accueil(this);
+            graphics.IsFullScreen = false;
+            acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
@@ -59,6 +59,10 @@ namespace BBTA
         {
             // TODO: Add your initialization logic here
             cam.Pos = new Vector2(500.0f, 200.0f);
+            partie = new PartieJeu(this);
+            this.Components.Add(partie);
+            partie.Visible = false;
+            Window.AllowUserResizing = true;
             base.Initialize();
         }
 
@@ -68,37 +72,9 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
-            //Instantiation du chargeur de carte
-            _circleSprite = Content.Load<Texture2D>(@"Ressources\circleSprite"); //  96px x 96px => 1.5m x 1.5m
-            /* Circle */
-            // Convert screen center from pixels to meters
-            Vector2 circlePosition = new Vector2(17, 0);
-
-            // Create the circle fixture
-            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f, circlePosition);
-            _circleBody.BodyType = BodyType.Dynamic;
-
-            // Give it some bounce and friction
-            _circleBody.Restitution = 0.3f;
-            _circleBody.Friction = 0.5f;
-
-            chargeurCarte = new BBTA_MapFileBuilder();
-            chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte1 = chargeurCarte.InfoTuileTab();
-            }
-
-            chargeurCarte.LectureCarte(@"Carte Jeu\escalator.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte2 = chargeurCarte.InfoTuileTab();
-            }
-
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
 
@@ -125,7 +101,6 @@ namespace BBTA
                 this.Exit();
 
             // TODO: Add your update logic here
-            monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             if (avant.ScrollWheelValue < now.ScrollWheelValue)
             {
                 cam.Zoom += 0.1f;
@@ -157,21 +132,15 @@ namespace BBTA
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            /* Circle position and rotation */
-            // Convert physics position (meters) to screen coordinates (pixels)
-            Vector2 circlePos = _circleBody.Position * 40;
-            Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
-            float circleRotation = _circleBody.Rotation;
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                        BlendState.AlphaBlend,
-                        null,
-                        null,
-                        null,
-                        null,
-                        cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
-            carte.Draw(spriteBatch);
-            spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
+            //spriteBatch.Begin(SpriteSortMode.BackToFront,
+            //            BlendState.AlphaBlend,
+            //            null,
+            //            null,
+            //            null,
+            //            null,
+            //            cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.End();
             base.Draw(gameTime);
         }
