@@ -48,9 +48,9 @@ namespace BBTA.Interface
             etatAvant = etatMaintenant;
             etatMaintenant = Mouse.GetState();  
             //Si la sourris est dans la zone occupée par le bouton
-            if (Mouse.GetState().X >= position.X && Mouse.GetState().X <= position.X+texture.Width)
+            if (Mouse.GetState().X >= position.X-largeur/2f && Mouse.GetState().X <= position.X+largeur/2f)
             {
-                if (Mouse.GetState().Y >= position.Y && Mouse.GetState().Y <= position.Y + texture.Height)
+                if (Mouse.GetState().Y >= position.Y-hauteur/2f && Mouse.GetState().Y <= position.Y + hauteur/2f)
                 {
                     //Si clic il y a, mais sans relâchement, alors la texture servant à indiquer un clic sera celle affichée
                     if (etatMaintenant.LeftButton == ButtonState.Pressed)
@@ -74,7 +74,7 @@ namespace BBTA.Interface
         public void Draw(SpriteBatch spriteBatch)
         {
             //Si l'état est "Attente", alors la texture du bouton est standart. Autrement, la texture du bouton est celle indiquant le clic.
-            spriteBatch.Draw(texture, position, new Rectangle(largeur*(int)etat, 0, largeur, hauteur), Color.White);
+            spriteBatch.Draw(texture, position, new Rectangle(largeur*(int)etat, 0, largeur, hauteur), Color.White, 0, new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
         }        
     }
 }

@@ -12,6 +12,8 @@ using FarseerPhysics.Dynamics;
 using XNATileMapEditor;
 using BBTA.Elements;
 using FarseerPhysics.Factories;
+using BBTA.Outils;
+using BBTA.Menus;
 
 namespace BBTA
 {
@@ -29,12 +31,21 @@ namespace BBTA
         World monde = new World(new Vector2(0, 20));
         private Texture2D _circleSprite;
         private Body _circleBody;
+        Camera2d cam = new Camera2d();
+        MouseState avant;
+        MouseState now;
+        private Accueil acc;
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 800;
-            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.PreferredBackBufferWidth = 1440;
+            this.IsMouseVisible = true;
+            graphics.IsFullScreen = true;
+            //acc = new Accueil(this);
+            this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
 
@@ -47,7 +58,7 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            cam.Pos = new Vector2(500.0f, 200.0f);
             base.Initialize();
         }
 
@@ -84,9 +95,8 @@ namespace BBTA
                 carte2 = chargeurCarte.InfoTuileTab();
             }
 
-           
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+                // Create a new SpriteBatch, which can be used to draw textures.
+                spriteBatch = new SpriteBatch(GraphicsDevice);
             carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -107,12 +117,35 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            avant = now;
+            now = Mouse.GetState();
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
             // TODO: Add your update logic here
             monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+            if (avant.ScrollWheelValue < now.ScrollWheelValue)
+            {
+                cam.Zoom += 0.1f;
+            }
+            else if (avant.ScrollWheelValue > now.ScrollWheelValue)
+            {
+                cam.Zoom -= 0.1f;
+            }
+            if (now.X > GraphicsDevice.Viewport.Width - 50)
+            {
+                cam.Pos = new Vector2(cam.Pos.X + 2, cam.Pos.Y);
+            }
+            else if (now.X < 50)
+            {
+                cam.Pos = new Vector2(cam.Pos.X - 2, cam.Pos.Y);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
             base.Update(gameTime);
         }
 
@@ -129,7 +162,13 @@ namespace BBTA
             Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
             float circleRotation = _circleBody.Rotation;
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.BackToFront,
+                        BlendState.AlphaBlend,
+                        null,
+                        null,
+                        null,
+                        null,
+                        cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             carte.Draw(spriteBatch);
             spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
             spriteBatch.End();

@@ -49,6 +49,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ressources\circleSprite.png">
+      <Name>circleSprite</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Ressources\HoraireNico.png">
       <Name>HoraireNico</Name>
       <Importer>TextureImporter</Importer>
@@ -56,8 +63,42 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ressources\circleSprite.png">
-      <Name>circleSprite</Name>
+    <Compile Include="Ressources\Menus\Accueil\ArrierePlan.png">
+      <Name>ArrierePlan</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Accueil\btnJouer.png">
+      <Name>btnJouer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Accueil\btnOptions.png">
+      <Name>btnOptions</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Accueil\btnQuitter.png">
+      <Name>btnQuitter</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Accueil\lettrage.png">
+      <Name>lettrage</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\Accueil\Nuage1.png">
+      <Name>Nuage1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\Accueil\Nuage2.png">
+      <Name>Nuage2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

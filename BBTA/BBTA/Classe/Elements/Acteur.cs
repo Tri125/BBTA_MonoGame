@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     public abstract class Acteur:SpriteAnimer
     {
