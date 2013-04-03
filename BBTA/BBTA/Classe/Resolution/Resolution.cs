@@ -29,6 +29,12 @@ namespace IndependentResolutionRendering
         static private Matrix _ScaleMatrix;
         static private bool _FullScreen = false;
         static private bool _dirtyMatrix = true;
+        static private Viewport VirtualViewport;
+
+        static public Viewport getVirtualViewport()
+        {
+            return VirtualViewport;
+        }
 
         static public void Init(ref GraphicsDeviceManager device)
         {
@@ -61,7 +67,7 @@ namespace IndependentResolutionRendering
         {
             _VWidth = Width;
             _VHeight = Height;
-
+            VirtualViewport = new Viewport(0, 0, _VWidth, _VHeight);
             _dirtyMatrix = true;
         }
 
