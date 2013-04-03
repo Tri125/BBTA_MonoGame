@@ -142,7 +142,7 @@ namespace BBTA.Classe.Partie_de_Jeu
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
-            Resolution.BeginDraw();
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             /* Circle position and rotation */
             // Convert physics position (meters) to screen coordinates (pixels)
             Vector2 circlePos = _circleBody.Position * 40;

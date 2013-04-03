@@ -39,7 +39,7 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(800, 480, false);
+            Resolution.SetResolution(1680, 1050, false);
             this.IsMouseVisible = true;
             acc = new Accueil(this);
             //this.Components.Add(acc);
@@ -59,7 +59,7 @@ namespace BBTA
             partie = new PartieJeu(this);
             this.Components.Add(partie);
             partie.Visible = true;
-            Window.AllowUserResizing = true;
+            //Window.AllowUserResizing = true;
             base.Initialize();
         }
 
