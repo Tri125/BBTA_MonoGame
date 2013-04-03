@@ -140,6 +140,7 @@ namespace BBTA
             //            null,
             //            null,
             //            cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
+            Resolution.BeginDraw();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.End();
             base.Draw(gameTime);

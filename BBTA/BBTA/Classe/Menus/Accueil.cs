@@ -86,7 +86,6 @@ namespace BBTA.Menus
             btnOptions.Draw(spriteBatch);
             btnQuitter.Draw(spriteBatch);
            // spriteBatch.Draw(dummyTexture, btnQuitter.position2, Color.AliceBlue);
-            Console.WriteLine(btnQuitter.position2);
             spriteBatch.End();
             base.Draw(gameTime);
         }
