@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace IndependentResolutionRendering
@@ -30,6 +31,32 @@ namespace IndependentResolutionRendering
         static private bool _FullScreen = false;
         static private bool _dirtyMatrix = true;
         static private Viewport VirtualViewport;
+        static private int virtualViewportX;
+        static private int virtualViewportY;
+
+        public static int VirtualViewportX { get { return virtualViewportX; } }
+        public static int VirtualViewportY { get { return virtualViewportY; } }
+
+
+        public static class MouseHelper
+        {
+            /// <summary>Translates the actual mouse position obtained from Mouse.GetState() into the virtual mouse position after a scaling matrix is applied to the viewport
+            /// </summary>
+            public static Point CurrentMousePosition
+            {
+                get
+                {
+                    MouseState mouse = Mouse.GetState();
+
+                    Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
+                    Vector2 virtualViewport = new Vector2(Resolution.VirtualViewportX, Resolution.VirtualViewportY);
+                    mousePosition = Vector2.Transform(mousePosition - virtualViewport, Matrix.Invert(Resolution.getTransformationMatrix()));
+
+                    Point virtualMousePosition = new Point((int)mousePosition.X, (int)mousePosition.Y);
+                    return virtualMousePosition;
+                }
+            }
+        }
 
         static public Viewport getVirtualViewport()
         {
@@ -184,6 +211,8 @@ namespace IndependentResolutionRendering
 
             viewport.X = (_Device.PreferredBackBufferWidth / 2) - (width / 2);
             viewport.Y = (_Device.PreferredBackBufferHeight / 2) - (height / 2);
+            virtualViewportX = viewport.X;
+            virtualViewportY = viewport.Y;
             viewport.Width = width;
             viewport.Height = height;
             viewport.MinDepth = 0;

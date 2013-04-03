@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using IndependentResolutionRendering;
 
 namespace BBTA.Interface
 {
@@ -50,9 +51,9 @@ namespace BBTA.Interface
             etatMaintenant = Mouse.GetState();  
             //Si la sourris est dans la zone occupée par le bouton
          
-            if (Mouse.GetState().X >= position.X-largeur/2f && Mouse.GetState().X <= position.X+largeur/2f)
+            if (Resolution.MouseHelper.CurrentMousePosition.X>= position.X-largeur/2f && Resolution.MouseHelper.CurrentMousePosition.X <= position.X+largeur/2f)
             {
-                if (Mouse.GetState().Y >= position.Y-hauteur/2f && Mouse.GetState().Y <= position.Y + hauteur/2f)
+                if (Resolution.MouseHelper.CurrentMousePosition.Y >= position.Y - hauteur / 2f && Resolution.MouseHelper.CurrentMousePosition.Y <= position.Y + hauteur / 2f)
                 {
                     //Si clic il y a, mais sans relâchement, alors la texture servant à indiquer un clic sera celle affichée
                     if (etatMaintenant.LeftButton == ButtonState.Pressed)
