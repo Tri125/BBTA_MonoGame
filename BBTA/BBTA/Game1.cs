@@ -39,13 +39,10 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(800, 800, false);
-            //graphics.PreferredBackBufferHeight = 720;
-            //graphics.PreferredBackBufferWidth = 1280;
+            Resolution.SetResolution(800, 480, false);
             this.IsMouseVisible = true;
-            graphics.IsFullScreen = false;
             acc = new Accueil(this);
-            this.Components.Add(acc);
+            //this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
 
@@ -61,7 +58,7 @@ namespace BBTA
             cam.Pos = new Vector2(500.0f, 200.0f);
             partie = new PartieJeu(this);
             this.Components.Add(partie);
-            partie.Visible = false;
+            partie.Visible = true;
             Window.AllowUserResizing = true;
             base.Initialize();
         }
@@ -131,7 +128,6 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
             //spriteBatch.Begin(SpriteSortMode.BackToFront,
             //            BlendState.AlphaBlend,
