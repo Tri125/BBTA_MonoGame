@@ -39,10 +39,10 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(1680, 1050, false);
+            Resolution.SetResolution(720, 480, false);
             this.IsMouseVisible = true;
             acc = new Accueil(this);
-            //this.Components.Add(acc);
+            this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
 

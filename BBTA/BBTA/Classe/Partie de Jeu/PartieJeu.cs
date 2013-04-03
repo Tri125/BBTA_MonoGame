@@ -55,10 +55,9 @@ namespace BBTA.Classe.Partie_de_Jeu
             
             // TODO: Add your initialization logic here
             camPartie = new Camera2d();
-            camPartie.Pos = new Vector2(500.0f, 200.0f);
+            camPartie.Pos = new Vector2(500.0f,200.0f);
             monde = new World(new Vector2(0, 20));
             base.Initialize();
-            
         }
 
 
@@ -73,10 +72,10 @@ namespace BBTA.Classe.Partie_de_Jeu
             _circleSprite = Game.Content.Load<Texture2D>(@"Ressources\circleSprite"); //  96px x 96px => 1.5m x 1.5m
             /* Circle */
             // Convert screen center from pixels to meters
-            Vector2 circlePosition = new Vector2(17, 0);
+            Vector2 circlePosition = new Vector2(17,0);
 
             // Create the circle fixture
-            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f, circlePosition);
+            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f,circlePosition);
             _circleBody.BodyType = BodyType.Dynamic;
 
             // Give it some bounce and friction
@@ -149,14 +148,14 @@ namespace BBTA.Classe.Partie_de_Jeu
             Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
             float circleRotation = _circleBody.Rotation;
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                        BlendState.AlphaBlend,
-                        null,
-                        null,
-                        null,
-                        null,
-                        camPartie.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            //spriteBatch.Begin(SpriteSortMode.BackToFront,
+            //            BlendState.AlphaBlend,
+            //            null,
+            //            null,
+            //            null,
+            //            null,
+            //            camPartie.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             carte.Draw(spriteBatch);
             spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
             spriteBatch.End();

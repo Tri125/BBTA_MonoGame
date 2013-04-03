@@ -54,8 +54,6 @@ namespace BBTA.Menus
             btnJouer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnJouer"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 500));
             btnOptions = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnOptions"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 625));
             btnQuitter = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnQuitter"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 750));
-            Console.WriteLine(GraphicsDevice.Viewport.Width / 2f + "750");
-            Console.WriteLine(btnQuitter.position);
             base.LoadContent();
         }
 
@@ -63,11 +61,6 @@ namespace BBTA.Menus
         {
             nuage1.Update(gameTime);
             nuage2.Update(gameTime);
-            if (Microsoft.Xna.Framework.Input.Mouse.GetState().LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-            {
-                Console.WriteLine("Souris X" + Microsoft.Xna.Framework.Input.Mouse.GetState().X + "Souris Y" + Microsoft.Xna.Framework.Input.Mouse.GetState().Y);
-                Console.WriteLine(btnQuitter.position);
-            }
             if (btnQuitter.ClicComplet())
             {
                 Game.Exit();
