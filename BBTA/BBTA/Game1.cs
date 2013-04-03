@@ -38,8 +38,8 @@ namespace BBTA
         {
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
-            Resolution.SetVirtualResolution(1280, 720);
-            Resolution.SetResolution(800, 600, false);
+            Resolution.SetVirtualResolution(1440, 900);
+            Resolution.SetResolution(800, 800, false);
             //graphics.PreferredBackBufferHeight = 720;
             //graphics.PreferredBackBufferWidth = 1280;
             this.IsMouseVisible = true;
