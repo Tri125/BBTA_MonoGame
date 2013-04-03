@@ -7,6 +7,7 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
+using IndependentResolutionRendering;
 
 namespace BBTA
 {
@@ -46,7 +47,7 @@ namespace BBTA
                 if(donneesBlocs[compteurBlocs] != 0)
                 {
                     //Position en mètres
-                    Vector2 positionBloc = new Vector2(compteurBlocs%largeurCarte*TAILLE_BLOC+TAILLE_BLOC*0.5f, compteurBlocs/largeurCarte*TAILLE_BLOC+TAILLE_BLOC*0.5f);
+                    Vector2 positionBloc = new Vector2((Resolution.getVirtualViewport().Width / (2 * 100)) + (compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f), (Resolution.getVirtualViewport().Height / (2 * 100)) + (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
                     blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel);
                 }                
             }
