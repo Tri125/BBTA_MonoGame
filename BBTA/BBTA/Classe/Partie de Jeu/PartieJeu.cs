@@ -124,11 +124,11 @@ namespace BBTA.Classe.Partie_de_Jeu
                 {
                     camPartie.Zoom -= 0.1f;
                 }
-                if (nowPos.X > Resolution.getVirtualViewport().Width - 50)
+                if (nowPos.X > Resolution.getVirtualViewport().Width - 50 && Resolution.getVirtualViewport().TitleSafeArea.Contains(nowPos))
                 {
                     camPartie.Pos = new Vector2(camPartie.Pos.X + 2, camPartie.Pos.Y);
                 }
-                else if (nowPos.X < 50 - Resolution.getVirtualViewport().X)
+                else if (nowPos.X < 50 - Resolution.getVirtualViewport().X && Resolution.getVirtualViewport().TitleSafeArea.Contains(nowPos))
                 {
                     camPartie.Pos = new Vector2(camPartie.Pos.X - 2, camPartie.Pos.Y);
                 }
