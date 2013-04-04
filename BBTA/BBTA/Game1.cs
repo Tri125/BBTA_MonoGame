@@ -35,6 +35,7 @@ namespace BBTA
         MouseState avant;
         MouseState now;
         private Accueil acc;
+        private SpriteJoueur sp;
 
 
         public Game1()
@@ -43,7 +44,6 @@ namespace BBTA
             graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             this.IsMouseVisible = true;
-            graphics.IsFullScreen = true;
             //acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
@@ -97,6 +97,7 @@ namespace BBTA
 
                 // Create a new SpriteBatch, which can be used to draw textures.
                 spriteBatch = new SpriteBatch(GraphicsDevice);
+                sp = new SpriteJoueur(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(7, 0), 100, Vector2.Zero, 1, 1);
             carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -124,7 +125,9 @@ namespace BBTA
                 this.Exit();
 
             // TODO: Add your update logic here
+
             monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+
             if (avant.ScrollWheelValue < now.ScrollWheelValue)
             {
                 cam.Zoom += 0.1f;
@@ -146,6 +149,7 @@ namespace BBTA
             {
                 this.Exit();
             }
+            sp.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -170,6 +174,7 @@ namespace BBTA
                         null,
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             carte.Draw(spriteBatch);
+            sp.Draw(spriteBatch);
             spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
             spriteBatch.End();
             base.Draw(gameTime);
