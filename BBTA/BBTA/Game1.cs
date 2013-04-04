@@ -26,7 +26,9 @@ namespace BBTA
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        //Utilisé pour faire un arrière plan noir si la résolution de l'utilisateur laisse de l'espacement.
+        private Texture2D cadranNoir;
+
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
@@ -39,7 +41,7 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(720, 480, false);
+            Resolution.SetResolution(480, 640, false);
             this.IsMouseVisible = true;
             acc = new Accueil(this);
             this.Components.Add(acc);
@@ -57,7 +59,7 @@ namespace BBTA
             // TODO: Add your initialization logic here
             cam.Pos = new Vector2(500.0f, 200.0f);
             partie = new PartieJeu(this);
-            this.Components.Add(partie);
+            //this.Components.Add(partie);
             partie.Visible = true;
             //Window.AllowUserResizing = true;
             base.Initialize();
@@ -71,7 +73,8 @@ namespace BBTA
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            cadranNoir = new Texture2D(GraphicsDevice, 1, 1);
+            cadranNoir.SetData(new Color[] { Color.White });
             // TODO: use this.Content to load your game content here
         }
 
@@ -137,9 +140,16 @@ namespace BBTA
             //            null,
             //            cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             Resolution.BeginDraw();
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(cadranNoir, new Rectangle(0, 0, Resolution.getVirtualViewport().Width, Resolution.getVirtualViewport().Height), Color.Black);
+            spriteBatch.End();
+
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.End();
+
             base.Draw(gameTime);
+
         }
     }
 }
