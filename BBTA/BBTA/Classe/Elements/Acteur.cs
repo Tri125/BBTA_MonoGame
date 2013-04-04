@@ -38,7 +38,8 @@ namespace BBTA.Elements
             : base(texture, position, vitesse, nbColonnes, nbRangees, milliSecParImage)
         {
             corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, largeur, hauteur, DENSITE, Position);
-            corpsPhysique.IsStatic = true;
+            corpsPhysique.FixedRotation = true;
+            corpsPhysique.Restitution = 0;
             corpsPhysique.Friction = 0.3f;
         }
 
