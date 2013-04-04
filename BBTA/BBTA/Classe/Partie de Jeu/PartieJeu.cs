@@ -115,8 +115,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             // TODO: Add your update logic here
             monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
-            if (Game.IsActive)
-            {
+
                 if (avant.ScrollWheelValue < now.ScrollWheelValue)
                 {
                     camPartie.Zoom += 0.1f;
@@ -133,7 +132,6 @@ namespace BBTA.Classe.Partie_de_Jeu
                 {
                     camPartie.Pos = new Vector2(camPartie.Pos.X - 2, camPartie.Pos.Y);
                 }
-            }
 
             base.Update(gameTime);
         }

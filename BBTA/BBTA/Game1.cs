@@ -92,19 +92,22 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            avant = now;
-            now = Mouse.GetState();
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-            // TODO: Add your update logic here
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (this.IsActive)
             {
-                this.Exit();
+                avant = now;
+                now = Mouse.GetState();
+                // Allows the game to exit
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    this.Exit();
+
+                // TODO: Add your update logic here
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                {
+                    this.Exit();
+                }
+                base.Update(gameTime);
             }
-            base.Update(gameTime);
         }
 
         /// <summary>
