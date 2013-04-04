@@ -29,7 +29,6 @@ namespace BBTA
         //Utilisé pour faire un arrière plan noir si la résolution de l'utilisateur laisse de l'espacement.
         private Texture2D cadranNoir;
 
-        Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
@@ -43,7 +42,7 @@ namespace BBTA
             Resolution.SetVirtualResolution(1440, 900);
             Resolution.SetResolution(860, 680, false);
             this.IsMouseVisible = true;
-            acc = new Accueil(this);
+            //acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
@@ -57,9 +56,8 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            cam.Pos = new Vector2(500.0f, 200.0f);
             partie = new PartieJeu(this);
-            //this.Components.Add(partie);
+            this.Components.Add(partie);
             partie.Visible = true;
             //Window.AllowUserResizing = true;
             base.Initialize();
@@ -101,22 +99,6 @@ namespace BBTA
                 this.Exit();
 
             // TODO: Add your update logic here
-            if (avant.ScrollWheelValue < now.ScrollWheelValue)
-            {
-                cam.Zoom += 0.1f;
-            }
-            else if (avant.ScrollWheelValue > now.ScrollWheelValue)
-            {
-                cam.Zoom -= 0.1f;
-            }
-            if (now.X > GraphicsDevice.Viewport.Width - 50)
-            {
-                cam.Pos = new Vector2(cam.Pos.X + 2, cam.Pos.Y);
-            }
-            else if (now.X < 50)
-            {
-                cam.Pos = new Vector2(cam.Pos.X - 2, cam.Pos.Y);
-            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -131,14 +113,6 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            // TODO: Add your drawing code here
-            //spriteBatch.Begin(SpriteSortMode.BackToFront,
-            //            BlendState.AlphaBlend,
-            //            null,
-            //            null,
-            //            null,
-            //            null,
-            //            cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             Resolution.BeginDraw();
 
             spriteBatch.Begin();
