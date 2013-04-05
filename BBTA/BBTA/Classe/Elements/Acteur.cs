@@ -16,8 +16,10 @@ namespace BBTA.Elements
     {
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
-        protected const float forceMouvementLateral = 2f;
-        protected const float forceMouvementVertical = 8f;
+        protected const float VITESSE_LATERALE = 5f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 6f;
+        public bool estAuSol { get; private set; }
+
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
@@ -37,6 +39,7 @@ namespace BBTA.Elements
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(texture, nbColonnes, nbRangees, milliSecParImage)
         {
+            estAuSol = true;
             corpsPhysique = BodyFactory.CreateCircle(mondePhysique, 0.5f, DENSITE, position);
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
@@ -46,7 +49,7 @@ namespace BBTA.Elements
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
          * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
-        void RecevoirDegat(float puissance, float rayon, Vector2 lieu)
+        public void RecevoirDegat(float puissance, float rayon, Vector2 lieu)
         {
             float pente = -puissance / rayon;
             float distance = Vector2.Distance(lieu, corpsPhysique.Position);
@@ -55,7 +58,7 @@ namespace BBTA.Elements
         }
 
         /*Détermine si un acteur est mort*/
-        bool KillMe()
+        private bool KillMe()
         {
             if (pointDeVie <= 0)
             {
@@ -65,6 +68,43 @@ namespace BBTA.Elements
             {
                 return false;
             }
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+            base.Update(gameTime);
+        }
+
+        protected void BougerADroite()
+        {
+            corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X + VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+        }
+
+        protected void BougerAGauche()
+        {
+            corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X - VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+        }
+
+        protected void Sauter()
+        {
+            estAuSol = false;
+            corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
+            corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+        }
+
+        bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
+        {
+            if (contact.Manifold.LocalPoint.Y == -0.5f && contact.Manifold.LocalPoint.X == 0)
+            {
+                estAuSol = true;
+            }
+            return true;
+        }
+
+        public Vector2 ObtenirPosition()
+        {
+            return corpsPhysique.Position * 40;
         }
     }
 }
