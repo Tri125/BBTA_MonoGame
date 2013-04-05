@@ -49,7 +49,7 @@ namespace BBTA
             graphics.PreferredBackBufferWidth = 1440;
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
-            //acc = new Accueil(this);
+            acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
