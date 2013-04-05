@@ -25,6 +25,7 @@ namespace BBTA
         private BBTA_MapFileBuilder chargeurCarte;
         private int[] carte1;
         private int[] carte2;
+        private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Carte carte;        
@@ -80,10 +81,15 @@ namespace BBTA
                 carte2 = chargeurCarte.InfoTuileTab();
             }
 
+            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                carte3 = chargeurCarte.InfoTuileTab();
+            }
                 // Create a new SpriteBatch, which can be used to draw textures.
                 spriteBatch = new SpriteBatch(GraphicsDevice);
-                sp = new JoueurHumain(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(4.5f, -3), 100, 1, 1);
-            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+                sp = new JoueurHumain(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(17.5f, 0f), 100, 1, 1);
+            carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
 
