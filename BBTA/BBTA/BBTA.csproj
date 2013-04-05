@@ -119,6 +119,7 @@
     <Compile Include="Classe\Elements\Bloc.cs" />
     <Compile Include="Classe\Carte\Carte.cs" />
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
+    <Compile Include="Classe\Elements\keybord.cs" />
     <Compile Include="Classe\Elements\ObjetPhysique.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\Elements\SpriteAnimer.cs" />

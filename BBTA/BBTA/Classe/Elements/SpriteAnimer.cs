@@ -21,11 +21,13 @@ namespace BBTA.Elements
         protected int milliSecParImage;
         protected int tempsdepuisDerniereImage;
 
-        public ObjetPhysiqueAnimer(Texture2D texture, Vector2 position, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            :base(texture, position)
+        public ObjetPhysiqueAnimer(Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            :base(texture)
         {
             this.largeur = texture.Width / nbColonnes;
             this.hauteur = texture.Height / nbRangees;
+            this.nbColonnes = nbColonnes;
+            this.nbRangees = nbRangees;
             this.nbImagesSequence = nbColonnes * nbRangees;
             this.milliSecParImage = milliSecParImage;
         }
@@ -35,7 +37,7 @@ namespace BBTA.Elements
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="borduresDeFenetre">Rectangle délimitant la région où peut se déplacer le sprite</param>
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;
             if (tempsdepuisDerniereImage > milliSecParImage)
@@ -58,8 +60,8 @@ namespace BBTA.Elements
             int rangeeActuelle = imageEnCours / nbColonnes;
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle*largeur, rangeeActuelle*hauteur, largeur, hauteur);           
-            spriteBatch.Draw(texture, corpsPhysique.Position, selection, Color.White, corpsPhysique.Rotation, 
-                             new Vector2((float)largeur/2f, (float)hauteur/2f), 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, corpsPhysique.Position*40, selection, Color.White, corpsPhysique.Rotation, 
+                             new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
         }
 
 

@@ -23,6 +23,7 @@ namespace BBTA
         //Variables-----------------------------------------------------------------------------------------------
         private Texture2D textureArrierePlan;
         private Bloc[] blocs;
+        private int largeur;
 
         //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
@@ -39,9 +40,10 @@ namespace BBTA
         public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
             this.textureArrierePlan = arrierePlan;
+            this.largeur = largeurCarte;
             blocs = new Bloc[donneesBlocs.Length];
             for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
-            {
+            {                
                 //Par convention, une case avec comme donnée "0" signifie une case vide.  En somme, il n'y a aucun bloc.
                 if(donneesBlocs[compteurBlocs] != 0)
                 {

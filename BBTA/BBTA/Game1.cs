@@ -29,13 +29,11 @@ namespace BBTA
         SpriteBatch spriteBatch;
         Carte carte;        
         World monde = new World(new Vector2(0, 20));
-        private Texture2D _circleSprite;
-        private Body _circleBody;
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
-        private SpriteJoueur sp;
+        private JoueurHumain sp;
 
 
         public Game1()
@@ -44,6 +42,7 @@ namespace BBTA
             graphics.PreferredBackBufferHeight = 900;
             graphics.PreferredBackBufferWidth = 1440;
             this.IsMouseVisible = true;
+            this.IsFixedTimeStep = false;
             //acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
@@ -68,20 +67,6 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
-            //Instantiation du chargeur de carte
-            _circleSprite = Content.Load<Texture2D>(@"Ressources\circleSprite"); //  96px x 96px => 1.5m x 1.5m
-            /* Circle */
-            // Convert screen center from pixels to meters
-            Vector2 circlePosition = new Vector2(17, 0);
-
-            // Create the circle fixture
-            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f, circlePosition);
-            _circleBody.BodyType = BodyType.Dynamic;
-
-            // Give it some bounce and friction
-            _circleBody.Restitution = 0.3f;
-            _circleBody.Friction = 0.5f;
-
             chargeurCarte = new BBTA_MapFileBuilder();
             chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
             if (chargeurCarte.ChargementReussis)
@@ -97,7 +82,7 @@ namespace BBTA
 
                 // Create a new SpriteBatch, which can be used to draw textures.
                 spriteBatch = new SpriteBatch(GraphicsDevice);
-                sp = new SpriteJoueur(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(7, 0), 100, Vector2.Zero, 1, 1);
+                sp = new JoueurHumain(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(4.5f, -3), 100, 1, 1);
             carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -150,6 +135,7 @@ namespace BBTA
                 this.Exit();
             }
             sp.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -160,11 +146,6 @@ namespace BBTA
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            /* Circle position and rotation */
-            // Convert physics position (meters) to screen coordinates (pixels)
-            Vector2 circlePos = _circleBody.Position * 40;
-            Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
-            float circleRotation = _circleBody.Rotation;
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                         BlendState.AlphaBlend,
@@ -175,7 +156,6 @@ namespace BBTA
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             carte.Draw(spriteBatch);
             sp.Draw(spriteBatch);
-            spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
             spriteBatch.End();
             base.Draw(gameTime);
         }
