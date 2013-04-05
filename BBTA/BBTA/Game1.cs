@@ -51,7 +51,7 @@ namespace BBTA
             graphics.PreferredBackBufferWidth = 800;
             this.IsMouseVisible = true;
             //graphics.IsFullScreen = true;
-            //acc = new Accueil(this);
+            acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
