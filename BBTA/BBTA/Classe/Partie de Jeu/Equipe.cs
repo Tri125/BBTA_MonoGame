@@ -19,11 +19,36 @@ namespace BBTA.Classe.Partie_de_Jeu
 {
     public class Equipe
     {
-        private const int NOMBRE_EQUIPE = 2;
+        readonly private int numEquipe;
+        private List<Acteur> membresEquipe;
 
-        public Equipe()
+        public int NumEquipe { get { return numEquipe; } }
+        public int NbrMembre { get { return membresEquipe.Count(); } }
+
+
+
+        public Equipe(int numEquipe, List<Acteur> membresEquipe)
         {
+            this.numEquipe = numEquipe;
+            this.membresEquipe = new List<Acteur>();
+            this.membresEquipe = membresEquipe.ToList();
+        }
 
+        public Equipe(int numEquipe, params Acteur[] membresEquipe)
+        {
+            this.numEquipe = numEquipe;
+            this.membresEquipe = new List<Acteur>();
+            this.membresEquipe = membresEquipe.ToList();
+        }
+
+        public void RajoutMembre(Acteur nouveauMembre)
+        {
+            this.membresEquipe.Add(nouveauMembre);
+        }
+
+        public void SupressionMembre(Acteur nouveauMembre)
+        {
+            this.membresEquipe.Remove(nouveauMembre);
         }
     }
 }

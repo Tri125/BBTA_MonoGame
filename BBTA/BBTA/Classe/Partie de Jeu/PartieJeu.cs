@@ -21,27 +21,28 @@ namespace BBTA.Classe.Partie_de_Jeu
     public class PartieJeu : DrawableGameComponent
     {
         private const int TEMPS_TOUR_DEFAUT = 3000;
+        private readonly int tempsTour;
+        private SpriteBatch spriteBatch;
+        MouseState avant;
+        MouseState now;
+
         private World mondePhysique;
-        private int tempsEcoule;
-        private int tempsTour;
+        private int tempsEcouler;
 
         private Camera2d camPartie;
         private BBTA_MapFileBuilder chargeurCarte;
         private int[] carte1;
         private int[] carte2;
-        private SpriteBatch spriteBatch;
-        
+            
         Carte carte;
-        World monde;
         private Texture2D _circleSprite;
         private Body _circleBody;
-        MouseState avant;
-        MouseState now;
 
-        public PartieJeu(Game jeu)
+
+        public PartieJeu(Game jeu, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
-          
+            this.tempsTour = tempsParTour;
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             // TODO: Add your initialization logic here
             camPartie = new Camera2d();
             camPartie.Pos = new Vector2(500.0f,200.0f);
-            monde = new World(new Vector2(0, 20));
+            mondePhysique = new World(new Vector2(0, 20));
             base.Initialize();
         }
 
@@ -75,7 +76,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             Vector2 circlePosition = new Vector2(17,0);
 
             // Create the circle fixture
-            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f,circlePosition);
+            _circleBody = BodyFactory.CreateCircle(mondePhysique, 96f / (2f * 40), 1f,circlePosition);
             _circleBody.BodyType = BodyType.Dynamic;
 
             // Give it some bounce and friction
@@ -98,7 +99,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\test"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
 
@@ -113,7 +114,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             now = Mouse.GetState();
             Point nowPos = Resolution.MouseHelper.CurrentMousePosition;
             // TODO: Add your update logic here
-            monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
 
                 if (avant.ScrollWheelValue < now.ScrollWheelValue)

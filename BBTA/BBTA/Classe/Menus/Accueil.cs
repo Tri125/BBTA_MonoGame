@@ -32,7 +32,6 @@ namespace BBTA.Menus
         private Texture2D lettrage;
         private Texture2D arrierePlan;
         private SpriteBatch spriteBatch;
-        Texture2D dummyTexture;
 
         public Accueil(Game game)
             : base(game)
@@ -42,8 +41,6 @@ namespace BBTA.Menus
 
         protected override void LoadContent()
         {
-            dummyTexture = new Texture2D(GraphicsDevice, 1, 1);
-            dummyTexture.SetData(new Color[] { Color.White });
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Vector2 vitesseNuage = new Vector2(3, 0);
             nuage1 = new Nuage(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\Nuage1"), new Vector2(100, 50), vitesseNuage, Resolution.getVirtualViewport());
@@ -78,7 +75,6 @@ namespace BBTA.Menus
             btnJouer.Draw(spriteBatch);
             btnOptions.Draw(spriteBatch);
             btnQuitter.Draw(spriteBatch);
-           // spriteBatch.Draw(dummyTexture, btnQuitter.position2, Color.AliceBlue);
             spriteBatch.End();
             base.Draw(gameTime);
         }
