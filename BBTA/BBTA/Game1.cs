@@ -33,7 +33,7 @@ namespace BBTA
         private Accueil acc;
 
         private PartieJeu partie;
-
+        static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
 
         public Game1()
         {
@@ -57,7 +57,11 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            partie = new PartieJeu(this);
+            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
+            }
             this.Components.Add(partie);
             partie.Visible = true;
             base.Initialize();
