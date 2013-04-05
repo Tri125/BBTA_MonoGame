@@ -30,18 +30,23 @@ namespace BBTA
         SpriteBatch spriteBatch;
         Carte carte;        
         World monde = new World(new Vector2(0, 20));
+
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
         private JoueurHumain sp;
 
+        //Acteur test
+        private Texture2D _acteurSprite;
+        private Body _acteurBody;
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 900;
-            graphics.PreferredBackBufferWidth = 1440;
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 800;
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             //acc = new Accueil(this);
@@ -68,6 +73,21 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
+            //Chargement du _acteur
+            _acteurSprite = Content.Load<Texture2D>(@"Ressources\Acteur\ActeurRouge"); //40x40 acteurrouge
+            // Convert screen center from pixels to meters
+            Vector2 rectPosition = new Vector2(11.5f, 0);
+            // Create the circle fixture
+            _acteurBody = BodyFactory.CreateRectangle(monde, 1f, 1f, 1f, rectPosition);
+            _acteurBody.BodyType = BodyType.Dynamic;
+            // Give it some bounce and friction
+            _acteurBody.Restitution = 0.1f;
+            _acteurBody.Friction = 0.5f;
+
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Chargement de la carte
             chargeurCarte = new BBTA_MapFileBuilder();
             chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
             if (chargeurCarte.ChargementReussis)
@@ -90,6 +110,7 @@ namespace BBTA
                 spriteBatch = new SpriteBatch(GraphicsDevice);
                 sp = new JoueurHumain(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(17.5f, 0f), 100, 1, 1);
             carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+
             // TODO: use this.Content to load your game content here
         }
 
