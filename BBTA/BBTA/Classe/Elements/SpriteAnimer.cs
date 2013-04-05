@@ -7,8 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BBTA.Elements
 {
-    public class SpriteAnimer:Sprite
+    public abstract class ObjetPhysiqueAnimer:ObjetPhysique
     {
+        protected int largeur;
+        protected int hauteur;
+
         protected int nbColonnes;
         protected int nbRangees;
         
@@ -18,42 +21,13 @@ namespace BBTA.Elements
         protected int milliSecParImage;
         protected int tempsdepuisDerniereImage;
 
-        /// <summary>
-        /// Constructeur
-        /// </summary>
-        /// <param name="texture">Texture pour un affichage en 2 dimmensions</param>
-        /// <param name="position">Position initiale du sprite</param>
-        /// <param name="vitesse">Vitesse initiale de l'objet</param>        
-        /// <param name="nbColonnes">Nombre de colonnes dans la sprite sheet</param>
-        /// <param name="nbRangees">Nombre de rangee dans la sprite sheet</param>
-        /// <param name="milliSecParImage">Délais désiré entre chaque image de la sprite sheet</param>
-        public SpriteAnimer(Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(texture)
+        public ObjetPhysiqueAnimer(Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            :base(texture)
         {
-            this.nbColonnes = nbColonnes;
-            this.nbRangees = nbRangees;
             this.largeur = texture.Width / nbColonnes;
             this.hauteur = texture.Height / nbRangees;
-            this.nbImagesSequence = nbColonnes * nbRangees;
-            this.milliSecParImage = milliSecParImage;
-        }
-
-        /// <summary>
-        /// Constructeur
-        /// </summary>
-        /// <param name="texture">Texture pour un affichage en 2 dimmensions</param>
-        /// <param name="position">Position initiale du sprite</param>
-        /// <param name="vitesse">Vitesse initiale de l'objet</param>        
-        /// <param name="nbColonnes">Nombre de colonnes dans la sprite sheet</param>
-        /// <param name="nbRangees">Nombre de rangee dans la sprite sheet</param>
-        /// <param name="milliSecParImage">Délais désiré entre chaque image de la sprite sheet</param>
-        public SpriteAnimer(Texture2D texture, Vector2 position, Vector2 vitesse, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(texture, position, vitesse)
-        {
             this.nbColonnes = nbColonnes;
             this.nbRangees = nbRangees;
-            this.largeur = texture.Width / nbColonnes;
-            this.hauteur = texture.Height / nbRangees;
             this.nbImagesSequence = nbColonnes * nbRangees;
             this.milliSecParImage = milliSecParImage;
         }
@@ -63,7 +37,7 @@ namespace BBTA.Elements
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="borduresDeFenetre">Rectangle délimitant la région où peut se déplacer le sprite</param>
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;
             if (tempsdepuisDerniereImage > milliSecParImage)
@@ -75,7 +49,6 @@ namespace BBTA.Elements
                     imageEnCours = 0;
                 }
             }
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -87,7 +60,10 @@ namespace BBTA.Elements
             int rangeeActuelle = imageEnCours / nbColonnes;
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle*largeur, rangeeActuelle*hauteur, largeur, hauteur);           
-            spriteBatch.Draw(texture, Position, selection, Color.White*opacite, angleRotation, new Vector2((float)largeur/2, (float)hauteur/2), echelle, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, corpsPhysique.Position*40, selection, Color.White, corpsPhysique.Rotation, 
+                             new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
         }
+
+
     }
 }

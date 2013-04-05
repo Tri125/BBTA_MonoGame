@@ -25,19 +25,17 @@ namespace BBTA
         private BBTA_MapFileBuilder chargeurCarte;
         private int[] carte1;
         private int[] carte2;
+        private int[] carte3;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Carte carte;        
         World monde = new World(new Vector2(0, 20));
 
-        //Cercle de test
-        private Texture2D _circleSprite;
-        private Body _circleBody;
-
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
+        private JoueurHumain sp;
 
         //Acteur test
         private Texture2D _acteurSprite;
@@ -50,7 +48,7 @@ namespace BBTA
             graphics.PreferredBackBufferHeight = 600;
             graphics.PreferredBackBufferWidth = 800;
             this.IsMouseVisible = true;
-            //graphics.IsFullScreen = true;
+            this.IsFixedTimeStep = false;
             acc = new Accueil(this);
             this.Components.Add(acc);
             Content.RootDirectory = "Content";
@@ -75,17 +73,6 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
-            /*//Chargement du _cercle
-            _circleSprite = Content.Load<Texture2D>(@"Ressources\circleSprite"); //  96px x 96px => 1.5m x 1.5m
-            // Convert screen center from pixels to meters
-            Vector2 circlePosition = new Vector2(17, 0);
-            // Create the circle fixture
-            _circleBody = BodyFactory.CreateCircle(monde, 96f / (2f * 40), 1f, circlePosition);
-            _circleBody.BodyType = BodyType.Dynamic;
-            // Give it some bounce and friction
-            _circleBody.Restitution = 0.3f;
-            _circleBody.Friction = 0.5f; /* */
-
             //Chargement du _acteur
             _acteurSprite = Content.Load<Texture2D>(@"Ressources\Acteur\ActeurRouge"); //40x40 acteurrouge
             // Convert screen center from pixels to meters
@@ -114,7 +101,15 @@ namespace BBTA
                 carte2 = chargeurCarte.InfoTuileTab();
             }
 
-            carte = new Carte(carte2, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
+            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                carte3 = chargeurCarte.InfoTuileTab();
+            }
+                // Create a new SpriteBatch, which can be used to draw textures.
+                spriteBatch = new SpriteBatch(GraphicsDevice);
+                sp = new JoueurHumain(monde, Content.Load<Texture2D>(@"Ressources\test"), new Vector2(17.5f, 0f), 100, 1, 1);
+            carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Content.Load<Texture2D>(@"Ressources\HoraireNico"), Content.Load<Texture2D>(@"Ressources\test"), monde, 40);
 
             // TODO: use this.Content to load your game content here
         }
@@ -142,7 +137,9 @@ namespace BBTA
                 this.Exit();
 
             // TODO: Add your update logic here
+
             monde.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+
             if (avant.ScrollWheelValue < now.ScrollWheelValue)
             {
                 cam.Zoom += 0.1f;
@@ -164,6 +161,8 @@ namespace BBTA
             {
                 this.Exit();
             }
+            sp.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -174,19 +173,6 @@ namespace BBTA
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            /* Circle position and rotation
-            // Convert physics position (meters) to screen coordinates (pixels)
-            Vector2 circlePos = _circleBody.Position * 40;
-            Vector2 circleOrigin = new Vector2(_circleSprite.Width / 2f, _circleSprite.Height / 2f);
-            float circleRotation = _circleBody.Rotation; /* */
-
-            /* Acteur position and rotation */
-            // Convert physics position (meters) to screen coordinates (pixels)
-            Vector2 rectPos = _acteurBody.Position * 40;
-            Vector2 rectOrigin = new Vector2(_acteurSprite.Width / 2f, _acteurSprite.Height / 2f);
-            float rectRotation = _acteurBody.Rotation;
-
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                         BlendState.AlphaBlend,
@@ -196,10 +182,7 @@ namespace BBTA
                         null,
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             carte.Draw(spriteBatch);
-
-            //spriteBatch.Draw(_circleSprite, circlePos, null, Color.White, circleRotation, circleOrigin, 1f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(_acteurSprite, rectPos, null, Color.White, rectRotation, rectOrigin, 1f, SpriteEffects.None, 0f);
-            
+            sp.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

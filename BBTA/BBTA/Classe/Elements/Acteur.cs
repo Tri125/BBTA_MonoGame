@@ -8,17 +8,18 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
+using FarseerPhysics;
 
 namespace BBTA.Elements
 {
-    public abstract class Acteur:SpriteAnimer
+    public abstract class Acteur:ObjetPhysiqueAnimer
     {
         //Variables-----------------------------------------------------------------------------------------------
-        private Body corpsPhysique;
         private float pointDeVie = 100;
-
+        protected const float forceMouvementLateral = 2f;
+        protected const float forceMouvementVertical = 8f;
         //Constantes----------------------------------------------------------------------------------------------
-        private const float DENSITE = 0;
+        private const float DENSITE = 1;
 
         /// <summary>
         /// Constructeur de base pour la classe acteur
@@ -29,17 +30,18 @@ namespace BBTA.Elements
         /// <param name="pointDeVie"></param>
         /// <param name="texture"></param>
         /// <param name="position"></param>
-        /// <param name="vitesse"></param>
         /// <param name="nbColonnes"></param>
         /// <param name="nbRangees"></param>
         /// <param name="milliSecParImage"></param>
-        public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position, Vector2 vitesse,
-                        int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(texture, position, vitesse, nbColonnes, nbRangees, milliSecParImage)
+        public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position, 
+                      int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            : base(texture, nbColonnes, nbRangees, milliSecParImage)
         {
-            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, largeur, hauteur, DENSITE, Position);
-            corpsPhysique.IsStatic = true;
-            corpsPhysique.Friction = 0.3f;
+            corpsPhysique = BodyFactory.CreateCircle(mondePhysique, 0.5f, DENSITE, position);
+            corpsPhysique.BodyType = BodyType.Dynamic;
+            corpsPhysique.FixedRotation = true;
+            corpsPhysique.Restitution = 0;
+            corpsPhysique.Friction = 0;
         }
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
@@ -47,7 +49,7 @@ namespace BBTA.Elements
         void RecevoirDegat(float puissance, float rayon, Vector2 lieu)
         {
             float pente = -puissance / rayon;
-            float distance = Vector2.Distance(lieu, Position);
+            float distance = Vector2.Distance(lieu, corpsPhysique.Position);
 
             this.pointDeVie -= pente * distance + puissance;
         }
