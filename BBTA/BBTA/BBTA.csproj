@@ -128,6 +128,9 @@
     <Compile Include="Classe\Menus\Accueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
     <Compile Include="Classe\Outils\Camera.cs" />
+    <Compile Include="Classe\Partie de Jeu\Equipe.cs" />
+    <Compile Include="Classe\Partie de Jeu\PartieJeu.cs" />
+    <Compile Include="Classe\Resolution\Resolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

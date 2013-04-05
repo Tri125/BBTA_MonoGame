@@ -15,6 +15,7 @@ namespace BBTA.Outils
         public Vector2 _pos; // Camera Position
         protected float _rotation; // Camera Rotation
 
+
         public Camera2d()
         {
             _zoom = 1.0f;
@@ -56,5 +57,6 @@ namespace BBTA.Outils
                                          Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.5f, graphicsDevice.Viewport.Height * 0.5f, 0));
             return _transform;
         }
+
     }
 }
