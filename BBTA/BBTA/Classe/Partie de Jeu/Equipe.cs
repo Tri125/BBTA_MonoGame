@@ -22,6 +22,8 @@ namespace BBTA.Classe.Partie_de_Jeu
         readonly private int numEquipe;
         private List<Acteur> membresEquipe;
 
+        private Acteur joueurActif;
+       
         public int NumEquipe { get { return numEquipe; } }
         public int NbrMembre { get { return membresEquipe.Count(); } }
 
@@ -41,14 +43,26 @@ namespace BBTA.Classe.Partie_de_Jeu
             this.membresEquipe = membresEquipe.ToList();
         }
 
+
         public void RajoutMembre(Acteur nouveauMembre)
         {
-            this.membresEquipe.Add(nouveauMembre);
+            membresEquipe.Add(nouveauMembre);
         }
 
-        public void SupressionMembre(Acteur nouveauMembre)
+        public void SupressionMembre(Acteur ancienMembre)
         {
-            this.membresEquipe.Remove(nouveauMembre);
+            foreach (Acteur membre in membresEquipe.ToList())
+            {
+                if (membre == ancienMembre)
+                {
+                    membresEquipe.Remove(ancienMembre);
+                }
+            }
+        }
+
+        public void ChangementJoueur()
+        {
+            joueurActif = membresEquipe[ (membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
         }
     }
 }
