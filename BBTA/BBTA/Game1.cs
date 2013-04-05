@@ -40,7 +40,7 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(1280, 1680, true);
+            Resolution.SetResolution(1280, 1680, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             acc = new Accueil(this);
