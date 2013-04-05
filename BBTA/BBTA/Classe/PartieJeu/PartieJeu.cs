@@ -31,19 +31,17 @@ namespace BBTA.Classe.Partie_de_Jeu
         private int tempsEcouler;
 
         private Camera2d camPartie;
-        private BBTA_MapFileBuilder chargeurCarte;
-        private int[] carte1;
-        private int[] carte2;
-        private int[] carte3;
         private ViseurVisuel vs;
         Carte carte;
+        int[] carteTuile;
         private Texture2D _circleSprite;
         private Body _circleBody;
         private JoueurHumain sp;
 
-        public PartieJeu(Game jeu, int tempsParTour = TEMPS_TOUR_DEFAUT)
+        public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
+            this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
         }
 
@@ -76,29 +74,10 @@ namespace BBTA.Classe.Partie_de_Jeu
 
             vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
 
-            chargeurCarte = new BBTA_MapFileBuilder();
-            chargeurCarte.LectureCarte(@"Carte Jeu\rectangle.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte1 = chargeurCarte.InfoTuileTab();
-            }
-
-            chargeurCarte.LectureCarte(@"Carte Jeu\escalator.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte2 = chargeurCarte.InfoTuileTab();
-            }
-
-            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                carte3 = chargeurCarte.InfoTuileTab();
-            }
-
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            carte = new Carte(carte3, chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\test"), mondePhysique, 40);
+            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\test"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
 

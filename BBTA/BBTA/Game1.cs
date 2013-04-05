@@ -26,21 +26,22 @@ namespace BBTA
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;      
+        SpriteBatch spriteBatch;  
 
         Camera2d cam = new Camera2d();
         MouseState avant;
         MouseState now;
         private Accueil acc;
         private PartieJeu partie;
-
+        static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(860, 680, false);
+            //La résolution de la fenêtre de jeu présenté à l'utilisateur
+            Resolution.SetResolution(1280, 1680, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             //acc = new Accueil(this);
@@ -57,10 +58,13 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            partie = new PartieJeu(this);
+            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
+            }
             this.Components.Add(partie);
             partie.Visible = true;
-            //Window.AllowUserResizing = true;
             base.Initialize();
         }
 
