@@ -25,8 +25,7 @@ namespace BBTA
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Carte carte;        
+        SpriteBatch spriteBatch;  
 
         Camera2d cam = new Camera2d();
         MouseState avant;
@@ -41,7 +40,7 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(860, 680, false);
+            Resolution.SetResolution(1280, 1680, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             acc = new Accueil(this);
@@ -61,7 +60,6 @@ namespace BBTA
             partie = new PartieJeu(this);
             this.Components.Add(partie);
             partie.Visible = true;
-            //Window.AllowUserResizing = true;
             base.Initialize();
         }
 
