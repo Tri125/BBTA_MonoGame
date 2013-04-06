@@ -90,7 +90,8 @@ namespace BBTA.Classe.Partie_de_Jeu
         {
             avant = now;
             now = Mouse.GetState();
-            Point nowPos = Resolution.MouseHelper.CurrentMousePosition;
+            Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie._transform);
+            
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
@@ -113,7 +114,7 @@ namespace BBTA.Classe.Partie_de_Jeu
             }
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
-            vs.Update(gameTime);
+            vs.Update(gameTime, nowPos);
             base.Update(gameTime);
         }
 

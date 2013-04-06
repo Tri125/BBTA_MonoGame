@@ -36,18 +36,9 @@ namespace BBTA.Interface
             estVerouiller = false;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Point positionSouris)
         {
-            Point m = IndependentResolutionRendering.Resolution.MouseHelper.CurrentMousePosition;
-
-            angleRotation = (float)Math.Atan2(-m.Y + positionJoueur.Y, -m.X + positionJoueur.X);
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                Console.WriteLine("Joueur" + positionJoueur);
-                Console.WriteLine(m);
-                Console.WriteLine(angleRotation);
-            }
-
+            angleRotation = (float)Math.Atan2(positionSouris.Y - positionJoueur.Y, positionSouris.X - positionJoueur.X);
         }
 
         public void Draw(SpriteBatch spriteBatch)

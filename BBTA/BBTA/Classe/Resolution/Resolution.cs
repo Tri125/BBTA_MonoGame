@@ -56,6 +56,19 @@ namespace IndependentResolutionRendering
                     return virtualMousePosition;
                 }
             }
+
+            public static Point PositionSourisCamera(Matrix MatriceCam)
+            {
+                MouseState mouse = Mouse.GetState();
+
+                Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
+                Vector2 virtualViewport = new Vector2(Resolution.VirtualViewportX, Resolution.VirtualViewportY);
+                mousePosition = Vector2.Transform(mousePosition - virtualViewport, Matrix.Invert(Resolution.getTransformationMatrix() * MatriceCam));
+
+                Point virtualMousePosition = new Point((int)mousePosition.X, (int)mousePosition.Y);
+                return virtualMousePosition;
+
+            }
         }
 
         static public Viewport getVirtualViewport()
