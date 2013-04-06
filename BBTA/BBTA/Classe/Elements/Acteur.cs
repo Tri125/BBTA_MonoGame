@@ -40,7 +40,7 @@ namespace BBTA.Elements
             : base(texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
-            corpsPhysique = BodyFactory.CreateCircle(mondePhysique, 0.5f, DENSITE, position);
+            corpsPhysique = BodyFactory.CreateCircle(mondePhysique, 0.43f, DENSITE, position);
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0;
@@ -73,17 +73,18 @@ namespace BBTA.Elements
         public override void Update(GameTime gameTime)
         {
             corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
-            base.Update(gameTime);
         }
 
         protected void BougerADroite()
         {
             corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X + VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            effet = SpriteEffects.FlipHorizontally;
         }
 
         protected void BougerAGauche()
         {
             corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X - VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            effet = SpriteEffects.None;
         }
 
         protected void Sauter()

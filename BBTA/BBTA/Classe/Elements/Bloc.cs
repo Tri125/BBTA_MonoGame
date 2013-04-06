@@ -20,6 +20,7 @@ namespace BBTA.Elements
         //Variables-----------------------------------------------------------------------------------------------
         private Body corpsPhysique;
         private float metrePixel;
+        private TypeBloc type;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
         private const float seuilResistance = 45;
@@ -31,13 +32,15 @@ namespace BBTA.Elements
         /// <param name="position">Position du bloc à l'écran (Coordonnées)</param>
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
-        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel)
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel, TypeBloc type)
             :base(texture, position*metrePixel)
         {
+            this.type = type;
             this.metrePixel = metrePixel;
             corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
+            echelle = 1.01f;
         }
 
         /// <summary>
@@ -66,8 +69,9 @@ namespace BBTA.Elements
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Vector2 pointCentral = new Vector2(largeur / 2f, hauteur / 2f);
-            spriteBatch.Draw(texture, corpsPhysique.Position*metrePixel, null,
+            Rectangle selection = new Rectangle((int)type * largeur/5, 0, largeur/5, hauteur);  
+            Vector2 pointCentral = new Vector2(largeur/5 / 2f, hauteur / 2f);
+            spriteBatch.Draw(texture, corpsPhysique.Position*metrePixel, selection,
                              Color.White, angleRotation, pointCentral, echelle, 
                              SpriteEffects.None, 0);
         }

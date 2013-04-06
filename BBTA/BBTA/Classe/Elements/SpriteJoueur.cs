@@ -28,12 +28,12 @@ namespace BBTA.Elements
 
             if (clavierMaintenant.IsKeyDown(Keys.D))
             {
-                corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X + 5f, corpsPhysique.LinearVelocity.Y);
+                BougerADroite();
             }
 
             if (clavierMaintenant.IsKeyDown(Keys.A))
             {
-                corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X - 5f, corpsPhysique.LinearVelocity.Y);
+                BougerAGauche();
             }
 
             if (clavierMaintenant.IsKeyDown(Keys.Space) && !clavierAvant.IsKeyDown(Keys.Space) && estAuSol == true)

@@ -34,8 +34,6 @@ namespace BBTA.Classe.Partie_de_Jeu
         private ViseurVisuel vs;
         Carte carte;
         int[] carteTuile;
-        private Texture2D _circleSprite;
-        private Body _circleBody;
         private JoueurHumain sp;
 
         public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
@@ -56,7 +54,7 @@ namespace BBTA.Classe.Partie_de_Jeu
 
             // TODO: Add your initialization logic here
             camPartie = new Camera2d();
-            camPartie.Pos = new Vector2(500.0f, 200.0f);
+            camPartie.Pos = new Vector2(Resolution.getVirtualViewport().Width/2f, 200.0f);
             mondePhysique = new World(new Vector2(0, 20));
             base.Initialize();
         }
@@ -70,14 +68,14 @@ namespace BBTA.Classe.Partie_de_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\test"), new Vector2(17.5f, 0f), 100, 1, 1);
+            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(17.5f, 0f), 100, 3, 1, 100);
 
             vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\test"), mondePhysique, 40);
+            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
 
@@ -95,26 +93,10 @@ namespace BBTA.Classe.Partie_de_Jeu
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
-
-            if (avant.ScrollWheelValue < now.ScrollWheelValue)
-            {
-                camPartie.Zoom += 0.1f;
-            }
-            else if (avant.ScrollWheelValue > now.ScrollWheelValue)
-            {
-                camPartie.Zoom -= 0.1f;
-            }
-            if (nowPos.X > Resolution.getVirtualViewport().Width - 50 && Resolution.getVirtualViewport().TitleSafeArea.Contains(nowPos))
-            {
-                camPartie.Pos = new Vector2(camPartie.Pos.X + 2, camPartie.Pos.Y);
-            }
-            else if (nowPos.X < 50 - Resolution.getVirtualViewport().X && Resolution.getVirtualViewport().TitleSafeArea.Contains(nowPos))
-            {
-                camPartie.Pos = new Vector2(camPartie.Pos.X - 2, camPartie.Pos.Y);
-            }
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
+            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange*40);
             base.Update(gameTime);
         }
 
