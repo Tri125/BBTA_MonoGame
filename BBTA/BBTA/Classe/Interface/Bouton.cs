@@ -76,7 +76,7 @@ namespace BBTA.Interface
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            //Si l'état est "Attente", alors la texture du bouton est standart. Autrement, la texture du bouton est celle indiquant le clic.
+            //Si l'état est "Attente", alors la texture du bouton est standard. Autrement, la texture du bouton est celle indiquant le clic.
             spriteBatch.Draw(texture, position, new Rectangle(largeur*(int)etat, 0, largeur, hauteur), Color.White, 0, new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
         }        
     }
