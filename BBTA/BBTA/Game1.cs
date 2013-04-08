@@ -40,20 +40,12 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-<<<<<<< HEAD
-            Resolution.SetResolution(1280, 1028, true);
-            this.IsMouseVisible = true;
-            this.IsFixedTimeStep = false;
-            acc = new Accueil(this);
-            this.Components.Add(acc);
-=======
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
             Resolution.SetResolution(1440, 900, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             //acc = new Accueil(this);
             //this.Components.Add(acc);
->>>>>>> 207224c137bfdd332aa29ea62ff167b91c992989
             Content.RootDirectory = "Content";
         }
 
@@ -66,17 +58,12 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-<<<<<<< HEAD
-            partie = new PartieJeu(this);
-            //this.Components.Add(partie);
-=======
             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
             if (chargeurCarte.ChargementReussis)
             {
                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
             }
             this.Components.Add(partie);
->>>>>>> 207224c137bfdd332aa29ea62ff167b91c992989
             partie.Visible = true;
             base.Initialize();
         }

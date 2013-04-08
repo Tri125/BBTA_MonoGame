@@ -128,7 +128,6 @@
     <Compile Include="Classe\Interface\ViseurVisuel.cs" />
     <Compile Include="Classe\Menus\Accueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
-    <Compile Include="Classe\Menus\Options.cs" />
     <Compile Include="Classe\Outils\Camera.cs" />
     <Compile Include="Classe\PartieJeu\Equipe.cs" />
     <Compile Include="Classe\PartieJeu\PartieJeu.cs" />
