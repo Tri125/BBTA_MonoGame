@@ -127,6 +127,7 @@
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Menus\Accueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
+    <Compile Include="Classe\Menus\Options.cs" />
     <Compile Include="Classe\Outils\Camera.cs" />
     <Compile Include="Classe\Partie de Jeu\Equipe.cs" />
     <Compile Include="Classe\Partie de Jeu\PartieJeu.cs" />

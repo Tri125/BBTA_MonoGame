@@ -41,11 +41,11 @@ namespace BBTA
             graphics = new GraphicsDeviceManager(this);
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
-            Resolution.SetResolution(860, 680, false);
+            Resolution.SetResolution(1280, 1028, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             acc = new Accueil(this);
-            //this.Components.Add(acc);
+            this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
 
@@ -59,9 +59,8 @@ namespace BBTA
         {
             // TODO: Add your initialization logic here
             partie = new PartieJeu(this);
-            this.Components.Add(partie);
+            //this.Components.Add(partie);
             partie.Visible = true;
-            //Window.AllowUserResizing = true;
             base.Initialize();
         }
 
