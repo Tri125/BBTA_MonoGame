@@ -128,11 +128,12 @@ namespace BBTA
                 switch (EtatActuel)
                 {
                     case EtatJeu.Accueil:
-                        //TransferEtat
-                        if(!this.Components.Contains(acc))
+                        /*TransferEtat
+                        //Vérifie si le component correspond à l'état en cour*/
+                        if(!this.Components.Contains(acc)) //Le component n'est pas celui qui correspond à l'état
                         {
-                            this.Components.Clear();
-                            this.Components.Add(acc);
+                            this.Components.Clear();    //On l'éfface
+                            this.Components.Add(acc);   //Et on s'assure que ce soit le bon
                         }
 
                         //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
