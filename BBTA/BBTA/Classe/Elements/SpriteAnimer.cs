@@ -21,6 +21,8 @@ namespace BBTA.Elements
         protected int milliSecParImage;
         protected int tempsdepuisDerniereImage;
 
+        protected SpriteEffects effet = SpriteEffects.None;
+
         public ObjetPhysiqueAnimer(Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
             :base(texture)
         {
@@ -61,7 +63,7 @@ namespace BBTA.Elements
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle*largeur, rangeeActuelle*hauteur, largeur, hauteur);           
             spriteBatch.Draw(texture, corpsPhysique.Position*40, selection, Color.White, corpsPhysique.Rotation, 
-                             new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
+                             new Vector2(largeur/2f, hauteur/2f), 1, effet, 0);
         }
 
 

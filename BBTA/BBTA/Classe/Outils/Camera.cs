@@ -48,6 +48,7 @@ namespace BBTA.Outils
             set { _pos = value; }
         }
 
+
         public Matrix get_transformation(GraphicsDevice graphicsDevice)
         {
             _transform =       // Thanks to o KB o for this solution
@@ -58,5 +59,18 @@ namespace BBTA.Outils
             return _transform;
         }
 
+        public void SuivreObjet(Vector2 positionJoueur, int longueurCarte, int hauteurCarte)
+        {
+            if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f > 0 &&
+                positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f < longueurCarte)
+            {
+                Pos = new Vector2(positionJoueur.X, Pos.Y);
+            }
+
+            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f < hauteurCarte)
+            {
+                Pos = new Vector2(Pos.X, positionJoueur.Y);
+            }
+        }
     }
 }
