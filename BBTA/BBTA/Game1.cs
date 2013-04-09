@@ -128,7 +128,7 @@ namespace BBTA
                     case EtatJeu.Accueil:
                         /*TransferEtat
                         //Vérifie si le component correspond à l'état en cour*/
-                        if(!this.Components.Contains(acc)) //Le component n'est pas celui qui correspond à l'état
+                        if (!this.Components.Contains(acc)) //Le component n'est pas celui qui correspond à l'état
                         {
                             this.Components.Clear();    //On l'éfface
                             this.Components.Add(acc);   //Et on s'assure que ce soit le bon
@@ -157,7 +157,7 @@ namespace BBTA
                         break;
                     case EtatJeu.Jeu:
                         //TransferEtat
-                        if (!this.Components.Contains(acc))
+                        if (!this.Components.Contains(partie))
                         {
                             this.Components.Clear();
                             this.Components.Add(partie);
