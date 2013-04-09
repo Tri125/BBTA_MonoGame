@@ -37,12 +37,30 @@ namespace BBTA.Partie_De_Jeu
         int[] carteTuile;
         private JoueurHumain sp;
         Texture2D pro;
+        List<Equipe> listeEquipes;
+
+        public List<Acteur> ListeActeur
+        {
+            get
+            {
+                List<Acteur> temp = new List<Acteur>();
+                foreach (Equipe equipe in listeEquipes)
+                {
+                    foreach (Acteur acteur in equipe.ListeMembres)
+                    {
+                        temp.Add(acteur);
+                    }
+                }
+                return temp;
+            }
+        }
 
         public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
+            this.listeEquipes = new List<Equipe>();
         }
 
         /// <summary>
@@ -76,7 +94,7 @@ namespace BBTA.Partie_De_Jeu
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -91,14 +109,14 @@ namespace BBTA.Partie_De_Jeu
             avant = now;
             now = Mouse.GetState();
             Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
-            
+
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange*40);
+            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }
 

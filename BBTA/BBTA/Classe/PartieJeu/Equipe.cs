@@ -26,6 +26,7 @@ namespace BBTA.Partie_De_Jeu
        
         public int NumEquipe { get { return numEquipe; } }
         public int NbrMembre { get { return membresEquipe.Count(); } }
+        public List<Acteur> ListeMembres { get { return membresEquipe; } }
 
 
 
