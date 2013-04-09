@@ -159,7 +159,7 @@ namespace BBTA
                         break;
                     case EtatJeu.Jeu:
                         //TransferEtat
-                        if (!this.Components.Contains(acc))
+                        if (!this.Components.Contains(partie))
                         {
                             this.Components.Clear();
                             this.Components.Add(partie);
