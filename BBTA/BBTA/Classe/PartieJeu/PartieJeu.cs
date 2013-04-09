@@ -35,10 +35,11 @@ namespace BBTA.Partie_De_Jeu
         private ViseurVisuel vs;
         Carte carte;
         int[] carteTuile;
-        private JoueurHumain sp;
         private Projectile p;
         Texture2D pro;
         List<Equipe> listeEquipes;
+        private int nbrEquipe1;
+        private int nbrEquipe2;
 
         public List<Acteur> ListeActeur
         {
@@ -62,6 +63,10 @@ namespace BBTA.Partie_De_Jeu
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
             this.listeEquipes = new List<Equipe>();
+            this.nbrEquipe1 = nbrEquipe1;
+            this.nbrEquipe2 = nbrEquipe2;
+
+
         }
 
         /// <summary>
@@ -88,8 +93,6 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75);
-
             vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
             pro = Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu");
 
@@ -98,6 +101,17 @@ namespace BBTA.Partie_De_Jeu
 
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
+            listeEquipes.Add(new Equipe());
+            listeEquipes.Add(new Equipe());
+            for (int iBoucle = 0; iBoucle < nbrEquipe1; iBoucle++)
+            {
+                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75));
+            }
+
+            for (int iBoucle = 0; iBoucle < nbrEquipe2; iBoucle++)
+            {
+                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75));
+            }
         }
 
         /// <summary>
@@ -114,10 +128,10 @@ namespace BBTA.Partie_De_Jeu
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
-            sp.Update(gameTime);
-            vs.AssocierAujoueur(sp);
+            listeEquipes[0].ListeMembres[0].Update(gameTime);
+            vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
                 p = new Projectile(mondePhysique, new CircleShape(0.5f, 1), new Vector2((float)Math.Cos(vs.angleRotation) * 3, (float)Math.Sin(vs.angleRotation) * 3), new Vector2(10, 3), pro, 430);
@@ -138,7 +152,7 @@ namespace BBTA.Partie_De_Jeu
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
             carte.Draw(spriteBatch);
-            sp.Draw(spriteBatch);
+            listeEquipes[0].ListeMembres[0].Draw(spriteBatch);
             vs.Draw(spriteBatch);
             if (p != null)
             {
