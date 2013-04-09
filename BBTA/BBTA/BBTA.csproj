@@ -121,6 +121,7 @@
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
     <Compile Include="Classe\Elements\keybord.cs" />
     <Compile Include="Classe\Elements\ObjetPhysique.cs" />
+    <Compile Include="Classe\Elements\Projectile.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\Elements\SpriteAnimer.cs" />
     <Compile Include="Classe\Elements\SpriteJoueur.cs" />

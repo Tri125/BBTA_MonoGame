@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Collision.Shapes;
 
 namespace BBTA.Elements
 {
@@ -21,10 +23,10 @@ namespace BBTA.Elements
         protected int milliSecParImage;
         protected int tempsdepuisDerniereImage;
 
-        protected SpriteEffects effet = SpriteEffects.None;
+        public SpriteEffects effet{get;set;}
 
-        public ObjetPhysiqueAnimer(Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            :base(texture)
+        public ObjetPhysiqueAnimer(World mondePhysique, Shape forme, Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            :base(texture, mondePhysique, forme)
         {
             this.largeur = texture.Width / nbColonnes;
             this.hauteur = texture.Height / nbRangees;
@@ -32,6 +34,7 @@ namespace BBTA.Elements
             this.nbRangees = nbRangees;
             this.nbImagesSequence = nbColonnes * nbRangees;
             this.milliSecParImage = milliSecParImage;
+            effet = SpriteEffects.None;
         }
 
         /// <summary>
@@ -41,14 +44,19 @@ namespace BBTA.Elements
         /// <param name="borduresDeFenetre">Rectangle délimitant la région où peut se déplacer le sprite</param>
         public virtual void Update(GameTime gameTime)
         {
+            Animer(gameTime, 0, nbImagesSequence);
+        }
+
+        protected void Animer(GameTime gameTime, int posDebut, int posFin)
+        {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;
             if (tempsdepuisDerniereImage > milliSecParImage)
             {
                 tempsdepuisDerniereImage -= milliSecParImage;
                 imageEnCours++;
-                if (imageEnCours == nbImagesSequence)
+                if (imageEnCours == posFin)
                 {
-                    imageEnCours = 0;
+                    imageEnCours = posDebut;
                 }
             }
         }

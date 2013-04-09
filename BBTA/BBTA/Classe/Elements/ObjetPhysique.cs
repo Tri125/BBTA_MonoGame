@@ -5,6 +5,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Collision.Shapes;
 
 namespace BBTA.Elements
 {
@@ -12,10 +13,13 @@ namespace BBTA.Elements
     {
         protected Body corpsPhysique;
         protected Texture2D texture;
+        private Fixture joint;
 
-        public ObjetPhysique(Texture2D texture)
+        public ObjetPhysique(Texture2D texture, World mondePhysique, Shape forme)
         {
             this.texture = texture;
+            corpsPhysique = new Body(mondePhysique);
+            joint = new Fixture(corpsPhysique, forme);
         }
 
         public float AngleRotation

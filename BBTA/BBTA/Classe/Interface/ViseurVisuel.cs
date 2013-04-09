@@ -13,7 +13,7 @@ namespace BBTA.Interface
     {
         private Texture2D texture;
         public Vector2 positionJoueur;
-        private float angleRotation;
+        public float angleRotation{get;set;}
         public bool estVerouiller = false;
 
         public ViseurVisuel(Texture2D texture)

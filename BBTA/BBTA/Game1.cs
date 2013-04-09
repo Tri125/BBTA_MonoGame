@@ -15,7 +15,7 @@ using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
 using BBTA.Interface;
-using BBTA.Classe.Partie_de_Jeu;
+using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
 
 namespace BBTA
@@ -26,9 +26,7 @@ namespace BBTA
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;  
-
-        Camera2d cam = new Camera2d();
+        SpriteBatch spriteBatch; 
         MouseState avant;
         MouseState now;
         private Accueil acc;
@@ -41,7 +39,7 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(1440, 900, true);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             //acc = new Accueil(this);
@@ -121,7 +119,7 @@ namespace BBTA
         {
             Resolution.BeginDraw();
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.End();
 
             base.Draw(gameTime);

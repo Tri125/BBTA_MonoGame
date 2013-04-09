@@ -15,7 +15,7 @@ using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
 
-namespace BBTA.Classe.Partie_de_Jeu
+namespace BBTA.Partie_De_Jeu
 {
     public class Equipe
     {

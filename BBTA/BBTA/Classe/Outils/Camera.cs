@@ -10,53 +10,45 @@ namespace BBTA.Outils
 {
     public class Camera2d
     {
-        protected float _zoom; // Camera Zoom
-        public Matrix _transform; // Matrix Transform
-        public Vector2 _pos; // Camera Position
-        protected float _rotation; // Camera Rotation
+        protected float zoom; // Camera Zoom
+        public Matrix transform; // Matrix Transform
+        public Vector2 pos; // Camera Position
+        protected float rotation; // Camera Rotation
 
 
         public Camera2d()
         {
-            _zoom = 1.0f;
-            _rotation = 0.0f;
-            _pos = Vector2.Zero;
-        }
-
-        // Sets and gets zoom
-        public float Zoom
-        {
-            get { return _zoom; }
-            set { _zoom = value; if (_zoom < 0.1f) _zoom = 0.1f; } // Negative zoom will flip image
+            zoom = 1;
+            rotation = 0.0f;
+            pos = Vector2.Zero;
         }
 
         public float Rotation
         {
-            get { return _rotation; }
-            set { _rotation = value; }
+            get { return rotation; }
+            set { rotation = value; }
         }
 
         // Auxiliary function to move the camera
         public void Move(Vector2 amount)
         {
-            _pos += amount;
+            pos += amount;
         }
         // Get set position
         public Vector2 Pos
         {
-            get { return _pos; }
-            set { _pos = value; }
+            get { return pos; }
+            set { pos = value; }
         }
-
 
         public Matrix get_transformation(GraphicsDevice graphicsDevice)
         {
-            _transform =       // Thanks to o KB o for this solution
-              Matrix.CreateTranslation(new Vector3(-_pos.X, -_pos.Y, 0)) *
+            transform =       // Thanks to o KB o for this solution
+              Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *
                                          Matrix.CreateRotationZ(Rotation) *
-                                         Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
-                                         Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.5f, graphicsDevice.Viewport.Height * 0.5f, 0));
-            return _transform;
+                                         Matrix.CreateScale(new Vector3(zoom, zoom, 1)) *
+                                         Matrix.CreateTranslation(new Vector3(IndependentResolutionRendering.Resolution.getVirtualViewport().Width * 0.5f, IndependentResolutionRendering.Resolution.getVirtualViewport().Height * 0.5f, 0));
+            return transform;
         }
 
         public void SuivreObjet(Vector2 positionJoueur, int longueurCarte, int hauteurCarte)
@@ -64,12 +56,12 @@ namespace BBTA.Outils
             if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f > 0 &&
                 positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f < longueurCarte)
             {
-                Pos = new Vector2(positionJoueur.X, Pos.Y);
+                Pos = new Vector2((int)positionJoueur.X, (int)Pos.Y);
             }
 
             if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f < hauteurCarte)
             {
-                Pos = new Vector2(Pos.X, positionJoueur.Y);
+                Pos = new Vector2((int)Pos.X, (int)positionJoueur.Y);
             }
         }
     }

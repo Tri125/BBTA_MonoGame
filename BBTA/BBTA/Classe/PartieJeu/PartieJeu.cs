@@ -16,8 +16,9 @@ using BBTA.Outils;
 using BBTA.Menus;
 using BBTA.Interface;
 using IndependentResolutionRendering;
+using FarseerPhysics.Collision.Shapes;
 
-namespace BBTA.Classe.Partie_de_Jeu
+namespace BBTA.Partie_De_Jeu
 {
     public class PartieJeu : DrawableGameComponent
     {
@@ -35,6 +36,8 @@ namespace BBTA.Classe.Partie_de_Jeu
         Carte carte;
         int[] carteTuile;
         private JoueurHumain sp;
+        private Projectile p;
+        Texture2D pro;
 
         public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
@@ -54,7 +57,6 @@ namespace BBTA.Classe.Partie_de_Jeu
 
             // TODO: Add your initialization logic here
             camPartie = new Camera2d();
-            camPartie.Pos = new Vector2(Resolution.getVirtualViewport().Width/2f, 200.0f);
             mondePhysique = new World(new Vector2(0, 20));
             base.Initialize();
         }
@@ -68,13 +70,14 @@ namespace BBTA.Classe.Partie_de_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(17.5f, 0f), 100, 3, 1, 100);
+            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75);
 
             vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
+            pro = Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu");
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -88,7 +91,7 @@ namespace BBTA.Classe.Partie_de_Jeu
         {
             avant = now;
             now = Mouse.GetState();
-            Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie._transform);
+            Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
             
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
@@ -97,6 +100,11 @@ namespace BBTA.Classe.Partie_de_Jeu
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
             camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange*40);
+            if (Mouse.GetState().RightButton == ButtonState.Pressed)
+            {
+                p = new Projectile(mondePhysique, new CircleShape(0.5f, 1), new Vector2((float)Math.Cos(vs.angleRotation) * 3, (float)Math.Sin(vs.angleRotation) * 3), new Vector2(10, 3) , pro, 430);
+            }
+
             base.Update(gameTime);
         }
 
@@ -114,6 +122,10 @@ namespace BBTA.Classe.Partie_de_Jeu
             carte.Draw(spriteBatch);
             sp.Draw(spriteBatch);
             vs.Draw(spriteBatch);
+            if (p != null)
+            {
+                p.Draw(spriteBatch);
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }

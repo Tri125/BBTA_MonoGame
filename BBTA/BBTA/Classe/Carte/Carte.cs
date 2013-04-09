@@ -69,13 +69,12 @@ namespace BBTA
         /// <summary>
         /// Détruit les blocs nécessaires suite à une explosion
         /// </summary>Lieu d'origine de l'explosion</param>
-        /// <param name="rayon">Rayon de l'explosion</param>
-        /// <param name="puissance">Puissance déployée par l'explosion</param>
-        public void Explosion(Vector2 lieu, float rayon, float puissance)
+        /// <param name="energie">Énergie déployée par l'explosion</param>
+        public void Explosion(Vector2 lieu, float energie)
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
 	        {
-                if(blocs[compteurBloc].ExplosetIl(puissance, rayon, lieu))
+                if(blocs[compteurBloc].ExplosetIl(energie, lieu))
                 {
                     //Destruction du bloc
                     blocs[compteurBloc] = null;
@@ -142,6 +141,11 @@ namespace BBTA
                 }
             }
             
+        }
+
+        public Rectangle ObtenirTailleCarte()
+        {
+            return new Rectangle(0, 0, largeur, hauteur);
         }
     }
 }

@@ -50,14 +50,13 @@ namespace BBTA.Elements
         /// <param name="rayon">Rayon de l'explosion</param>
         /// <param name="lieu">Lieu d'origine de l'explosion</param>
         /// <returns>Si le bloc doit être détruit</returns>
-        public bool ExplosetIl(float puissance, float rayon, Vector2 lieu)
+        public bool ExplosetIl(float energie, Vector2 lieu)
         {
             /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
              * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
-            float pente = -puissance / rayon;
             float distance = Vector2.Distance(lieu, Position);
-            if (pente * distance + puissance > seuilResistance)
+            if (energie/distance > seuilResistance)
             {
                 return true;
             }

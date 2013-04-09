@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using FarseerPhysics;
+using FarseerPhysics.Collision.Shapes;
 
 namespace BBTA.Elements
 {
@@ -19,6 +20,7 @@ namespace BBTA.Elements
         protected const float VITESSE_LATERALE = 5f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 6f;
         public bool estAuSol { get; private set; }
+        private bool veutSeDeplacer = false;
 
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
@@ -37,13 +39,13 @@ namespace BBTA.Elements
         /// <param name="milliSecParImage"></param>
         public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(texture, nbColonnes, nbRangees, milliSecParImage)
+            : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
-            corpsPhysique = BodyFactory.CreateCircle(mondePhysique, 0.43f, DENSITE, position);
+            corpsPhysique.Position = position; 
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
-            corpsPhysique.Restitution = 0;
+            corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
         }
 
@@ -72,19 +74,40 @@ namespace BBTA.Elements
 
         public override void Update(GameTime gameTime)
         {
-            corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+            if (veutSeDeplacer == true && estAuSol == true)
+            {
+                Animer(gameTime, 0, 3);
+            }
+
+            if (veutSeDeplacer == false)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+            }
+            else
+            {
+                veutSeDeplacer = false;
+            }
         }
 
         protected void BougerADroite()
         {
-            corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X + VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            if (ObtenirPosition().X+texture.Width/3/2f <= IndependentResolutionRendering.Resolution.getVirtualViewport().Width)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+            }
             effet = SpriteEffects.FlipHorizontally;
         }
 
         protected void BougerAGauche()
         {
-            corpsPhysique.LinearVelocity = new Vector2(corpsPhysique.LinearVelocity.X - VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            if (ObtenirPosition().X - texture.Width/3/2f >= 0)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+            }
             effet = SpriteEffects.None;
+
         }
 
         protected void Sauter()
