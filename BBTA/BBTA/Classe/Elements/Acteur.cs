@@ -91,21 +91,15 @@ namespace BBTA.Elements
 
         protected void BougerADroite()
         {
-            if (ObtenirPosition().X+texture.Width/3/2f <= IndependentResolutionRendering.Resolution.getVirtualViewport().Width)
-            {
-                corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-                veutSeDeplacer = true;
-            }
+            corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            veutSeDeplacer = true;
             effet = SpriteEffects.FlipHorizontally;
         }
 
         protected void BougerAGauche()
         {
-            if (ObtenirPosition().X - texture.Width/3/2f >= 0)
-            {
-                corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-                veutSeDeplacer = true;
-            }
+            corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            veutSeDeplacer = true;
             effet = SpriteEffects.None;
 
         }
