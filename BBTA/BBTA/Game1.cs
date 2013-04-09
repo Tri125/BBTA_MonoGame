@@ -25,6 +25,19 @@ namespace BBTA
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        //États du menu
+        public enum EtatJeu
+        {
+            Accueil,        //État initial du jeu -> Options, Configuration ou Quitter
+            Options,        //Permet de modifier les options du jeu tels que volumee et touches -> Accueil ou Quitter
+            Configuration,  //Permet de définir les paramètres de la partie -> Jeu
+            Jeu,            //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
+            Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
+            Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
+            Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
+        }
+        EtatJeu EtatActuel = EtatJeu.Accueil;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch; 
         MouseState avant;
@@ -42,8 +55,6 @@ namespace BBTA
             Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
-            //acc = new Accueil(this);
-            //this.Components.Add(acc);
             Content.RootDirectory = "Content";
         }
 
@@ -56,12 +67,17 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            //Etat Accueil
+            acc = new Accueil(this);
+
+            //Etat Jeu
             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
             if (chargeurCarte.ChargementReussis)
             {
                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
             }
-            this.Components.Add(partie);
+            //this.Components.Add(partie);
             partie.Visible = true;
             base.Initialize();
         }
@@ -72,8 +88,8 @@ namespace BBTA
         /// </summary>
         protected override void LoadContent()
         {
-                // Create a new SpriteBatch, which can be used to draw textures.
-                spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -97,15 +113,64 @@ namespace BBTA
             {
                 avant = now;
                 now = Mouse.GetState();
-                // Allows the game to exit
+
+                // Permet de fermer la fenêtre du jeu
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                     this.Exit();
-
-                // TODO: Add your update logic here
-
                 if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 {
                     this.Exit();
+                }
+
+                //S'occupe du transfer d'état entre les parties du menu
+                switch (EtatActuel)
+                {
+                    case EtatJeu.Accueil:
+                        /*TransferEtat
+                        //Vérifie si le component correspond à l'état en cour*/
+                        if(!this.Components.Contains(acc)) //Le component n'est pas celui qui correspond à l'état
+                        {
+                            this.Components.Clear();    //On l'éfface
+                            this.Components.Add(acc);   //Et on s'assure que ce soit le bon
+                        }
+
+                        //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
+                        if (acc.btnJouer.ClicComplet())
+                        {
+                            EtatActuel = EtatJeu.Jeu;
+                        }
+                        //Clic btnOptions -> Options
+                        if (acc.btnOptions.ClicComplet())
+                        {
+                            EtatActuel = EtatJeu.Options;
+                        }
+                        //Clic btnQuitter -> Quitter
+                        if (acc.btnQuitter.ClicComplet())
+                        {
+                            this.Exit();
+                        }
+
+                        break;
+                    case EtatJeu.Options:
+                        break;
+                    case EtatJeu.Configuration:
+                        break;
+                    case EtatJeu.Jeu:
+                        //TransferEtat
+                        if (!this.Components.Contains(acc))
+                        {
+                            this.Components.Clear();
+                            this.Components.Add(partie);
+                        }
+                        break;
+                    case EtatJeu.Victoire:
+                        break;
+                    case EtatJeu.Defaite:
+                        break;
+                    case EtatJeu.Pause:
+                        break;
+                    default:
+                        break;
                 }
                 base.Update(gameTime);
             }
