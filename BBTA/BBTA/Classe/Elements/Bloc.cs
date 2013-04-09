@@ -56,7 +56,20 @@ namespace BBTA.Elements
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
              * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
             float distance = Vector2.Distance(lieu, Position);
-            if (energie/distance > seuilResistance)
+            if (energie / distance > seuilResistance)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public bool MeDetruire()
+        {
+            if (corpsPhysique == null)
             {
                 return true;
             }

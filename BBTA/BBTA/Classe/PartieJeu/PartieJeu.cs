@@ -35,7 +35,6 @@ namespace BBTA.Partie_De_Jeu
         private ViseurVisuel vs;
         Carte carte;
         int[] carteTuile;
-        private Projectile p;
         Texture2D pro;
         List<Equipe> listeEquipes;
         private int nbrEquipe1;
@@ -132,11 +131,6 @@ namespace BBTA.Partie_De_Jeu
             vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
             camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
-            if (Mouse.GetState().RightButton == ButtonState.Pressed)
-            {
-                p = new Projectile(mondePhysique, new CircleShape(0.5f, 1), new Vector2((float)Math.Cos(vs.angleRotation) * 3, (float)Math.Sin(vs.angleRotation) * 3), new Vector2(10, 3), pro, 430);
-            }
-
             base.Update(gameTime);
         }
 
@@ -154,10 +148,6 @@ namespace BBTA.Partie_De_Jeu
             carte.Draw(spriteBatch);
             listeEquipes[0].ListeMembres[0].Draw(spriteBatch);
             vs.Draw(spriteBatch);
-            if (p != null)
-            {
-                p.Draw(spriteBatch);
-            }
             spriteBatch.End();
             base.Draw(gameTime);
         }
