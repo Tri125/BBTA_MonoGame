@@ -38,12 +38,30 @@ namespace BBTA.Partie_De_Jeu
         private JoueurHumain sp;
         private Projectile p;
         Texture2D pro;
+        List<Equipe> listeEquipes;
+
+        public List<Acteur> ListeActeur
+        {
+            get
+            {
+                List<Acteur> temp = new List<Acteur>();
+                foreach (Equipe equipe in listeEquipes)
+                {
+                    foreach (Acteur acteur in equipe.ListeMembres)
+                    {
+                        temp.Add(acteur);
+                    }
+                }
+                return temp;
+            }
+        }
 
         public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
+            this.listeEquipes = new List<Equipe>();
         }
 
         /// <summary>
@@ -77,7 +95,7 @@ namespace BBTA.Partie_De_Jeu
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
         }
@@ -92,17 +110,17 @@ namespace BBTA.Partie_De_Jeu
             avant = now;
             now = Mouse.GetState();
             Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
-            
+
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange*40);
+            camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
             if (Mouse.GetState().RightButton == ButtonState.Pressed)
             {
-                p = new Projectile(mondePhysique, new CircleShape(0.5f, 1), new Vector2((float)Math.Cos(vs.angleRotation) * 3, (float)Math.Sin(vs.angleRotation) * 3), new Vector2(10, 3) , pro, 430);
+                p = new Projectile(mondePhysique, new CircleShape(0.5f, 1), new Vector2((float)Math.Cos(vs.angleRotation) * 3, (float)Math.Sin(vs.angleRotation) * 3), new Vector2(10, 3), pro, 430);
             }
 
             base.Update(gameTime);
