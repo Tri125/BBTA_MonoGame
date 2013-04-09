@@ -51,12 +51,10 @@ namespace BBTA.Elements
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
          * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
-        public void RecevoirDegat(float puissance, float rayon, Vector2 lieu)
+        public void RecevoirDegat(float energieExplosion, Vector2 positionExplosion)
         {
-            float pente = -puissance / rayon;
-            float distance = Vector2.Distance(lieu, corpsPhysique.Position);
-
-            this.pointDeVie -= pente * distance + puissance;
+            float puissanceRecue =  energieExplosion / Vector2.Distance(positionExplosion, corpsPhysique.Position);
+            pointDeVie -= puissanceRecue;
         }
 
         /*Détermine si un acteur est mort*/
