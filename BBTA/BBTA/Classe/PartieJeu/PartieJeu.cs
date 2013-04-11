@@ -38,6 +38,7 @@ namespace BBTA.Partie_De_Jeu
         private JoueurHumain sp;
         Texture2D pro;
         List<Equipe> listeEquipes;
+        Roquette ro;
 
         public List<Acteur> ListeActeur
         {
@@ -97,6 +98,7 @@ namespace BBTA.Partie_De_Jeu
 
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
             // TODO: use this.Content to load your game content here
+            ro = new Roquette(mondePhysique, new Vector2(10, 0), Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu"));
         }
 
         /// <summary>
@@ -111,11 +113,11 @@ namespace BBTA.Partie_De_Jeu
             Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
 
             // TODO: Add your update logic here
-            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
-
+            ro.Update(gameTime);
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
+            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }
@@ -134,6 +136,7 @@ namespace BBTA.Partie_De_Jeu
             carte.Draw(spriteBatch);
             sp.Draw(spriteBatch);
             vs.Draw(spriteBatch);
+            ro.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
