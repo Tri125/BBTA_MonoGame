@@ -87,7 +87,7 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75);
+            sp = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(17.5f, 0f), 100, 3, 1, 75);
 
             vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
             pro = Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu");
