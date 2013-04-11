@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
 
 namespace BBTA.Elements
 {
@@ -17,8 +18,8 @@ namespace BBTA.Elements
     {
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
-        protected const float VITESSE_LATERALE = 5f;
-        protected const float FORCE_MOUVEMENT_VERTICAL = 6f;
+        protected const float VITESSE_LATERALE = 2f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 3f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
 
