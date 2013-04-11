@@ -55,12 +55,12 @@ namespace BBTA.Outils
 
             if (positionJoueur.X <= IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f)
             {
-                Pos = new Vector2((int)IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f, (int)Pos.Y);
+                Pos = new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f, (int)Pos.Y);
             }
 
-            else if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f > longueurCarte)
+            else if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f >= longueurCarte)
             {
-                Pos = new Vector2((int)longueurCarte + 5 - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f, (int)Pos.Y);
+                Pos = new Vector2(longueurCarte + 5 - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f, (int)Pos.Y);
             }
 
             else
@@ -71,11 +71,6 @@ namespace BBTA.Outils
             if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f < hauteurCarte)
             {
                 Pos = new Vector2((int)Pos.X, (int)positionJoueur.Y);
-            }
-
-            else
-            {
-                Pos = new Vector2((int)Pos.X, (int)IndependentResolutionRendering.Resolution.getVirtualViewport().Height/2f);
             }
         }
     }
