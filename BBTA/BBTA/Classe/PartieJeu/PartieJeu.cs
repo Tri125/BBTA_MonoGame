@@ -96,6 +96,8 @@ namespace BBTA.Partie_De_Jeu
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
+            //La position de départ de la caméra est le centre de la carte
+            camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne /2, Game1.chargeurCarte.InformationCarte().NbRange/2) * 40;
             // TODO: use this.Content to load your game content here
             listeEquipes.Add(new Equipe());
             listeEquipes.Add(new Equipe());
