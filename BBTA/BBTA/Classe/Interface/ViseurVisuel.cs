@@ -43,7 +43,7 @@ namespace BBTA.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, positionJoueur, null, Color.White * 0.25f, angleRotation, new Vector2(texture.Width/2f, texture.Height/2f), 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, positionJoueur, null, Color.White, angleRotation, new Vector2(texture.Width/2f, texture.Height/2f), 1, SpriteEffects.None, 0);
         }
     }
 }
