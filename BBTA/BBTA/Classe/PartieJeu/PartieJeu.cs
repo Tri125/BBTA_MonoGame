@@ -38,7 +38,7 @@ namespace BBTA.Partie_De_Jeu
         List<Equipe> listeEquipes;
         private int nbrEquipe1;
         private int nbrEquipe2;
-
+        Roquette ro;
         public List<Acteur> ListeActeur
         {
             get
@@ -99,7 +99,7 @@ namespace BBTA.Partie_De_Jeu
             //La position de départ de la caméra est le centre de la carte
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne /2, Game1.chargeurCarte.InformationCarte().NbRange/2) * 40;
             // TODO: use this.Content to load your game content here
-            listeEquipes.Add(new Equipe());
+            ro = new Roquette(mondePhysique, new Vector2(10, 0), Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu"));            listeEquipes.Add(new Equipe());
             listeEquipes.Add(new Equipe());
             List<Vector2> listeApparition = carte.ListeApparition;
             for (int iBoucle = 0; iBoucle < nbrEquipe1; iBoucle++)
@@ -125,13 +125,12 @@ namespace BBTA.Partie_De_Jeu
             Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
 
             // TODO: Add your update logic here
-            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
-
+            ro.Update(gameTime);
             listeEquipes[0].ListeMembres[0].Update(gameTime);
             vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
-            base.Update(gameTime);
+            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);            base.Update(gameTime);
         }
 
 
@@ -148,6 +147,7 @@ namespace BBTA.Partie_De_Jeu
             carte.Draw(spriteBatch);
             listeEquipes[0].ListeMembres[0].Draw(spriteBatch);
             vs.Draw(spriteBatch);
+            ro.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
