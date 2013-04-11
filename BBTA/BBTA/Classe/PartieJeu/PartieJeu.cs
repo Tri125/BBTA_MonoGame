@@ -112,12 +112,13 @@ namespace BBTA.Partie_De_Jeu
             now = Mouse.GetState();
             Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
 
+
             // TODO: Add your update logic here
+            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             ro.Update(gameTime);
             sp.Update(gameTime);
             vs.AssocierAujoueur(sp);
             vs.Update(gameTime, nowPos);
-            mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             camPartie.SuivreObjet(sp.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }

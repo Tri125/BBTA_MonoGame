@@ -19,7 +19,7 @@ namespace BBTA.Elements
         {
             this.texture = texture;
             corpsPhysique = new Body(mondePhysique);
-            joint = new Fixture(corpsPhysique, forme);
+            joint = corpsPhysique.CreateFixture(forme);
         }
 
         public float AngleRotation

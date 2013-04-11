@@ -18,8 +18,8 @@ namespace BBTA.Elements
     {
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
-        protected const float VITESSE_LATERALE = 2f;
-        protected const float FORCE_MOUVEMENT_VERTICAL = 3f;
+        protected const float VITESSE_LATERALE = 6f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
 

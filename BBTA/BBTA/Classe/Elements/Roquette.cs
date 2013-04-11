@@ -19,18 +19,13 @@ namespace BBTA.Elements
         public Roquette(World mondePhysique, Vector2 positionDepart, Texture2D texture)
             : base(mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(texture.Width/80f, texture.Height/80f), 1), positionDepart, texture, ENERGIE_EXPLOSION)
         {
-            //corpsPhysique.ApplyLinearImpulse(new Vector2(10, -20));
+            corpsPhysique.ApplyLinearImpulse(new Vector2(30, -30));
             corpsPhysique.FixedRotation = true;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (EstEnMain == true)
-            {
-                corpsPhysique.ApplyLinearImpulse(new Vector2(10, -10));
-                EstEnMain = false;
-            }
             base.Update(gameTime);
         }
 

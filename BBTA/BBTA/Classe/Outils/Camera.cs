@@ -58,7 +58,7 @@ namespace BBTA.Outils
                 Pos = new Vector2((int)IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f, (int)Pos.Y);
             }
 
-            else if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f > longueurCarte)
+            else if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f >= longueurCarte)
             {
                 Pos = new Vector2((int)longueurCarte + 5 - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f, (int)Pos.Y);
             }
