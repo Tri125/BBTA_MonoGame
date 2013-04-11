@@ -14,11 +14,12 @@ namespace BBTA
 
     public enum TypeBloc
     {
+        Apparition = -1,
         Terre = 0,
-        GazonX1Haut = 1,
-        GazonX1CoinGauche = 2,
-        GazonX1CoinDroite = 3,
-        GazonX1CoinGaucheDroite = 4
+        GazonHaut = 1,
+        GazonCoinGauche = 2,
+        GazonCoinDroite = 3,
+        GazonCoinGaucheDroite = 4
     }
     /// <summary>
     /// La classe contient les blocs composant le relief ainsi que l'arrière-plan de la carte.
@@ -35,10 +36,11 @@ namespace BBTA
         private Bloc[] blocs;
         private int largeur;
         private int hauteur;
-
+        private List<Vector2> listeApparition;
         //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
 
+        public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -50,19 +52,26 @@ namespace BBTA
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
         public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
+            this.listeApparition = new List<Vector2>();
             this.textureArrierePlan = arrierePlan;
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
             blocs = new Bloc[donneesBlocs.Length];
             for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
             {                
-                //Par convention, une case avec comme donnée "0" signifie une case vide.  En somme, il n'y a aucun bloc.
-                if(donneesBlocs[compteurBlocs] != 0)
+                //Par convention, une case avec "1" comme donnée signifie une case de terre pour notre énumérateur.
+                if (donneesBlocs[compteurBlocs] == 1)
                 {
                     //Position en mètres
-                    Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) +5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
+                    Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
                     blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
-                }                
+                }
+                else
+                    //Par convention, une case avec "-1" comme donnée signifie un lieu d'apparition pour les joueurs.
+                    if(donneesBlocs[compteurBlocs] == (int)TypeBloc.Apparition)
+                    {
+                        listeApparition.Add(new Vector2(metrePixel*((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel*((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
+                    }
             }
         }
 
@@ -106,32 +115,32 @@ namespace BBTA
             }
             else
             {
-                if (blocs[identifiant - largeur] == 0)
+                if (blocs[identifiant - largeur] <= 0 )
                 {
                     if (identifiant % largeur == 0)
                     {
-                        return TypeBloc.GazonX1CoinGauche;
+                        return TypeBloc.GazonCoinGauche;
                     }
                     else if (identifiant % largeur == largeur - 1)
                     {
-                        return TypeBloc.GazonX1CoinDroite;
+                        return TypeBloc.GazonCoinDroite;
                     }
 
                     else if (blocs[identifiant - 1] == 0 && blocs[identifiant + 1] == 0)
                     {
-                        return TypeBloc.GazonX1CoinGaucheDroite;
+                        return TypeBloc.GazonCoinGaucheDroite;
                     }
                     else if (blocs[identifiant - 1] != 0 && blocs[identifiant + 1] == 0)
                     {
-                        return TypeBloc.GazonX1CoinDroite;
+                        return TypeBloc.GazonCoinDroite;
                     }
                     else if (blocs[identifiant - 1] == 0 && blocs[identifiant + 1] != 0)
                     {
-                        return TypeBloc.GazonX1CoinGauche;
+                        return TypeBloc.GazonCoinGauche;
                     }
                     else
                     {
-                        return TypeBloc.GazonX1Haut;
+                        return TypeBloc.GazonHaut;
                     }
                 }
 

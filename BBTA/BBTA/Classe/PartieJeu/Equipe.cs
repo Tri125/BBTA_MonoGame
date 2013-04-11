@@ -28,7 +28,16 @@ namespace BBTA.Partie_De_Jeu
         public int NbrMembre { get { return membresEquipe.Count(); } }
         public List<Acteur> ListeMembres { get { return membresEquipe; } }
 
+        public Equipe()
+        {
+            this.membresEquipe = new List<Acteur>();
+        }
 
+        public Equipe(int numEquipe)
+        {
+            this.membresEquipe = new List<Acteur>();
+            this.numEquipe = numEquipe;
+        }
 
         public Equipe(int numEquipe, List<Acteur> membresEquipe)
         {
