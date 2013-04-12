@@ -10,20 +10,24 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
 
 namespace BBTA.Elements
 {
     public abstract class Acteur:ObjetPhysiqueAnimer
     {
+        //Évênements----------------------------------------------------------------------------------------------
+        public event EventHandler TourCompleter;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
-        protected const float VITESSE_LATERALE = 5f;
-        protected const float FORCE_MOUVEMENT_VERTICAL = 6f;
+        protected const float VITESSE_LATERALE = 6f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
-
+        public bool monTour = false;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
+
 
         /// <summary>
         /// Constructeur de base pour la classe acteur
@@ -49,14 +53,20 @@ namespace BBTA.Elements
             corpsPhysique.Friction = 0;
         }
 
+        protected void CompletionTour()
+        {
+            if (monTour == true)
+            {
+                TourCompleter(this, EventArgs.Empty);
+            }
+        }
+
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
          * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
-        public void RecevoirDegat(float puissance, float rayon, Vector2 lieu)
+        public void RecevoirDegat(float energieExplosion, Vector2 positionExplosion)
         {
-            float pente = -puissance / rayon;
-            float distance = Vector2.Distance(lieu, corpsPhysique.Position);
-
-            this.pointDeVie -= pente * distance + puissance;
+            float puissanceRecue =  energieExplosion / Vector2.Distance(positionExplosion, corpsPhysique.Position);
+            pointDeVie -= puissanceRecue;
         }
 
         /*Détermine si un acteur est mort*/
@@ -91,24 +101,33 @@ namespace BBTA.Elements
 
         protected void BougerADroite()
         {
-            corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-            veutSeDeplacer = true;
-            effet = SpriteEffects.FlipHorizontally;
+            if (monTour == true)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+                effet = SpriteEffects.FlipHorizontally;
+            }
         }
 
         protected void BougerAGauche()
         {
-            corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-            veutSeDeplacer = true;
-            effet = SpriteEffects.None;
+            if (monTour == true)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+                effet = SpriteEffects.None;
+            }
 
         }
 
         protected void Sauter()
         {
-            estAuSol = false;
-            corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
-            corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+            if (monTour == true)
+            {
+                estAuSol = false;
+                corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
+                corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+            }
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)

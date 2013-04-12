@@ -22,8 +22,11 @@ namespace BBTA.Elements
 
         public override void Update(GameTime gameTime)
         {
-            clavierAvant = clavierMaintenant;
-            clavierMaintenant = Keyboard.GetState();
+            if (monTour == true)
+            {
+                clavierAvant = clavierMaintenant;
+                clavierMaintenant = Keyboard.GetState();
+            }
             base.Update(gameTime);
 
             if (clavierMaintenant.IsKeyDown(Keys.D))
@@ -39,6 +42,13 @@ namespace BBTA.Elements
             if (clavierMaintenant.IsKeyDown(Keys.Space) && !clavierAvant.IsKeyDown(Keys.Space) && estAuSol == true)
             {
                 Sauter();
+            }
+
+            if (clavierMaintenant.IsKeyUp(Keys.T) && clavierAvant.IsKeyDown(Keys.T))
+            {
+                clavierAvant = clavierMaintenant;
+                clavierMaintenant = Keyboard.GetState();
+                CompletionTour();
             }
         }
 

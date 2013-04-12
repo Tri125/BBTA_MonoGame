@@ -15,7 +15,6 @@ namespace BBTA.Outils
         public Vector2 pos; // Camera Position
         protected float rotation; // Camera Rotation
 
-
         public Camera2d()
         {
             zoom = 1;
@@ -51,17 +50,17 @@ namespace BBTA.Outils
             return transform;
         }
 
-        public void SuivreObjet(Vector2 positionJoueur, int longueurCarte, int hauteurCarte)
+        public void SuivreObjet(Vector2 positionJoueur, int hauteurCarte)
         {
-            if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f > 0 &&
-                positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f < longueurCarte)
+
+            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
             {
-                Pos = new Vector2((int)positionJoueur.X, (int)Pos.Y);
+                Pos = new Vector2((int)positionJoueur.X, (int)hauteurCarte-IndependentResolutionRendering.Resolution.getVirtualViewport().Height/2f);
             }
 
-            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f < hauteurCarte)
+            else
             {
-                Pos = new Vector2((int)Pos.X, (int)positionJoueur.Y);
+                Pos = new Vector2((int)positionJoueur.X, (int)positionJoueur.Y);
             }
         }
     }

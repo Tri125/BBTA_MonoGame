@@ -26,6 +26,7 @@ namespace BBTA
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public static Random hasard = new Random();
         //États du menu
         public enum EtatJeu
         {
@@ -52,6 +53,7 @@ namespace BBTA
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Window.Title = "Bang Bang Total Annihilation";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
@@ -78,10 +80,10 @@ namespace BBTA
             option = new Options(this);
 
             //Etat Jeu
-            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
             if (chargeurCarte.ChargementReussis)
             {
-                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
             }
             partie.Visible = true;
             base.Initialize();
@@ -96,6 +98,7 @@ namespace BBTA
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
+
         }
 
         /// <summary>
