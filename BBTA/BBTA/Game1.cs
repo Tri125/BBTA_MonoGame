@@ -76,7 +76,7 @@ namespace BBTA
             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
             if (chargeurCarte.ChargementReussis)
             {
-                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 0);
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
             }
             //this.Components.Add(partie);
             partie.Visible = true;

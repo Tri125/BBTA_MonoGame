@@ -40,6 +40,11 @@ namespace BBTA.Elements
             {
                 Sauter();
             }
+
+            if (clavierMaintenant.IsKeyDown(Keys.T) && !clavierAvant.IsKeyDown(Keys.T))
+            {
+                CompletionTour();
+            }
         }
 
     }

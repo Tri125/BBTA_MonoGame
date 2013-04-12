@@ -22,6 +22,7 @@ namespace BBTA.Partie_De_Jeu
 {
     public class PartieJeu : DrawableGameComponent
     {
+
         private const int TEMPS_TOUR_DEFAUT = 3000;
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
@@ -99,7 +100,8 @@ namespace BBTA.Partie_De_Jeu
             //La position de départ de la caméra est le centre de la carte
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne /2, Game1.chargeurCarte.InformationCarte().NbRange/2) * 40;
             // TODO: use this.Content to load your game content here
-            ro = new Roquette(mondePhysique, new Vector2(10, 0), Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu"));            listeEquipes.Add(new Equipe());
+            ro = new Roquette(mondePhysique, new Vector2(10, 0), Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu"));            
+            listeEquipes.Add(new Equipe());
             listeEquipes.Add(new Equipe());
             List<Vector2> listeApparition = carte.ListeApparition;
             for (int iBoucle = 0; iBoucle < nbrEquipe1; iBoucle++)
@@ -177,6 +179,15 @@ namespace BBTA.Partie_De_Jeu
             Vector2 apparition = listeApparition[numHasard];
             listeApparition.RemoveAt(numHasard);
             return apparition / 40;
+        }
+
+
+        static public void EvenTourCompleter(object sender, EventArgs eventArgs)
+        {
+            if (sender is Acteur)
+            {
+                Console.WriteLine("VOICI UN ACTEUR QUI A FINI SON TOUR!");
+            }
         }
     }
 }
