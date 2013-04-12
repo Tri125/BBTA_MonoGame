@@ -44,8 +44,10 @@ namespace BBTA.Elements
                 Sauter();
             }
 
-            if (clavierMaintenant.IsKeyDown(Keys.T) && !clavierAvant.IsKeyDown(Keys.T))
+            if (clavierMaintenant.IsKeyUp(Keys.T) && clavierAvant.IsKeyDown(Keys.T))
             {
+                clavierAvant = clavierMaintenant;
+                clavierMaintenant = Keyboard.GetState();
                 CompletionTour();
             }
         }
