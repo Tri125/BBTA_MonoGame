@@ -109,7 +109,7 @@ namespace BBTA.Partie_De_Jeu
 
             for (int iBoucle = 0; iBoucle < nbrEquipe2; iBoucle++)
             {
-                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), new Vector2(37.5f, 0f), 100, 3, 1, 75));
+                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75));
             }
         }
 
@@ -126,7 +126,13 @@ namespace BBTA.Partie_De_Jeu
 
             // TODO: Add your update logic here
             ro.Update(gameTime);
-            listeEquipes[0].ListeMembres[0].Update(gameTime);
+            foreach (Equipe equipe in listeEquipes)
+            {
+                foreach (Acteur acteur in equipe.ListeMembres)
+                {
+                    acteur.Update(gameTime);
+                }
+            }
             vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
@@ -145,7 +151,13 @@ namespace BBTA.Partie_De_Jeu
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
             carte.Draw(spriteBatch);
-            listeEquipes[0].ListeMembres[0].Draw(spriteBatch);
+            foreach (Equipe equipe in listeEquipes)
+            {
+                foreach (Acteur acteur in equipe.ListeMembres)
+                {
+                    acteur.Draw(spriteBatch);
+                }
+            }
             vs.Draw(spriteBatch);
             ro.Draw(spriteBatch);
             spriteBatch.End();
