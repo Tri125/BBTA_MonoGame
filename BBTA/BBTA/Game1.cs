@@ -17,6 +17,7 @@ using BBTA.Menus;
 using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
+using BBTA.Classe.Menus;
 
 namespace BBTA
 {
@@ -42,8 +43,10 @@ namespace BBTA
         SpriteBatch spriteBatch; 
         MouseState avant;
         MouseState now;
+
         private Accueil acc;
         private PartieJeu partie;
+        private Options option;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
 
         public Game1()
@@ -71,13 +74,15 @@ namespace BBTA
             //Etat Accueil
             acc = new Accueil(this);
 
+            //Etat Options
+            option = new Options(this);
+
             //Etat Jeu
             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
             if (chargeurCarte.ChargementReussis)
             {
                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 4, 4);
             }
-            //this.Components.Add(partie);
             partie.Visible = true;
             base.Initialize();
         }
@@ -151,10 +156,18 @@ namespace BBTA
                         }
 
                         break;
+
                     case EtatJeu.Options:
+                        if (!this.Components.Contains(option))
+                        {
+                            this.Components.Clear();
+                            this.Components.Add(option);
+                        }
                         break;
+
                     case EtatJeu.Configuration:
                         break;
+
                     case EtatJeu.Jeu:
                         //TransferEtat
                         if (!this.Components.Contains(partie))
@@ -163,13 +176,14 @@ namespace BBTA
                             this.Components.Add(partie);
                         }
                         break;
+
                     case EtatJeu.Victoire:
                         break;
+
                     case EtatJeu.Defaite:
                         break;
+
                     case EtatJeu.Pause:
-                        break;
-                    default:
                         break;
                 }
                 base.Update(gameTime);
