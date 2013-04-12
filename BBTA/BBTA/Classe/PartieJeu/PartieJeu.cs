@@ -37,6 +37,7 @@ namespace BBTA.Partie_De_Jeu
         Carte carte;
         int[] carteTuile;
         List<Equipe> listeEquipes;
+        Equipe equipeActive;
         private int nbrEquipe1;
         private int nbrEquipe2;
         Roquette ro;
@@ -106,13 +107,19 @@ namespace BBTA.Partie_De_Jeu
             List<Vector2> listeApparition = carte.ListeApparition;
             for (int iBoucle = 0; iBoucle < nbrEquipe1; iBoucle++)
             {
-                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75));
+                JoueurHumain joueurH = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75);
+                listeEquipes[0].RajoutMembre(joueurH);
+                joueurH.TourCompleter += EvenTourCompleter;
             }
 
             for (int iBoucle = 0; iBoucle < nbrEquipe2; iBoucle++)
             {
-                listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75));
+                JoueurHumain joueurH = new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75);
+                listeEquipes[1].RajoutMembre(joueurH);
+                joueurH.TourCompleter += EvenTourCompleter;
             }
+            //On charge une première équipe pour son tour.
+            ChangementEquipe();
         }
 
         /// <summary>
@@ -137,9 +144,9 @@ namespace BBTA.Partie_De_Jeu
                     acteur.Update(gameTime);
                 }
             }
-            vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
+            vs.AssocierAujoueur(equipeActive.JoueurActif);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }
 
@@ -181,12 +188,33 @@ namespace BBTA.Partie_De_Jeu
             return apparition / 40;
         }
 
+        public void ChangementEquipe()
+        {
+            if (listeEquipes.Count != 0 && equipeActive == null)
+            {
+                equipeActive = listeEquipes[Game1.hasard.Next(listeEquipes.Count)];
+                equipeActive.ChangementJoueur();
+                equipeActive.DebutTour();
+            }
+            else
+            {
+                equipeActive = listeEquipes[(listeEquipes.IndexOf(equipeActive) + 1) % listeEquipes.Count()];
+                equipeActive.ChangementJoueur();
+                equipeActive.DebutTour();
+            }
+        }
 
-        static public void EvenTourCompleter(object sender, EventArgs eventArgs)
+        public void EvenTourCompleter(object sender, EventArgs eventArgs)
         {
             if (sender is Acteur)
             {
-                Console.WriteLine("VOICI UN ACTEUR QUI A FINI SON TOUR!");
+                Acteur envoyeur = sender as Acteur;
+                if (envoyeur != null )
+                {
+                    equipeActive.FinTour();
+                    ChangementEquipe();
+                }
+                
             }
         }
     }

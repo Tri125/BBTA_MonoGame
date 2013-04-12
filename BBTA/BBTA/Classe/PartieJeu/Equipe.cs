@@ -27,6 +27,7 @@ namespace BBTA.Partie_De_Jeu
         public int NumEquipe { get { return numEquipe; } }
         public int NbrMembre { get { return membresEquipe.Count(); } }
         public List<Acteur> ListeMembres { get { return membresEquipe; } }
+        public Acteur JoueurActif { get { return joueurActif; } }
         public bool NotreTour { get { return notreTour; } }
 
         public Equipe()
@@ -74,7 +75,14 @@ namespace BBTA.Partie_De_Jeu
         //Pour enregistrer le prochain joueur de l'équipe à jouer
         public void ChangementJoueur()
         {
-            joueurActif = membresEquipe[ (membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
+            if (membresEquipe.Count != 0 && joueurActif == null)
+            {
+                joueurActif = membresEquipe[Game1.hasard.Next(membresEquipe.Count)];
+            }
+            else
+            {
+                joueurActif = membresEquipe[(membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
+            }
         }
         //Lorsque le tour est fini, le joueurActif est désactivé
         public void FinTour()
@@ -86,7 +94,7 @@ namespace BBTA.Partie_De_Jeu
         {
             joueurActif.monTour = true;
         }
-        //Pour la transition entre équipe
+        //Pour la transition entre équipe ----- LARGEMENT MAL FAIT POUR LE MOMENT
         public void ChangementEquipe()
         {
             if (notreTour == false)

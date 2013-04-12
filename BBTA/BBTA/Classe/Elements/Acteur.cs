@@ -17,7 +17,7 @@ namespace BBTA.Elements
     public abstract class Acteur:ObjetPhysiqueAnimer
     {
         //Évênements----------------------------------------------------------------------------------------------
-        private event EventHandler TourCompleter;
+        public event EventHandler TourCompleter;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
         protected const float VITESSE_LATERALE = 6f;
@@ -45,8 +45,7 @@ namespace BBTA.Elements
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
-            TourCompleter += Partie_De_Jeu.PartieJeu.EvenTourCompleter;
-            estAuSol = false;
+            estAuSol = true;
             corpsPhysique.Position = position; 
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
