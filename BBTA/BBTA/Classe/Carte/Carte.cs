@@ -95,9 +95,10 @@ namespace BBTA
         /// Affiche les blocs nécessaires à l'écran
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 positionCamera)
         {
-            spriteBatch.Draw(textureArrierePlan, new Vector2(0, hauteur-textureArrierePlan.Height), Color.White);
+            spriteBatch.Draw(textureArrierePlan, new Vector2(positionCamera.X-IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f,
+                                                           positionCamera.Y - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f), Color.White);
             foreach (Bloc item in blocs)
             {
                 if (item != null)

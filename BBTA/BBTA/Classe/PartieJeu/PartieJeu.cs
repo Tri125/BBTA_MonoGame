@@ -131,7 +131,8 @@ namespace BBTA.Partie_De_Jeu
             listeEquipes[0].ListeMembres[0].Update(gameTime);
             vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
-            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbColonne * 40, Game1.chargeurCarte.InformationCarte().NbRange * 40);            base.Update(gameTime);
+            camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            base.Update(gameTime);
         }
 
 
@@ -145,7 +146,7 @@ namespace BBTA.Partie_De_Jeu
             // Convert physics position (meters) to screen coordinates (pixels)
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
-            carte.Draw(spriteBatch);
+            carte.Draw(spriteBatch, camPartie.Pos);
             listeEquipes[0].ListeMembres[0].Draw(spriteBatch);
             vs.Draw(spriteBatch);
             ro.Draw(spriteBatch);

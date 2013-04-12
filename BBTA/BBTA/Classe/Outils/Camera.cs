@@ -50,27 +50,17 @@ namespace BBTA.Outils
             return transform;
         }
 
-        public void SuivreObjet(Vector2 positionJoueur, int longueurCarte, int hauteurCarte)
+        public void SuivreObjet(Vector2 positionJoueur, int hauteurCarte)
         {
 
-            if (positionJoueur.X <= IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f)
+            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
             {
-                Pos = new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f, (int)Pos.Y);
-            }
-
-            else if (positionJoueur.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f >= longueurCarte)
-            {
-                Pos = new Vector2(longueurCarte + 5 - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f, (int)Pos.Y);
+                Pos = new Vector2((int)positionJoueur.X, (int)hauteurCarte-IndependentResolutionRendering.Resolution.getVirtualViewport().Height/2f);
             }
 
             else
             {
-                Pos = new Vector2((int)positionJoueur.X, (int)Pos.Y);
-            }
-
-            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f < hauteurCarte)
-            {
-                Pos = new Vector2((int)Pos.X, (int)positionJoueur.Y);
+                Pos = new Vector2((int)positionJoueur.X, (int)positionJoueur.Y);
             }
         }
     }
