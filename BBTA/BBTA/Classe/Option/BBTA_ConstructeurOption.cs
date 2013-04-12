@@ -17,15 +17,22 @@ namespace BBTA.Classe.Option
     public class BBTA_ConstructeurOption
     {
         #region Attribut
-        private Option option;
+        private Option optionUtilisateur;
+        private Option optionDefaut;
+        bool mauvaisUtilisateur;
+        bool mauvaisDefaut;
+        bool presentUtilisateur;
+        bool presentDefaut;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer = new XmlSerializer(typeof(Option));
         private bool chargementReussis;
         #endregion
 
-        #region Option par Défaut
+        #region Option Usine
         private Option optionBase = new Option();
+        private string nomDefaut = "defautConfig.xml";
+        private string nomUtilisateur = "utilisateurConfig.xml";
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
@@ -42,6 +49,73 @@ namespace BBTA.Classe.Option
             this.optionBase.InformationTouche.Tir = Keys.Space;
             this.optionBase.InformationTouche.Pause = Keys.P;
         }
+
+        private void ChercheFichierConfig()
+        {
+            List<string> fichiers = new List<string>();
+
+            foreach (var path in Directory.GetFiles(Directory.GetCurrentDirectory()))
+            {
+                fichiers.Add(System.IO.Path.GetFileName(path));
+            }
+
+            foreach (string fichier in fichiers)
+            {
+                if (fichier == nomDefaut)
+                {
+                    presentDefaut = true;
+                }
+                else if (fichier == nomUtilisateur)
+                {
+                    presentUtilisateur = true;
+                }
+            }
+        }
+
+        private void TesterFichier()
+        {
+            if (presentDefaut)
+            {
+                LectureOption(nomDefaut, optionDefaut);
+                if (chargementReussis == false)
+                {
+                    mauvaisDefaut = true;
+                }
+            }
+            else if (!presentDefaut)
+            {
+                mauvaisDefaut = true;
+            }
+
+            if (presentUtilisateur)
+            {
+                LectureOption(nomUtilisateur, optionUtilisateur);
+                if (chargementReussis == false)
+                {
+                    mauvaisUtilisateur = true;
+                }
+            }
+            else if (!presentUtilisateur)
+            {
+                mauvaisUtilisateur = true;
+            }
+        }
+
+        public void Initialisation()
+        {
+            ChercheFichierConfig();
+            TesterFichier();
+            Console.WriteLine("Fichier utilisateur trouvé : " + presentUtilisateur);
+            Console.WriteLine("Fichier defaut trouvé : " + presentDefaut);
+            Console.WriteLine("Fichier utilisateur mal chargé : " + mauvaisUtilisateur);
+            Console.WriteLine("Fichier defaut mal chargé : " + mauvaisDefaut);
+        }
+
+        public void Reparation()
+        {
+
+        }
+
 
         public BBTA_ConstructeurOption()
         {
@@ -80,13 +154,13 @@ namespace BBTA.Classe.Option
 
         }
 
-        public void LectureOption(string FichierEntre)
+        public void LectureOption(string FichierEntre, Option option)
         {
 
             try
             {
                 lecteur = new XmlTextReader(FichierEntre);
-                this.option = (Option)serializer.Deserialize(lecteur);
+                option = (Option)serializer.Deserialize(lecteur);
 
                 chargementReussis = true;
             }
