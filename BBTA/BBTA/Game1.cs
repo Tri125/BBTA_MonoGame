@@ -50,6 +50,7 @@ namespace BBTA
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Window.Title = "Bang Bang Total Annihilation";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
@@ -73,7 +74,7 @@ namespace BBTA
             acc = new Accueil(this);
 
             //Etat Jeu
-            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
             if (chargeurCarte.ChargementReussis)
             {
                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
