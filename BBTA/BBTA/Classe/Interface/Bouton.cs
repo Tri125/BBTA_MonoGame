@@ -36,7 +36,6 @@ namespace BBTA.Interface
             this.position = position;
             hauteur = texture.Height;
             largeur = texture.Width / 2;
-            //position2 = new Rectangle(largeur * (int)etat, 0, largeur, hauteur);
         }
 
         /// <summary>
