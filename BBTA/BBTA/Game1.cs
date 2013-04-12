@@ -17,6 +17,7 @@ using BBTA.Menus;
 using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
+using BBTA.Classe.Option;
 
 namespace BBTA
 {
@@ -40,12 +41,13 @@ namespace BBTA
         EtatJeu EtatActuel = EtatJeu.Accueil;
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch; 
+        SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
         private Accueil acc;
         private PartieJeu partie;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
+        static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
 
         public Game1()
         {
