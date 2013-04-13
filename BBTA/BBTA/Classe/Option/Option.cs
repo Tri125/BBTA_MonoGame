@@ -36,8 +36,23 @@ namespace BBTA.Classe.Option
         [Serializable]
         public class InfoSonore
         {
-            public int musique { get; set; }
-            public int effetSonore { get; set; }
+            private int musique;
+            private int effetSonore;
+            public int Musique { get { return musique; } set { musique = LimiteSonore(value); } }
+            public int EffetSonore { get { return effetSonore; } set { effetSonore = LimiteSonore(value); } }
+
+            private int LimiteSonore(int volume)
+            {
+                if (volume > 100)
+                {
+                    volume = 100;
+                }
+                else if (volume < 0)
+                {
+                    volume = 0;
+                }
+                return volume;
+            }
         }
 
         [Serializable]

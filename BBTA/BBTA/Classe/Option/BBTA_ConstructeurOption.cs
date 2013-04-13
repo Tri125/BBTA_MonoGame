@@ -17,8 +17,9 @@ namespace BBTA.Classe.Option
     public class BBTA_ConstructeurOption
     {
         #region Attribut
-        private Option optionUtilisateur;
-        private Option optionDefaut;
+        private Option optionActif = new Option();
+        private Option optionUtilisateur = new Option();
+        private Option optionDefaut = new Option();
         bool mauvaisUtilisateur;
         bool mauvaisDefaut;
         bool presentUtilisateur;
@@ -36,12 +37,12 @@ namespace BBTA.Classe.Option
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
-
+        public Option OptionActif { get { return optionActif; } }
 
         private void OptionBase()
         {
-            this.optionBase.InformationSonore.musique = 100;
-            this.optionBase.InformationSonore.effetSonore = 100;
+            this.optionBase.InformationSonore.Musique = 100;
+            this.optionBase.InformationSonore.EffetSonore = 100;
 
             this.optionBase.InformationTouche.Gauche = Keys.A;
             this.optionBase.InformationTouche.Droite = Keys.D;
@@ -76,7 +77,7 @@ namespace BBTA.Classe.Option
         {
             if (presentDefaut)
             {
-                LectureOption(nomDefaut, optionDefaut);
+                LectureOption(nomDefaut, ref optionDefaut);
                 if (chargementReussis == false)
                 {
                     mauvaisDefaut = true;
@@ -89,7 +90,7 @@ namespace BBTA.Classe.Option
 
             if (presentUtilisateur)
             {
-                LectureOption(nomUtilisateur, optionUtilisateur);
+                LectureOption(nomUtilisateur, ref optionUtilisateur);
                 if (chargementReussis == false)
                 {
                     mauvaisUtilisateur = true;
@@ -105,15 +106,44 @@ namespace BBTA.Classe.Option
         {
             ChercheFichierConfig();
             TesterFichier();
+            Console.WriteLine("TESTE");
             Console.WriteLine("Fichier utilisateur trouvé : " + presentUtilisateur);
             Console.WriteLine("Fichier defaut trouvé : " + presentDefaut);
             Console.WriteLine("Fichier utilisateur mal chargé : " + mauvaisUtilisateur);
             Console.WriteLine("Fichier defaut mal chargé : " + mauvaisDefaut);
+            if (mauvaisUtilisateur || mauvaisDefaut)
+            {
+                Reparation();
+                Console.WriteLine("RÉPARATION");
+                Console.WriteLine("Fichier utilisateur trouvé : " + presentUtilisateur);
+                Console.WriteLine("Fichier defaut trouvé : " + presentDefaut);
+                Console.WriteLine("Fichier utilisateur mal chargé : " + mauvaisUtilisateur);
+                Console.WriteLine("Fichier defaut mal chargé : " + mauvaisDefaut);
+            }
+            Console.WriteLine("FINI");
         }
 
         public void Reparation()
         {
+            if (mauvaisDefaut)
+            {
+                optionDefaut = new Option();
+                EcritureOption(nomDefaut, optionBase);
+                mauvaisDefaut = false;
+                presentDefaut = false;
+                ChercheFichierConfig();
+                TesterFichier();
+            }
 
+            if (mauvaisUtilisateur)
+            {
+                optionUtilisateur = new Option();
+                EcritureOption(nomUtilisateur, optionDefaut);
+                mauvaisUtilisateur = false;
+                presentUtilisateur = false;
+                ChercheFichierConfig();
+                TesterFichier();
+            }
         }
 
 
@@ -154,7 +184,7 @@ namespace BBTA.Classe.Option
 
         }
 
-        public void LectureOption(string FichierEntre, Option option)
+        public void LectureOption(string FichierEntre, ref Option option)
         {
 
             try
