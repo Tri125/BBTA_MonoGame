@@ -17,7 +17,6 @@ namespace BBTA.Classe.Option
     public class BBTA_ConstructeurOption
     {
         #region Attribut
-        private Option optionActif = new Option();
         private Option optionUtilisateur = new Option();
         private Option optionDefaut = new Option();
         bool mauvaisUtilisateur;
@@ -37,7 +36,8 @@ namespace BBTA.Classe.Option
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
-        public Option OptionActif { get { return optionActif; } }
+        public Option OptionDefaut { get { return optionDefaut; } }
+        public Option OptionUtilisateur { get { return optionUtilisateur; } }
 
         private void OptionBase()
         {
