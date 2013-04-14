@@ -21,23 +21,24 @@ using BBTA.Classe.Menus;
 
 namespace BBTA
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+    //États du menu
+    public enum EtatJeu
+    {
+        Accueil,        //État initial du jeu -> Options, Configuration ou Quitter
+        Options,        //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
+        Configuration,  //Permet de définir les paramètres de la partie -> Jeu
+        Jeu,            //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
+        Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
+        Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
+        Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
+    }
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        
+
         public static Random hasard = new Random();
-        //États du menu
-        public enum EtatJeu
-        {
-            Accueil,        //État initial du jeu -> Options, Configuration ou Quitter
-            Options,        //Permet de modifier les options du jeu tels que volumee et touches -> Accueil ou Quitter
-            Configuration,  //Permet de définir les paramètres de la partie -> Jeu
-            Jeu,            //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
-            Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
-            Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
-            Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
-        }
+        //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
 
         GraphicsDeviceManager graphics;
@@ -45,9 +46,9 @@ namespace BBTA
         MouseState avant;
         MouseState now;
 
-        private Accueil acc;
+        private MenuAccueil acc;
         private PartieJeu partie;
-        private Options option;
+        private MenuOptions option;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
 
         public Game1()
@@ -57,7 +58,7 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
@@ -74,10 +75,10 @@ namespace BBTA
             // TODO: Add your initialization logic here
 
             //Etat Accueil
-            acc = new Accueil(this);
+            acc = new MenuAccueil(this);
 
             //Etat Options
-            option = new Options(this);
+            option = new MenuOptions(this);
 
             //Etat Jeu
             chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
@@ -130,6 +131,7 @@ namespace BBTA
                     this.Exit();
                 }
 
+
                 //S'occupe du transfer d'état entre les parties du menu
                 switch (EtatActuel)
                 {
@@ -141,23 +143,8 @@ namespace BBTA
                             this.Components.Clear();    //On l'éfface
                             this.Components.Add(acc);   //Et on s'assure que ce soit le bon
                         }
-
-                        //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
-                        if (acc.btnJouer.ClicComplet())
-                        {
-                            EtatActuel = EtatJeu.Jeu;
-                        }
-                        //Clic btnOptions -> Options
-                        if (acc.btnOptions.ClicComplet())
-                        {
-                            EtatActuel = EtatJeu.Options;
-                        }
-                        //Clic btnQuitter -> Quitter
-                        if (acc.btnQuitter.ClicComplet())
-                        {
-                            this.Exit();
-                        }
-
+                        EtatActuel = acc.ObtenirEtat();
+                        acc.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.Options:
@@ -166,6 +153,8 @@ namespace BBTA
                             this.Components.Clear();
                             this.Components.Add(option);
                         }
+                        EtatActuel = option.ObtenirEtat();
+                        option.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.Configuration:

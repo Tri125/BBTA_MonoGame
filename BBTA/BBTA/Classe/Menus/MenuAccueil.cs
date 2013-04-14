@@ -11,18 +11,19 @@ using BBTA.Classe.Menus;
 
 namespace BBTA.Menus
 {
-    public class Accueil : MenuArrierePlan
+    public class MenuAccueil : MenuArrierePlan
     {        
         //Propre à accueil
         private Texture2D lettrage;
-        public Bouton btnJouer;
-        public Bouton btnOptions;
-        public Bouton btnQuitter;
+        private Bouton btnJouer;
+        private Bouton btnOptions;
+        private Bouton btnQuitter;
+        private EtatJeu prochainEtat;
 
-        public Accueil(Game game)
+        public MenuAccueil(Game game)
             : base(game)
         {
-
+            prochainEtat = EtatJeu.Accueil;
         }
 
         protected override void LoadContent()
@@ -38,6 +39,31 @@ namespace BBTA.Menus
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
+            if (btnJouer.ClicComplet())
+            {
+                prochainEtat = EtatJeu.Jeu;
+            }
+            //Clic btnOptions -> Options
+            if (btnOptions.ClicComplet())
+            {
+                prochainEtat = EtatJeu.Options;
+            }
+            //Clic btnQuitter -> Quitter
+            if (btnQuitter.ClicComplet())
+            {
+                Game.Exit();
+            }
+        }
+
+        public EtatJeu ObtenirEtat()
+        {
+            return prochainEtat;
+        }
+
+        public void RemiseAZeroEtat()
+        {
+            prochainEtat = EtatJeu.Accueil;
         }
 
         public override void Draw(GameTime gameTime)
