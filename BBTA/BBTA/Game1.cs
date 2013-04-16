@@ -18,6 +18,7 @@ using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
 using BBTA.Classe.Menus;using BBTA.Classe.Option;
+using EventInput;
 
 namespace BBTA
 {
@@ -52,7 +53,6 @@ namespace BBTA
         private MenuConfiguration config;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -76,6 +76,8 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            EventInput.EventInput.Initialize(Window);
 
             //Etat Accueil
             acc = new MenuAccueil(this);
