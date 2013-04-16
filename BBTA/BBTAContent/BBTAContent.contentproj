@@ -147,6 +147,49 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ressources\Menus\Options\lettrageOption.png">
+      <Name>lettrageOption</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\Options\btnRetour.png">
+      <Name>btnRetour</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\Configuration\btnConfirmer.png">
+      <Name>btnConfirmer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Configuration\lettrageConfiguration.png">
+      <Name>lettrageConfiguration</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\Options\ArrierePlanSlider.png">
+      <Name>ArrierePlanSlider</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Options\BarreSlider.png">
+      <Name>BarreSlider</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\Options\btnSlider.png">
+      <Name>btnSlider</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Ressources\InterfaceEnJeu\panneauSelecteurArme.png">
       <Name>panneauSelecteurArme</Name>
       <Importer>TextureImporter</Importer>

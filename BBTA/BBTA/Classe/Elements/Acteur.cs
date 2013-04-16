@@ -16,15 +16,18 @@ namespace BBTA.Elements
 {
     public abstract class Acteur:ObjetPhysiqueAnimer
     {
+        //Évênements----------------------------------------------------------------------------------------------
+        public event EventHandler TourCompleter;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
         protected const float VITESSE_LATERALE = 6f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
-
+        public bool monTour = false;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
+
 
         /// <summary>
         /// Constructeur de base pour la classe acteur
@@ -48,6 +51,14 @@ namespace BBTA.Elements
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
+        }
+
+        protected void CompletionTour()
+        {
+            if (monTour == true)
+            {
+                TourCompleter(this, EventArgs.Empty);
+            }
         }
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
@@ -90,24 +101,33 @@ namespace BBTA.Elements
 
         protected void BougerADroite()
         {
-            corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-            veutSeDeplacer = true;
-            effet = SpriteEffects.FlipHorizontally;
+            if (monTour == true)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+                effet = SpriteEffects.FlipHorizontally;
+            }
         }
 
         protected void BougerAGauche()
         {
-            corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-            veutSeDeplacer = true;
-            effet = SpriteEffects.None;
+            if (monTour == true)
+            {
+                corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+                veutSeDeplacer = true;
+                effet = SpriteEffects.None;
+            }
 
         }
 
         protected void Sauter()
         {
-            estAuSol = false;
-            corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
-            corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+            if (monTour == true)
+            {
+                estAuSol = false;
+                corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
+                corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+            }
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)

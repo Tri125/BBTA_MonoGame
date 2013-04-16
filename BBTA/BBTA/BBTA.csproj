@@ -127,12 +127,18 @@
     <Compile Include="Classe\Elements\SpriteAnimer.cs" />
     <Compile Include="Classe\Elements\SpriteJoueur.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
+    <Compile Include="Classe\Interface\Slider.cs" />
     <Compile Include="Classe\Interface\IndiquateurArmeRestante.cs" />
     <Compile Include="Classe\Interface\MenuDeployable.cs" />
     <Compile Include="Classe\Interface\SelectionArme.cs" />
     <Compile Include="Classe\Interface\ViseurVisuel.cs" />
-    <Compile Include="Classe\Menus\Accueil.cs" />
+    <Compile Include="Classe\Menus\MenuAccueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
+    <Compile Include="Classe\Menus\MenuConfiguration.cs" />
+    <Compile Include="Classe\Option\Option.cs" />
+    <Compile Include="Classe\Option\BBTA_ConstructeurOption.cs" />
+    <Compile Include="Classe\Menus\MenuArrierePlan.cs" />
+    <Compile Include="Classe\Menus\MenuOptions.cs" />
     <Compile Include="Classe\Outils\Camera.cs" />
     <Compile Include="Classe\PartieJeu\Equipe.cs" />
     <Compile Include="Classe\PartieJeu\PartieJeu.cs" />
@@ -142,6 +148,9 @@
     <Compile Include="Game1.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Carte Jeu\arena.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Carte Jeu\escalator.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -17,39 +17,46 @@ using BBTA.Menus;
 using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
+using BBTA.Classe.Menus;using BBTA.Classe.Option;
 
 namespace BBTA
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
+    //États du menu
+    public enum EtatJeu
+    {
+        Accueil, //X       //État initial du jeu -> Options, Configuration ou Quitter
+        Options, //X       //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
+        Configuration, //X //Permet de définir les paramètres de la partie -> Jeu
+        Jeu,  //x          //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
+        Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
+        Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
+        Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
+    }
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        
+
         public static Random hasard = new Random();
-        //États du menu
-        public enum EtatJeu
-        {
-            Accueil,        //État initial du jeu -> Options, Configuration ou Quitter
-            Options,        //Permet de modifier les options du jeu tels que volumee et touches -> Accueil ou Quitter
-            Configuration,  //Permet de définir les paramètres de la partie -> Jeu
-            Jeu,            //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
-            Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
-            Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
-            Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
-        }
+        //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch; 
+        SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-        private Accueil acc;
+
+        private MenuAccueil acc;
         private PartieJeu partie;
+        private MenuOptions option;
+        private MenuConfiguration config;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
+        static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            Window.Title = "Bang Bang Total Annihilation";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
@@ -57,6 +64,7 @@ namespace BBTA
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = true;
             Content.RootDirectory = "Content";
+            chargeurOption.Initialisation();
         }
 
         /// <summary>
@@ -70,15 +78,20 @@ namespace BBTA
             // TODO: Add your initialization logic here
 
             //Etat Accueil
-            acc = new Accueil(this);
+            acc = new MenuAccueil(this);
+
+            //Etat Options
+            option = new MenuOptions(this);
+
+            //Etat configuration
+            config = new MenuConfiguration(this);
 
             //Etat Jeu
-            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
+            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
             if (chargeurCarte.ChargementReussis)
             {
-                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 0);
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
             }
-            //this.Components.Add(partie);
             partie.Visible = true;
             base.Initialize();
         }
@@ -92,7 +105,6 @@ namespace BBTA
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-
         }
 
         /// <summary>
@@ -124,6 +136,7 @@ namespace BBTA
                     this.Exit();
                 }
 
+
                 //S'occupe du transfer d'état entre les parties du menu
                 switch (EtatActuel)
                 {
@@ -135,28 +148,30 @@ namespace BBTA
                             this.Components.Clear();    //On l'éfface
                             this.Components.Add(acc);   //Et on s'assure que ce soit le bon
                         }
-
-                        //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
-                        if (acc.btnJouer.ClicComplet())
-                        {
-                            EtatActuel = EtatJeu.Jeu;
-                        }
-                        //Clic btnOptions -> Options
-                        if (acc.btnOptions.ClicComplet())
-                        {
-                            EtatActuel = EtatJeu.Options;
-                        }
-                        //Clic btnQuitter -> Quitter
-                        if (acc.btnQuitter.ClicComplet())
-                        {
-                            this.Exit();
-                        }
-
+                        EtatActuel = acc.ObtenirEtat();
+                        acc.RemiseAZeroEtat();
                         break;
+
                     case EtatJeu.Options:
+                        if (!this.Components.Contains(option))
+                        {
+                            this.Components.Clear();
+                            this.Components.Add(option);
+                        }
+                        EtatActuel = option.ObtenirEtat();
+                        option.RemiseAZeroEtat();
                         break;
+
                     case EtatJeu.Configuration:
+                        if (!this.Components.Contains(config))
+                        {
+                            this.Components.Clear();
+                            this.Components.Add(config);
+                        }
+                        EtatActuel = config.ObtenirEtat();
+                        config.RemiseAZeroEtat();
                         break;
+
                     case EtatJeu.Jeu:
                         //TransferEtat
                         if (!this.Components.Contains(partie))
@@ -165,13 +180,14 @@ namespace BBTA
                             this.Components.Add(partie);
                         }
                         break;
+
                     case EtatJeu.Victoire:
                         break;
+
                     case EtatJeu.Defaite:
                         break;
+
                     case EtatJeu.Pause:
-                        break;
-                    default:
                         break;
                 }
                 base.Update(gameTime);
