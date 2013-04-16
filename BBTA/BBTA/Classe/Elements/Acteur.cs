@@ -123,5 +123,6 @@ namespace BBTA.Elements
         {
             return corpsPhysique.Position * 40;
         }
+
     }
 }

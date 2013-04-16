@@ -127,6 +127,9 @@
     <Compile Include="Classe\Elements\SpriteAnimer.cs" />
     <Compile Include="Classe\Elements\SpriteJoueur.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
+    <Compile Include="Classe\Interface\IndiquateurArmeRestante.cs" />
+    <Compile Include="Classe\Interface\MenuDeployable.cs" />
+    <Compile Include="Classe\Interface\SelectionArme.cs" />
     <Compile Include="Classe\Interface\ViseurVisuel.cs" />
     <Compile Include="Classe\Menus\Accueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />

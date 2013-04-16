@@ -16,17 +16,13 @@ namespace BBTA.Elements
     {
         const float ENERGIE_EXPLOSION = 500f;
 
-        public Roquette(World mondePhysique, Vector2 positionDepart, Texture2D texture)
+        public Roquette(World mondePhysique, Vector2 positionDepart, Vector2 direction, Texture2D texture)
             : base(mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(texture.Width/80f, texture.Height/80f), 1), positionDepart, texture, ENERGIE_EXPLOSION)
         {
-            corpsPhysique.ApplyLinearImpulse(new Vector2(30, -30));
+            direction.Normalize();
+            corpsPhysique.ApplyLinearImpulse(new Vector2(10*direction.X, 20*direction.Y));
             corpsPhysique.FixedRotation = true;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)

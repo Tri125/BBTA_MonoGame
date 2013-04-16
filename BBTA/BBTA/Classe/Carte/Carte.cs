@@ -127,15 +127,15 @@ namespace BBTA
                         return TypeBloc.GazonCoinDroite;
                     }
 
-                    else if (blocs[identifiant - 1] == 0 && blocs[identifiant + 1] == 0)
+                    else if (blocs[identifiant - 1] <= 0 && blocs[identifiant + 1] <= 0)
                     {
                         return TypeBloc.GazonCoinGaucheDroite;
                     }
-                    else if (blocs[identifiant - 1] != 0 && blocs[identifiant + 1] == 0)
+                    else if (blocs[identifiant - 1] > 0 && blocs[identifiant + 1] <= 0)
                     {
                         return TypeBloc.GazonCoinDroite;
                     }
-                    else if (blocs[identifiant - 1] == 0 && blocs[identifiant + 1] != 0)
+                    else if (blocs[identifiant - 1] <= 0 && blocs[identifiant + 1] > 0)
                     {
                         return TypeBloc.GazonCoinGauche;
                     }

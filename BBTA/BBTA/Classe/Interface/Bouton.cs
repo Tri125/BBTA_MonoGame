@@ -9,7 +9,7 @@ using IndependentResolutionRendering;
 
 namespace BBTA.Interface
 {
-    enum EtatBouton
+    public enum EtatBouton
     {
         Attente,
         Clic
@@ -18,13 +18,24 @@ namespace BBTA.Interface
     public class Bouton
     {
         private Texture2D texture;
-        public Vector2 position;
-        public Rectangle position2;
-        private int largeur;
-        private int hauteur;
+        private Rectangle rectangleCollisionBouton;
+        public Vector2 Position
+        {
+            get
+            {
+                return new Vector2(rectangleCollisionBouton.X, rectangleCollisionBouton.Y);
+            }
+
+            set
+            {
+                rectangleCollisionBouton = new Rectangle((int)value.X, (int)value.Y, rectangleCollisionBouton.Width, rectangleCollisionBouton.Height);
+            }
+        }
+
         private MouseState etatAvant;
         private MouseState etatMaintenant;
-        private EtatBouton etat;
+        protected EtatBouton etat;
+
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -33,10 +44,41 @@ namespace BBTA.Interface
         public Bouton(Texture2D texture, Vector2 position)
         {
             this.texture = texture;
-            this.position = position;
-            hauteur = texture.Height;
-            largeur = texture.Width / 2;
-            //position2 = new Rectangle(largeur * (int)etat, 0, largeur, hauteur);
+            int largeurUnique = texture.Width / 4;
+            int hauteurUnique = texture.Height / 2;
+            this.rectangleCollisionBouton = new Rectangle((int)position.X-largeurUnique, (int)position.Y - hauteurUnique, (int)texture.Width / 2, (int)texture.Height);
+        }
+
+        /// <summary>
+        /// Indique si un clic réglementaire fut fait sur le bouton.
+        /// Un tel clic correspond à un clic suivit d'un relâchement dans la zone occupée par le bouton
+        /// </summary>
+        /// <returns>Si clic il y eu</returns>
+        public bool ClicComplet(Matrix matriceCamera)
+        {
+            etat = EtatBouton.Attente;
+            etatAvant = etatMaintenant;
+            etatMaintenant = Mouse.GetState();
+            //Si la sourris est dans la zone occupée par le bouton
+            Point souris = IndependentResolutionRendering.Resolution.MouseHelper.PositionSourisCamera(matriceCamera);
+            Console.WriteLine(rectangleCollisionBouton);
+            Console.WriteLine(souris);
+
+            if(rectangleCollisionBouton.Contains(souris))
+            {
+                //Si clic il y a, mais sans relâchement, alors la texture servant à indiquer un clic sera celle affichée
+                if (etatMaintenant.LeftButton == ButtonState.Pressed)
+                {
+                    etat = EtatBouton.Clic;
+                }
+                //S'il y a relâchement, alors on le communique 
+                else if (etatMaintenant.LeftButton == ButtonState.Released && etatAvant.LeftButton == ButtonState.Pressed)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -45,28 +87,29 @@ namespace BBTA.Interface
         /// </summary>
         /// <returns>Si clic il y eu</returns>
         public bool ClicComplet()
-        {
+        {         
             etat = EtatBouton.Attente;
             etatAvant = etatMaintenant;
-            etatMaintenant = Mouse.GetState();  
+            etatMaintenant = Mouse.GetState();
+            Point souris = new Point((int)IndependentResolutionRendering.Resolution.MouseHelper.CurrentMousePosition.X,
+                                                              (int)IndependentResolutionRendering.Resolution.MouseHelper.CurrentMousePosition.Y);
             //Si la sourris est dans la zone occupée par le bouton
-         
-            if (Resolution.MouseHelper.CurrentMousePosition.X>= position.X-largeur/2f && Resolution.MouseHelper.CurrentMousePosition.X <= position.X+largeur/2f)
+
+            if (rectangleCollisionBouton.Contains(souris))
             {
-                if (Resolution.MouseHelper.CurrentMousePosition.Y >= position.Y - hauteur / 2f && Resolution.MouseHelper.CurrentMousePosition.Y <= position.Y + hauteur / 2f)
+                //Si clic il y a, mais sans relâchement, alors la texture servant à indiquer un clic sera celle affichée
+
+                if (etatMaintenant.LeftButton == ButtonState.Pressed)
                 {
-                    //Si clic il y a, mais sans relâchement, alors la texture servant à indiquer un clic sera celle affichée
-                    if (etatMaintenant.LeftButton == ButtonState.Pressed)
-                    {
-                        etat = EtatBouton.Clic;
-                    }
-                    //S'il y a relâchement, alors on le communique 
-                    else if (etatMaintenant.LeftButton == ButtonState.Released && etatAvant.LeftButton == ButtonState.Pressed)
-                    {
-                        return true;
-                    }
+                    etat = EtatBouton.Clic;
+                }
+                //S'il y a relâchement, alors on le communique 
+                else if (etatMaintenant.LeftButton == ButtonState.Released && etatAvant.LeftButton == ButtonState.Pressed)
+                {
+                    return true;
                 }
             }
+
             return false;
         }
 
@@ -74,10 +117,11 @@ namespace BBTA.Interface
         /// Affiche le bouton à l'écran selon la présence de clic ou non.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             //Si l'état est "Attente", alors la texture du bouton est standard. Autrement, la texture du bouton est celle indiquant le clic.
-            spriteBatch.Draw(texture, position, new Rectangle(largeur*(int)etat, 0, largeur, hauteur), Color.White, 0, new Vector2(largeur/2f, hauteur/2f), 1, SpriteEffects.None, 0);
+            Rectangle selection = new Rectangle((int)etat * rectangleCollisionBouton.Width, 0, rectangleCollisionBouton.Width, rectangleCollisionBouton.Height);
+            spriteBatch.Draw(texture, rectangleCollisionBouton, selection, Color.White);
         }        
     }
 }

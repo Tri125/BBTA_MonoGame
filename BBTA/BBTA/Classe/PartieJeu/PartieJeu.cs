@@ -30,6 +30,7 @@ namespace BBTA.Partie_De_Jeu
 
         private World mondePhysique;
         private int tempsEcouler;
+        public SelectionArme sa;
 
         private Camera2d camPartie;
         private ViseurVisuel vs;
@@ -38,7 +39,6 @@ namespace BBTA.Partie_De_Jeu
         List<Equipe> listeEquipes;
         private int nbrEquipe1;
         private int nbrEquipe2;
-        Roquette ro;
         public List<Acteur> ListeActeur
         {
             get
@@ -99,7 +99,7 @@ namespace BBTA.Partie_De_Jeu
             //La position de départ de la caméra est le centre de la carte
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne /2, Game1.chargeurCarte.InformationCarte().NbRange/2) * 40;
             // TODO: use this.Content to load your game content here
-            ro = new Roquette(mondePhysique, new Vector2(10, 0), Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu"));            listeEquipes.Add(new Equipe());
+            listeEquipes.Add(new Equipe());
             listeEquipes.Add(new Equipe());
             List<Vector2> listeApparition = carte.ListeApparition;
             for (int iBoucle = 0; iBoucle < nbrEquipe1; iBoucle++)
@@ -111,6 +111,9 @@ namespace BBTA.Partie_De_Jeu
             {
                 listeEquipes[0].RajoutMembre(new JoueurHumain(mondePhysique, Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp"), PhaseApparition(ref listeApparition), 100, 3, 1, 75));
             }
+            List<Texture2D> tex = new List<Texture2D>();
+            tex.Add(Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
+            sa = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), tex, Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
         }
 
         /// <summary>
@@ -127,7 +130,6 @@ namespace BBTA.Partie_De_Jeu
 
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
-            ro.Update(gameTime);
             foreach (Equipe equipe in listeEquipes)
             {
                 foreach (Acteur acteur in equipe.ListeMembres)
@@ -135,6 +137,13 @@ namespace BBTA.Partie_De_Jeu
                     acteur.Update(gameTime);
                 }
             }
+            sa.Position = new Vector2((int)listeEquipes[0].ListeMembres[0].ObtenirPosition().X, (int)listeEquipes[0].ListeMembres[0].ObtenirPosition().Y - 10);
+            if (Keyboard.GetState().IsKeyDown(Keys.L))
+            {
+                sa.Ouvrir(gameTime);
+            }
+            sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
+
             vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
             vs.Update(gameTime, nowPos);
             camPartie.SuivreObjet(listeEquipes[0].ListeMembres[0].ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
@@ -161,7 +170,7 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
             vs.Draw(spriteBatch);
-            ro.Draw(spriteBatch);
+            sa.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
