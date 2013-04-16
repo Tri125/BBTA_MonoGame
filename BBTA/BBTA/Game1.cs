@@ -24,10 +24,10 @@ namespace BBTA
     //États du menu
     public enum EtatJeu
     {
-        Accueil,        //État initial du jeu -> Options, Configuration ou Quitter
-        Options,        //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
-        Configuration,  //Permet de définir les paramètres de la partie -> Jeu
-        Jeu,            //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
+        Accueil, //X       //État initial du jeu -> Options, Configuration ou Quitter
+        Options, //X       //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
+        Configuration, //X //Permet de définir les paramètres de la partie -> Jeu
+        Jeu,  //x          //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
         Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
         Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
         Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
@@ -49,6 +49,7 @@ namespace BBTA
         private MenuAccueil acc;
         private PartieJeu partie;
         private MenuOptions option;
+        private MenuConfiguration config;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
 
@@ -59,7 +60,7 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
@@ -82,6 +83,9 @@ namespace BBTA
             //Etat Options
             option = new MenuOptions(this);
 
+            //Etat configuration
+            config = new MenuConfiguration(this);
+
             //Etat Jeu
             chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
             if (chargeurCarte.ChargementReussis)
@@ -101,7 +105,6 @@ namespace BBTA
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-
         }
 
         /// <summary>
@@ -160,6 +163,13 @@ namespace BBTA
                         break;
 
                     case EtatJeu.Configuration:
+                        if (!this.Components.Contains(config))
+                        {
+                            this.Components.Clear();
+                            this.Components.Add(config);
+                        }
+                        EtatActuel = config.ObtenirEtat();
+                        config.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.Jeu:

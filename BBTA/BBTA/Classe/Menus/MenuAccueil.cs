@@ -42,7 +42,7 @@ namespace BBTA.Menus
             //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
             if (btnJouer.ClicComplet())
             {
-                prochainEtat = EtatJeu.Jeu;
+                prochainEtat = EtatJeu.Configuration;
             }
             //Clic btnOptions -> Options
             if (btnOptions.ClicComplet())

@@ -131,6 +131,7 @@
     <Compile Include="Classe\Interface\ViseurVisuel.cs" />
     <Compile Include="Classe\Menus\MenuAccueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
+    <Compile Include="Classe\Menus\MenuConfiguration.cs" />
     <Compile Include="Classe\Option\Option.cs" />
     <Compile Include="Classe\Option\BBTA_ConstructeurOption.cs" />
     <Compile Include="Classe\Menus\MenuArrierePlan.cs" />

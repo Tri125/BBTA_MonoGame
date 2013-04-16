@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using IndependentResolutionRendering;
 using BBTA.Interface;
+using Microsoft.Xna.Framework;
+using IndependentResolutionRendering;
 
 namespace BBTA.Classe.Menus
 {
-    public class MenuOptions : MenuArrierePlan
+    public class MenuConfiguration : MenuArrierePlan
     {
         private Texture2D lettrage;
         private Bouton btnRetour;
+        private Bouton btnConfirmer;
         private EtatJeu prochainEtat;
 
-        public MenuOptions(Game game)
+        public MenuConfiguration(Game game)
             : base(game)
         {
-            prochainEtat = EtatJeu.Options;
+            prochainEtat = EtatJeu.Configuration;
         }
 
         protected override void LoadContent()
         {
-            lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
+            lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\lettrageConfiguration");
             btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800));
+            btnConfirmer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnConfirmer"), new Vector2(1200, 700));
             base.LoadContent();
         }
 
@@ -35,6 +37,10 @@ namespace BBTA.Classe.Menus
             {
                 prochainEtat = EtatJeu.Accueil;
             }
+            if (btnConfirmer.ClicComplet())
+            {
+                prochainEtat = EtatJeu.Jeu;
+            }
         }
 
         public EtatJeu ObtenirEtat()
@@ -44,7 +50,7 @@ namespace BBTA.Classe.Menus
 
         public void RemiseAZeroEtat()
         {
-            prochainEtat = EtatJeu.Options;
+            prochainEtat = EtatJeu.Configuration;
         }
 
         public override void Draw(GameTime gameTime)
@@ -53,6 +59,7 @@ namespace BBTA.Classe.Menus
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
             btnRetour.Draw(spriteBatch);
+            btnConfirmer.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
