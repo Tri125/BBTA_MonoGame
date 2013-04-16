@@ -19,7 +19,7 @@ namespace BBTA.Interface
     {
         private Texture2D texture;
         public Vector2 position;
-        public Rectangle position2;
+
         private int largeur;
         private int hauteur;
         private MouseState etatAvant;
@@ -47,9 +47,9 @@ namespace BBTA.Interface
         {
             etat = EtatBouton.Attente;
             etatAvant = etatMaintenant;
-            etatMaintenant = Mouse.GetState();  
+            etatMaintenant = Mouse.GetState(); 
+
             //Si la sourris est dans la zone occupée par le bouton
-         
             if (Resolution.MouseHelper.CurrentMousePosition.X>= position.X-largeur/2f && Resolution.MouseHelper.CurrentMousePosition.X <= position.X+largeur/2f)
             {
                 if (Resolution.MouseHelper.CurrentMousePosition.Y >= position.Y - hauteur / 2f && Resolution.MouseHelper.CurrentMousePosition.Y <= position.Y + hauteur / 2f)

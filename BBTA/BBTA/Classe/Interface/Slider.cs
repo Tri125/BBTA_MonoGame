@@ -5,123 +5,100 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
+using IndependentResolutionRendering;
 
 namespace BBTA.Classe.Interface
 {
+    enum EtatSlider
+    {
+        Attente,
+        Clic
+    }
+
     class Slider
     {
-        /*//slider background
-        private Texture2D sliderBackground; //Texture of the slider background
-        private Vector2 posBackground; //position of the slider background
-        private Rectangle sliderBackgroundRectangle;
+        //sliderArrierePlan
+        private Texture2D sliderArrierePlan; //Texture of the slider background
+        private Vector2 posArrierePlan; //position of the slider background
+        private int largeurArrierePlan;
+        private int hauteurArrierePlan;
+
+        //barre slider
+        private Texture2D barre; //Texture of the slider background
+        private Vector2 posBarre; //position of the slider background
+        private int largeurBarre;
+        private int hauteurBarre;
 
         //slider
-        private Texture2D slider;
+        private Texture2D btnSlider;
         private Vector2 posSlider;
-        private Rectangle sliderRectangle;
+        private int largeurBouton;
+        private int hauteurBouton;
 
-        private Rectangle touchRectangle;     
-
-        //says us if the player has touched the sliders background
-        private bool touched = false;
+        private MouseState etatAvant;
+        private MouseState etatMaintenant;
+        private EtatSlider etat;
 
         //devider that we get a value between 0 - 100 
         private float divider;
 
-        public Slider(ContentManager content)
+        public Slider(Texture2D sliderArrierePlan, Vector2 posArrierePlan, Texture2D barre, Texture2D btnSlider)
         {
-            sliderBackground = content.Load<Texture2D>("ship/slider");
-            posBackground = new Vector2(40, HelpfulGlobals.Instance.screenH
-             - sliderBackground.Height);
+            this.sliderArrierePlan = sliderArrierePlan;
+            this.posArrierePlan = posArrierePlan;
+            hauteurArrierePlan = sliderArrierePlan.Height;
+            largeurArrierePlan = sliderArrierePlan.Width;
 
-            slider = content.Load<Texture2D>("ship/slider_button");
-            posSlider = new Vector2(posBackground.X + sliderBackground.Width / 2,
-            posBackground.Y);
+            this.barre = barre;
+            this.posBarre = posArrierePlan;
+            hauteurBarre = barre.Height;
+            largeurBarre = barre.Width;
 
-            sliderRectangle = new Rectangle((int) posSlider.X,
-            (int) posSlider.Y, slider.Width, slider.Height);
+            this.btnSlider = btnSlider;
+            this.posSlider = posArrierePlan;
+            hauteurBouton = btnSlider.Height;
+            largeurBouton = btnSlider.Width;
 
-            touchRectangle = new Rectangle(0, 0, 30, 30);
-            sliderBackgroundRectangle = new Rectangle((int) posBackground.X - 40,
-            (int) posBackground.Y - 10, sliderBackground.Width + 80,
-            sliderBackground.Height + 20);
+            etat = EtatSlider.Attente;
 
             //later we want to get values between 0 and 100 from our slider
-            divider = (sliderBackground.Width - slider.Width) / 100f;
+            divider = (sliderArrierePlan.Width - btnSlider.Width) / 100f;
         }
 
-        public void Update(GameTime gameTime)
+        public void Deplacement()
         {
-            float distance = 0f;
-            touched = false;
+            etat = EtatSlider.Attente;
+            etatAvant = etatMaintenant;
+            etatMaintenant = Mouse.GetState();
 
-            TouchCollection touches = TouchPanel.GetState();       
-
-            foreach (var touch in touches)
+            if (Resolution.MouseHelper.CurrentMousePosition.X >= posSlider.X - largeurBouton / 2f && Resolution.MouseHelper.CurrentMousePosition.X <= posSlider.X + largeurBouton / 2f)
             {
-                touchRectangle.X = (int) touch.Position.X - 15; // -15, because the finger is 30x30 pixel
-                touchRectangle.Y = (int) touch.Position.Y - 15;          
-
-                //finger touched on the sliders background
-                if (touchRectangle.Intersects(sliderBackgroundRectangle))
+                if (Resolution.MouseHelper.CurrentMousePosition.Y >= posSlider.Y - hauteurBouton / 2f && Resolution.MouseHelper.CurrentMousePosition.Y <= posSlider.Y + hauteurBouton / 2f)
                 {
-                    //Distance between finger and slider button
-                   distance = posSlider.X - (touchRectangle.X);
-
-                    //move the button to position of the finger 
-                    if (distance < -5f)
+                    //Si clic il y a, mais sans relâchement, slider peut se déplacer
+                    if (etatMaintenant.LeftButton == ButtonState.Pressed)
                     {
-                        posSlider.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.40f;
+                        etat = EtatSlider.Clic;
                     }
-                    if (distance > 5f)
+                    //S'il y a un maintient, on peut déplacer le slider
+                    if (etatMaintenant.LeftButton == ButtonState.Pressed && etatAvant.LeftButton == ButtonState.Pressed)
                     {
-                        posSlider.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.40f;
+                        posSlider.X = Resolution.MouseHelper.CurrentMousePosition.X;
                     }
-
-                    if (posSlider.X <= posBackground.X)
-                    {
-                        posSlider.X = posBackground.X;
-                    }
-                    if (posSlider.X >= posBackground.X + sliderBackground.Width - slider.Width)
-                    {
-                        posSlider.X = posBackground.X + sliderBackground.Width - slider.Width;
-                    }    
-
-                    sliderRectangle.X = (int)posSlider.X;
-
-                    //player touched the slider
-                    touched = true;
                 }
             }
+        }
 
-            if (touched == false)
-            {
-                //move back to the middle of the slider
-                distance = posSlider.X - (posBackground.X + (sliderBackground.Width
-                - slider.Width) / 2);
-                if (distance < -5f)
-                {
-                    posSlider.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.40f;
-                }
-                else if (distance > 5f)
-                {
-                    posSlider.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.40f;
-                }
-                else
-                {
-                    posSlider.X = posBackground.X + (sliderBackground.Width - slider.Width) / 2;
-                }
-
-                sliderRectangle.X = (int)posSlider.X;
-            }
-
-            HelpfulGlobals.Instance.sliderValue = (posSlider.X - posBackground.X) / divider;
-           }
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
-            HelpfulGlobals.Instance.spriteBatch.Draw(sliderBackground, posBackground, Color.White);
-            HelpfulGlobals.Instance.spriteBatch.Draw(slider, posSlider, Color.White);
-        }*/
+            //Arriere Plan
+            spriteBatch.Draw(sliderArrierePlan, posArrierePlan, null, Color.White, 0, new Vector2(largeurArrierePlan / 2f, hauteurArrierePlan / 2f), 1, SpriteEffects.None, 0);
+            //Barre
+            spriteBatch.Draw(barre, posArrierePlan, null, Color.White, 0, new Vector2(largeurBarre / 2f, hauteurBarre / 2f), 1, SpriteEffects.None, 0);
+            //Bouton
+            spriteBatch.Draw(btnSlider, posSlider, null, Color.White, 0, new Vector2(largeurBouton / 2f, hauteurBouton / 2f), 1, SpriteEffects.None, 0);
 
+        }
     }
 }
