@@ -10,7 +10,20 @@ namespace BBTA.Interface
     public abstract class MenuDeployable
     {
         protected Texture2D texturePanneau;
-        public Vector2 Position { get; set; }
+        private Vector2 position;
+        public Vector2 Position 
+        {
+            get
+            {
+                return position;
+            }
+            set
+            {
+                position = value;
+                aireOccupee = new Rectangle((int)value.X- texturePanneau.Width / 2, (int)value.Y - 10 - texturePanneau.Height, aireOccupee.Width, aireOccupee.Height);
+            }
+        }
+        protected Rectangle aireOccupee;
 
         protected bool estDeploye = false;
         protected bool estOuvert = false;
@@ -22,6 +35,7 @@ namespace BBTA.Interface
         {
             this.texturePanneau = texture;
             this.delaiOuvertureFermeture = delaiOuvertureFermeture;
+            aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, (int)texture.Width, (int)texture.Height);
         }
 
         public void Ouvrir(GameTime gameTime)

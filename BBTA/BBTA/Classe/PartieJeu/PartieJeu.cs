@@ -150,6 +150,7 @@ namespace BBTA.Partie_De_Jeu
             {
                 sa.Ouvrir(gameTime);
             }
+            sa.AssocierJoueur(equipeActive.JoueurActif);
             sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
 
             vs.AssocierAujoueur(equipeActive.JoueurActif);
