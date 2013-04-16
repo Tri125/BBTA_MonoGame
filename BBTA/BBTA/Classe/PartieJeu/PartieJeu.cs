@@ -152,7 +152,7 @@ namespace BBTA.Partie_De_Jeu
             }
             sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
 
-            vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
+            vs.AssocierAujoueur(equipeActive.JoueurActif);
             vs.Update(gameTime, nowPos);
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
