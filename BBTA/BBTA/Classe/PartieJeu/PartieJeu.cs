@@ -201,18 +201,15 @@ namespace BBTA.Partie_De_Jeu
             if (listeEquipes.Count != 0 && equipeActive == null)
             {
                 equipeActive = listeEquipes[Game1.hasard.Next(listeEquipes.Count)];
-                equipeActive.ChangementEquipe();
-                equipeActive.ChangementJoueur();
-                equipeActive.DebutTour();
             }
             else
             {
                 equipeActive.ChangementEquipe();
                 equipeActive = listeEquipes[(listeEquipes.IndexOf(equipeActive) + 1) % listeEquipes.Count()];
-                equipeActive.ChangementEquipe();
-                equipeActive.ChangementJoueur();
-                equipeActive.DebutTour();
             }
+            equipeActive.ChangementEquipe();
+            equipeActive.ChangementJoueur();
+            equipeActive.DebutTour();
         }
 
         public void EvenTourCompleter(object sender, EventArgs eventArgs)
