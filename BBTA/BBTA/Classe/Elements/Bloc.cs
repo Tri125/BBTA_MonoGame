@@ -38,6 +38,8 @@ namespace BBTA.Elements
             this.type = type;
             this.metrePixel = metrePixel;
             corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
+            corpsPhysique.CollisionCategories = Category.All;
+            corpsPhysique.CollidesWith = Category.All;
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
             echelle = 1.01f;

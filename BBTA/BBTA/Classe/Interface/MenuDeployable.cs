@@ -26,7 +26,7 @@ namespace BBTA.Interface
         protected Rectangle aireOccupee;
 
         protected bool estDeploye = false;
-        protected bool estOuvert = false;
+        public bool estOuvert{get;set;}
 
         float progressionDeploiement = 0;
         int delaiOuvertureFermeture;
@@ -36,15 +36,6 @@ namespace BBTA.Interface
             this.texturePanneau = texture;
             this.delaiOuvertureFermeture = delaiOuvertureFermeture;
             aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, (int)texture.Width, (int)texture.Height);
-        }
-
-        public void Ouvrir(GameTime gameTime)
-        {
-            estOuvert = true;
-        }
-
-        public void Fermer(GameTime gameTime)
-        {
             estOuvert = false;
         }
 

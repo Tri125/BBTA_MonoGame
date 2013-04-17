@@ -25,6 +25,7 @@ namespace BBTA.Interface
         private MouseState sourisApres;
         private List<IndiquateurArmeRestante> Armes = new List<IndiquateurArmeRestante>();
         public Armes armeChoisie {get;set;}
+        private bool estDessiner = false;
 
         public SelectionArme(Texture2D texturePanneau, List<Texture2D> texturesArmes, SpriteFont police, int delaiDeploiement = 500)
             :base(texturePanneau, delaiDeploiement)
@@ -43,6 +44,7 @@ namespace BBTA.Interface
         public void AssocierJoueur(Acteur joueur)
         {
             Position = new Vector2(joueur.ObtenirPosition().X, joueur.ObtenirPosition().Y - 10);
+            estDessiner = true;
         }
 
         public void Update(GameTime gameTime, Matrix matriceCamera)
@@ -62,13 +64,13 @@ namespace BBTA.Interface
                     if (Armes[compteur].ClicComplet(matriceCamera) == true)
                     {
                         armeChoisie = (Armes)compteur;
-                        Fermer(gameTime);
+                        estOuvert = false;
                     }
                 }
             }
             if (estOuvert == true && !aireOccupee.Contains(positionSouris) && sourisApres.LeftButton == ButtonState.Pressed && sourisAvant.LeftButton == ButtonState.Released)
             {
-                Fermer(gameTime);
+                estOuvert = false;
             }
 
             base.Update(gameTime);
@@ -76,13 +78,17 @@ namespace BBTA.Interface
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
-            if (estDeploye == true && estOuvert == true)
+            if (estDessiner == true)
             {
-                foreach (Bouton item in Armes)
+                base.Draw(spriteBatch);
+                if (estDeploye == true && estOuvert == true)
                 {
-                    item.Draw(spriteBatch);
+                    foreach (Bouton item in Armes)
+                    {
+                        item.Draw(spriteBatch);
+                    }
                 }
+                estDessiner = false;
             }
         }
 
