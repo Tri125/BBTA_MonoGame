@@ -7,13 +7,15 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BBTA.Classe.Option;
 
 namespace BBTA.Elements
 {
     public class JoueurHumain : Acteur
     {
-        KeyboardState clavierAvant;
-        KeyboardState clavierMaintenant;
+        private KeyboardState clavierAvant;
+        private KeyboardState clavierMaintenant;
+        private BBTA.Classe.Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionUtilisateur.InformationTouche;
 
         public JoueurHumain(World mondePhysique, Texture2D texture, Vector2 position, float pointsVie, int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(mondePhysique, pointsVie, texture, position, nbColonnes, nbRangees, milliSecParImage)
@@ -29,17 +31,17 @@ namespace BBTA.Elements
             }
             base.Update(gameTime);
 
-            if (clavierMaintenant.IsKeyDown(Keys.D))
+            if (clavierMaintenant.IsKeyDown(optionClavier.Droite))
             {
                 BougerADroite();
             }
 
-            if (clavierMaintenant.IsKeyDown(Keys.A))
+            if (clavierMaintenant.IsKeyDown(optionClavier.Gauche))
             {
                 BougerAGauche();
             }
 
-            if (clavierMaintenant.IsKeyDown(Keys.Space) && !clavierAvant.IsKeyDown(Keys.Space) && estAuSol == true)
+            if (clavierMaintenant.IsKeyDown(optionClavier.Saut) && !clavierAvant.IsKeyDown(optionClavier.Saut) && estAuSol == true)
             {
                 Sauter();
             }
