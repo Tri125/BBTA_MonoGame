@@ -33,7 +33,8 @@ namespace BBTA.Interface
             set
             {
                 //'Modifie la position du bouton en fonction du Vector2
-                rectangleCollisionBouton = new Rectangle((int)value.X, (int)value.Y, rectangleCollisionBouton.Width, rectangleCollisionBouton.Height);
+                rectangleCollisionBouton = new Rectangle((int)value.X, (int)value.Y,
+                    rectangleCollisionBouton.Width, rectangleCollisionBouton.Height);
             }
         }
 
