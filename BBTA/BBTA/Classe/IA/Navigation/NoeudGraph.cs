@@ -27,7 +27,7 @@ namespace BBTA.Classe.IA.Navigation
 
         protected void AffichageNoeud(NoeudGraph n)
         {
-            Console.WriteLine(n.NumIndex);
+            Console.WriteLine("Index : " + n.NumIndex);
         }
 
     
