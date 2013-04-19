@@ -146,11 +146,13 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && sa.estOuvert == false)
             {
                 sa.estOuvert = true;
+                sa.AssocierJoueur(equipeActive.JoueurActif);
             }
-            sa.Update(gameTime);
+
+            sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
             
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);

@@ -25,22 +25,28 @@ namespace BBTA.Classe.Menus
         protected override void LoadContent()
         {
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\lettrageConfiguration");
-            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800));
-            btnConfirmer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnConfirmer"), new Vector2(1200, 700));
+            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
+            btnRetour.Clic += new EventHandler(btnRetour_Clic);
+            btnConfirmer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnConfirmer"), new Vector2(1200, 700), null);
+            btnConfirmer.Clic += new EventHandler(btnConfirmer_Clic);
             base.LoadContent();
+        }
+
+        void btnConfirmer_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Jeu;
+        }
+
+        void btnRetour_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Accueil;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (btnRetour.ClicComplet())
-            {
-                prochainEtat = EtatJeu.Accueil;
-            }
-            if (btnConfirmer.ClicComplet())
-            {
-                prochainEtat = EtatJeu.Jeu;
-            }
+            btnConfirmer.Update(null);
+            btnRetour.Update(null);
         }
 
         public EtatJeu ObtenirEtat()

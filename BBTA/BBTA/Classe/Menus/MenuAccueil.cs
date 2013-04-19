@@ -30,30 +30,37 @@ namespace BBTA.Menus
         {
             //Contenu propre au menu Accueil
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\lettrage");
-            btnJouer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnJouer"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 500));
-            btnOptions = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnOptions"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 625));
-            btnQuitter = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnQuitter"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 750));
+            btnJouer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnJouer"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 500), null);
+            btnJouer.Clic += new EventHandler(btnJouer_Clic);
+            btnOptions = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnOptions"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 625), null);
+            btnOptions.Clic += new EventHandler(btnOptions_Clic);
+            btnQuitter = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Accueil\btnQuitter"), new Vector2(Resolution.getVirtualViewport().Width / 2f, 750), null);
+            btnQuitter.Clic += new EventHandler(btnQuitter_Clic);
             base.LoadContent();
+        }
+
+        void btnQuitter_Clic(object sender, EventArgs e)
+        {
+            Game.Exit();
+        }
+
+        void btnOptions_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Options;
+        }
+
+        void btnJouer_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Configuration;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            btnJouer.Update(null);
+            btnOptions.Update(null);
+            btnQuitter.Update(null);
             //Clic sur btnJouer -> Configuration en temps normal, mais pour la phase de développement, aller directement au jeu
-            if (btnJouer.ClicComplet())
-            {
-                prochainEtat = EtatJeu.Configuration;
-            }
-            //Clic btnOptions -> Options
-            if (btnOptions.ClicComplet())
-            {
-                prochainEtat = EtatJeu.Options;
-            }
-            //Clic btnQuitter -> Quitter
-            if (btnQuitter.ClicComplet())
-            {
-                Game.Exit();
-            }
         }
 
         public EtatJeu ObtenirEtat()

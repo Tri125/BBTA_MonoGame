@@ -12,8 +12,8 @@ namespace BBTA.Interface
         private SpriteFont police;
         public int nbArmeRestantes { get; set; }
 
-        public IndiquateurArmeRestante(Texture2D texture, Vector2 position, SpriteFont police)
-            : base(texture, position)
+        public IndiquateurArmeRestante(Texture2D texture, Rectangle? boutonDansSpriteSheet, Vector2 position, SpriteFont police)
+            : base(texture, position, boutonDansSpriteSheet)
         {
             this.police = police;
         }
