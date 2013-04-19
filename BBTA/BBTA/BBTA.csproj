@@ -127,6 +127,8 @@
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
+    <Compile Include="Classe\IA\Navigation\Graphe.cs" />
+    <Compile Include="Classe\IA\Navigation\NavArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
