@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using BBTA.Elements;
 
 namespace BBTA.Interface
 {
@@ -19,7 +20,9 @@ namespace BBTA.Interface
     {
         public bool YaTilUneArmeSelectionne { get; set; }
         private List<Texture2D> texturesArmes;
-        private Rectangle positionSouris = new Rectangle(0, 0, 1, 1);
+        private Point positionSouris;
+        private MouseState sourisAvant;
+        private MouseState sourisApres;
         private List<IndiquateurArmeRestante> Armes = new List<IndiquateurArmeRestante>();
         public Armes armeChoisie {get;set;}
 
@@ -37,8 +40,16 @@ namespace BBTA.Interface
             }
         }
 
+        public void AssocierJoueur(Acteur joueur)
+        {
+            Position = new Vector2(joueur.ObtenirPosition().X, joueur.ObtenirPosition().Y - 10);
+        }
+
         public void Update(GameTime gameTime, Matrix matriceCamera)
         {
+            sourisAvant = sourisApres;
+            sourisApres = Mouse.GetState();
+            positionSouris = IndependentResolutionRendering.Resolution.MouseHelper.PositionSourisCamera(matriceCamera);
             if (estDeploye == true)
             {
                 for (int compteur = 0; compteur < Armes.Count; compteur++)
@@ -55,6 +66,11 @@ namespace BBTA.Interface
                     }
                 }
             }
+            if (estOuvert == true && !aireOccupee.Contains(positionSouris) && sourisApres.LeftButton == ButtonState.Pressed && sourisAvant.LeftButton == ButtonState.Released)
+            {
+                Fermer(gameTime);
+            }
+
             base.Update(gameTime);
         }
 

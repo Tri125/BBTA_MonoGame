@@ -150,9 +150,10 @@ namespace BBTA.Partie_De_Jeu
             {
                 sa.Ouvrir(gameTime);
             }
+            sa.AssocierJoueur(equipeActive.JoueurActif);
             sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
 
-            vs.AssocierAujoueur(listeEquipes[0].ListeMembres[0]);
+            vs.AssocierAujoueur(equipeActive.JoueurActif);
             vs.Update(gameTime, nowPos);
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
@@ -201,18 +202,15 @@ namespace BBTA.Partie_De_Jeu
             if (listeEquipes.Count != 0 && equipeActive == null)
             {
                 equipeActive = listeEquipes[Game1.hasard.Next(listeEquipes.Count)];
-                equipeActive.ChangementEquipe();
-                equipeActive.ChangementJoueur();
-                equipeActive.DebutTour();
             }
             else
             {
                 equipeActive.ChangementEquipe();
                 equipeActive = listeEquipes[(listeEquipes.IndexOf(equipeActive) + 1) % listeEquipes.Count()];
-                equipeActive.ChangementEquipe();
-                equipeActive.ChangementJoueur();
-                equipeActive.DebutTour();
             }
+            equipeActive.ChangementEquipe();
+            equipeActive.ChangementJoueur();
+            equipeActive.DebutTour();
         }
 
         public void EvenTourCompleter(object sender, EventArgs eventArgs)
