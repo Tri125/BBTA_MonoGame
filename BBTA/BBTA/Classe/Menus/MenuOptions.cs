@@ -17,10 +17,10 @@ namespace BBTA.Classe.Menus
         private EtatJeu prochainEtat;
 
         private Slider sliderEffet;
-        private float pourcentageEffet;
+        private int pourcentageEffet;
 
         private Slider sliderMusique;
-        private float pourcentageMusique;
+        private int pourcentageMusique;
 
         public MenuOptions(Game game)
             : base(game)
