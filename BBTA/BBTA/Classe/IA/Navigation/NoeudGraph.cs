@@ -17,7 +17,7 @@ namespace BBTA.Classe.IA.Navigation
 
         public NoeudGraph()
         {
-            this.NumIndex = (int)MessageNoeud.index_invalide;
+            this.NumIndex = (int)Navigation.MessageNoeud.index_invalide;
         }
 
         public NoeudGraph(int index)
