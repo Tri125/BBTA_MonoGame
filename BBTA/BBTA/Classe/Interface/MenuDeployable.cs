@@ -29,15 +29,23 @@ namespace BBTA.Interface
         protected bool estDeploye = false;
         public bool estOuvert{get;set;}
 
-        float progressionDeploiement = 0;
+        protected float progressionDeploiement = 0;
         int delaiOuvertureFermeture;
 
         public MenuDeployable(Texture2D texture, Rectangle? tailleBouton, int delaiOuvertureFermeture = 500)
         {
             this.texturePanneau = texture;
-            this.tailleBouton = tailleBouton.Value;
             this.delaiOuvertureFermeture = delaiOuvertureFermeture;
-            aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, (int)texture.Width, (int)texture.Height);
+            if (!tailleBouton.HasValue)
+            {
+                aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, (int)texture.Width, (int)texture.Height);
+                this.tailleBouton = new Rectangle(0, 0, aireOccupee.Width, aireOccupee.Height);
+            }
+            else
+            {
+                aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, tailleBouton.Value.Width, tailleBouton.Value.Height);
+                this.tailleBouton = tailleBouton.Value;
+            }
             estOuvert = false;
         }
 

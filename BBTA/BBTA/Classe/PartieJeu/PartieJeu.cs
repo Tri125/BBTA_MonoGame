@@ -91,7 +91,7 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
+            vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"), Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -120,6 +120,14 @@ namespace BBTA.Partie_De_Jeu
             List<Texture2D> tex = new List<Texture2D>();
             tex.Add(Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
             sa = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), tex, Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
+            sa.ArmeSelectionnee += new EventHandler(sa_ArmeSelectionnee);
+        }
+
+        void sa_ArmeSelectionnee(object sender, EventArgs e)
+        {
+            equipeActive.JoueurActif.enModeTir = true;
+            vs.Dessiner = true;
+            vs.estOuvert = true;
         }
 
         /// <summary>
@@ -144,14 +152,16 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && sa.estOuvert == false)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && sa.estOuvert == false && !equipeActive.JoueurActif.enModeTir)
             {
                 sa.estOuvert = true;
-                sa.AssocierJoueur(equipeActive.JoueurActif);
             }
 
+            sa.Position = equipeActive.JoueurActif.ObtenirPosition();
             sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
-            
+            vs.Position = equipeActive.JoueurActif.ObtenirPosition();
+            vs.Update(gameTime);
+
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }
@@ -176,7 +186,7 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
             vs.Draw(spriteBatch);
-            sa.Draw(spriteBatch);
+            sa.Draw(spriteBatch, GraphicsDevice);
             spriteBatch.End();
             base.Draw(gameTime);
         }
