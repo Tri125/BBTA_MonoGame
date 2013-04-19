@@ -10,6 +10,7 @@ namespace BBTA.Interface
     public abstract class MenuDeployable
     {
         protected Texture2D texturePanneau;
+        private Rectangle tailleBouton;
         private Vector2 position;
         public Vector2 Position 
         {
@@ -26,25 +27,17 @@ namespace BBTA.Interface
         protected Rectangle aireOccupee;
 
         protected bool estDeploye = false;
-        protected bool estOuvert = false;
+        public bool estOuvert{get;set;}
 
         float progressionDeploiement = 0;
         int delaiOuvertureFermeture;
 
-        public MenuDeployable(Texture2D texture, int delaiOuvertureFermeture = 500)
+        public MenuDeployable(Texture2D texture, Rectangle? tailleBouton, int delaiOuvertureFermeture = 500)
         {
             this.texturePanneau = texture;
+            this.tailleBouton = tailleBouton.Value;
             this.delaiOuvertureFermeture = delaiOuvertureFermeture;
             aireOccupee = new Rectangle((int)Position.X, (int)Position.Y, (int)texture.Width, (int)texture.Height);
-        }
-
-        public void Ouvrir(GameTime gameTime)
-        {
-            estOuvert = true;
-        }
-
-        public void Fermer(GameTime gameTime)
-        {
             estOuvert = false;
         }
 
@@ -60,7 +53,7 @@ namespace BBTA.Interface
                 }
             }
 
-            if (estOuvert == false && estDeploye == true)
+            if (estOuvert == false)
             {
                 progressionDeploiement -= (float)1 / delaiOuvertureFermeture * gameTime.ElapsedGameTime.Milliseconds;
                 if (progressionDeploiement < 0)
@@ -74,7 +67,7 @@ namespace BBTA.Interface
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texturePanneau, Position, null, Color.White * progressionDeploiement, 0,
+            spriteBatch.Draw(texturePanneau, Position, tailleBouton, Color.White * progressionDeploiement, 0,
                              new Vector2(texturePanneau.Width/2f, texturePanneau.Height), 
                              progressionDeploiement, SpriteEffects.None, 0);
         }

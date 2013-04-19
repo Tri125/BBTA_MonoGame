@@ -15,6 +15,7 @@ namespace BBTA.Interface
         public Vector2 positionJoueur;
         public float angleRotation{get;set;}
         public bool estVerouiller = false;
+        private bool estDessiner = false;
 
         public ViseurVisuel(Texture2D texture)
         {
@@ -24,6 +25,7 @@ namespace BBTA.Interface
         public void AssocierAujoueur(Acteur joueur)
         {
             positionJoueur = joueur.ObtenirPosition();
+            estDessiner = true;
         }
 
         public void Verrouiller()
@@ -43,7 +45,11 @@ namespace BBTA.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, positionJoueur, null, Color.White, angleRotation, new Vector2(texture.Width/2f, texture.Height/2f), 1, SpriteEffects.None, 0);
+            if (estDessiner == true)
+            {
+                spriteBatch.Draw(texture, positionJoueur, null, Color.White, angleRotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1, SpriteEffects.None, 0);
+                estDessiner = false;
+            }
         }
     }
 }

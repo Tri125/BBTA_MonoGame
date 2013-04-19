@@ -19,6 +19,7 @@ namespace BBTA.Interface
     public class SelectionArme: MenuDeployable
     {
         public bool YaTilUneArmeSelectionne { get; set; }
+        private Acteur joueur;
         private List<Texture2D> texturesArmes;
         private Point positionSouris;
         private MouseState sourisAvant;
@@ -27,21 +28,29 @@ namespace BBTA.Interface
         public Armes armeChoisie {get;set;}
 
         public SelectionArme(Texture2D texturePanneau, List<Texture2D> texturesArmes, SpriteFont police, int delaiDeploiement = 500)
-            :base(texturePanneau, delaiDeploiement)
+            :base(texturePanneau, new Rectangle(0,0,528,309), delaiDeploiement)
         {
             this.texturesArmes = texturesArmes;
             YaTilUneArmeSelectionne = false;
             for(int compteur = 0; compteur < texturesArmes.Count; compteur++)
             {
                 int hauteur = compteur/4;
-                Armes.Add(new IndiquateurArmeRestante(texturesArmes[compteur],
+                Armes.Add(new IndiquateurArmeRestante(texturePanneau, new Rectangle(0, 319, 183, 91),
                                                       new Vector2(Position.X - texturePanneau.Width/2f + 100, Position.Y + 50 + hauteur * 100),
                                                       police));
+                Armes[compteur].Clic += new EventHandler(SelectionArme_Clic);
             }
+        }
+
+        void SelectionArme_Clic(object sender, EventArgs e)
+        {
+                
+                estOuvert = false;
         }
 
         public void AssocierJoueur(Acteur joueur)
         {
+            this.joueur = joueur;
             Position = new Vector2(joueur.ObtenirPosition().X, joueur.ObtenirPosition().Y - 10);
         }
 
@@ -55,20 +64,15 @@ namespace BBTA.Interface
                 for (int compteur = 0; compteur < Armes.Count; compteur++)
                 {
                     int hauteur = compteur / 4;
-                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20, Position.Y - texturePanneau.Height+20);
+                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20, Position.Y - texturePanneau.Height + 20);
 
-                    Console.WriteLine(Position);
-
-                    if (Armes[compteur].ClicComplet(matriceCamera) == true)
-                    {
-                        armeChoisie = (Armes)compteur;
-                        Fermer(gameTime);
-                    }
+                    Armes[compteur].Update(matriceCamera);
                 }
             }
-            if (estOuvert == true && !aireOccupee.Contains(positionSouris) && sourisApres.LeftButton == ButtonState.Pressed && sourisAvant.LeftButton == ButtonState.Released)
+
+            if (sourisApres.LeftButton == ButtonState.Pressed && sourisAvant.LeftButton == ButtonState.Released && aireOccupee.Contains(positionSouris))
             {
-                Fermer(gameTime);
+                estOuvert = false;
             }
 
             base.Update(gameTime);
@@ -76,14 +80,11 @@ namespace BBTA.Interface
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
-            if (estDeploye == true && estOuvert == true)
-            {
+                base.Draw(spriteBatch);
                 foreach (Bouton item in Armes)
                 {
                     item.Draw(spriteBatch);
                 }
-            }
         }
 
     }

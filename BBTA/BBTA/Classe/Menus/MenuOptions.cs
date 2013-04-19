@@ -31,7 +31,8 @@ namespace BBTA.Classe.Menus
         protected override void LoadContent()
         {
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
-            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800));
+            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
+            btnRetour.Clic += new EventHandler(btnRetour_Clic);
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"));
@@ -42,13 +43,15 @@ namespace BBTA.Classe.Menus
             base.LoadContent();
         }
 
+        void btnRetour_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Accueil;
+        }
+
         public override void Update(GameTime gameTime)
         {
+            btnRetour.Update(null);
             base.Update(gameTime);
-            if (btnRetour.ClicComplet())
-            {
-                prochainEtat = EtatJeu.Accueil;
-            }
             sliderEffet.Deplacement();
             pourcentageEffet = sliderEffet.ObtenirPourcentage();
 

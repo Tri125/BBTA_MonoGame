@@ -145,16 +145,15 @@ namespace BBTA.Partie_De_Jeu
                     acteur.Update(gameTime);
                 }
             }
-            sa.Position = new Vector2((int)listeEquipes[0].ListeMembres[0].ObtenirPosition().X, (int)listeEquipes[0].ListeMembres[0].ObtenirPosition().Y - 10);
-            if (Keyboard.GetState().IsKeyDown(Keys.L))
-            {
-                sa.Ouvrir(gameTime);
-            }
-            sa.AssocierJoueur(equipeActive.JoueurActif);
-            sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
 
-            vs.AssocierAujoueur(equipeActive.JoueurActif);
-            vs.Update(gameTime, nowPos);
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && sa.estOuvert == false)
+            {
+                sa.estOuvert = true;
+                sa.AssocierJoueur(equipeActive.JoueurActif);
+            }
+
+            sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
+            
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
         }

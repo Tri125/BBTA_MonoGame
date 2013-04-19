@@ -23,6 +23,7 @@ namespace BBTA.Elements
         protected const float VITESSE_LATERALE = 6f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
+        public bool estActif { get; set; }
         private bool veutSeDeplacer = false;
         public bool monTour = false;
         //Constantes----------------------------------------------------------------------------------------------
@@ -46,11 +47,14 @@ namespace BBTA.Elements
             : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
+            corpsPhysique.CollisionCategories = Category.Cat1;
+            corpsPhysique.CollidesWith = Category.All & ~Category.Cat1;
             corpsPhysique.Position = position; 
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
+            estActif = false;
         }
 
         protected void CompletionTour()
@@ -84,6 +88,7 @@ namespace BBTA.Elements
 
         public override void Update(GameTime gameTime)
         {
+
             if (veutSeDeplacer == true && estAuSol == true)
             {
                 Animer(gameTime, 0, 3);
