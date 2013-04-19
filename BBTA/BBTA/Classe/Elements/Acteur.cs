@@ -24,6 +24,7 @@ namespace BBTA.Elements
         protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
         public bool estActif { get; set; }
+        public bool enModeTir { get; set; }
         private bool veutSeDeplacer = false;
         public bool monTour = false;
         //Constantes----------------------------------------------------------------------------------------------

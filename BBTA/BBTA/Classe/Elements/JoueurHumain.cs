@@ -31,19 +31,23 @@ namespace BBTA.Elements
             }
             base.Update(gameTime);
 
-            if (clavierMaintenant.IsKeyDown(optionClavier.Droite))
+            if (!enModeTir)
             {
-                BougerADroite();
-            }
 
-            if (clavierMaintenant.IsKeyDown(optionClavier.Gauche))
-            {
-                BougerAGauche();
-            }
+                if (clavierMaintenant.IsKeyDown(optionClavier.Droite))
+                {
+                    BougerADroite();
+                }
 
-            if (clavierMaintenant.IsKeyDown(optionClavier.Saut) && !clavierAvant.IsKeyDown(optionClavier.Saut) && estAuSol == true)
-            {
-                Sauter();
+                if (clavierMaintenant.IsKeyDown(optionClavier.Gauche))
+                {
+                    BougerAGauche();
+                }
+
+                if (clavierMaintenant.IsKeyDown(optionClavier.Saut) && !clavierAvant.IsKeyDown(optionClavier.Saut) && estAuSol == true)
+                {
+                    Sauter();
+                }
             }
 
             if (clavierMaintenant.IsKeyUp(Keys.T) && clavierAvant.IsKeyDown(Keys.T))

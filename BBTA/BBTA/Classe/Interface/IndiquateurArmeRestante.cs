@@ -11,17 +11,24 @@ namespace BBTA.Interface
     {
         private SpriteFont police;
         public int nbArmeRestantes { get; set; }
+        private Armes type;
 
-        public IndiquateurArmeRestante(Texture2D texture, Rectangle? boutonDansSpriteSheet, Vector2 position, SpriteFont police)
+        public IndiquateurArmeRestante(Texture2D texture, Rectangle? boutonDansSpriteSheet, Vector2 position, Armes type, SpriteFont police)
             : base(texture, position, boutonDansSpriteSheet)
         {
+            this.type = type;
             this.police = police;
+        }
+
+        public Armes ObtenirTypeArme()
+        {
+            return type;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbArmeRestantes.ToString(), new Vector2(Position.X + 70, Position.Y), Color.White);
+            spriteBatch.DrawString(police, nbArmeRestantes.ToString(), new Vector2(Position.X + 65, Position.Y), Color.White);
         }
     }
 }
