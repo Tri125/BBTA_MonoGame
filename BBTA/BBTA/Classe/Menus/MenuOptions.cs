@@ -17,10 +17,10 @@ namespace BBTA.Classe.Menus
         private EtatJeu prochainEtat;
 
         private Slider sliderEffet;
-        private float pourcentageEffet;
+        private int pourcentageEffet;
 
         private Slider sliderMusique;
-        private float pourcentageMusique;
+        private int pourcentageMusique;
 
         public MenuOptions(Game game)
             : base(game)
@@ -33,6 +33,7 @@ namespace BBTA.Classe.Menus
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
             btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
             btnRetour.Clic += new EventHandler(btnRetour_Clic);
+
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"));

@@ -65,8 +65,6 @@ namespace BBTA.Partie_De_Jeu
             this.listeEquipes = new List<Equipe>();
             this.nbrEquipe1 = nbrEquipe1;
             this.nbrEquipe2 = nbrEquipe2;
-
-
         }
 
         /// <summary>

@@ -59,8 +59,6 @@ namespace BBTA.Classe.Interface
             hauteurBouton = btnSlider.Height;
             largeurBouton = btnSlider.Width;
 
-            pourcentage = 0.5f;
-
             etat = EtatSlider.Attente;
         }
 
@@ -70,6 +68,7 @@ namespace BBTA.Classe.Interface
             etatAvant = etatMaintenant;
             etatMaintenant = Mouse.GetState();
 
+            pourcentage = (posSlider.X - (posArrierePlan.X - largeurBarre / 2f + 30)) / (largeurBarre - 60);
 
             if (Resolution.MouseHelper.CurrentMousePosition.Y >= posArrierePlan.Y - hauteurArrierePlan / 2f &&
                 Resolution.MouseHelper.CurrentMousePosition.Y <= posArrierePlan.Y + hauteurArrierePlan / 2f)
@@ -94,13 +93,12 @@ namespace BBTA.Classe.Interface
                 {
                     posSlider.X = posArrierePlan.X + largeurBarre / 2f - 30;
                 }
-                pourcentage = (posSlider.X - (posArrierePlan.X - largeurBarre / 2f + 30)) / (largeurBarre - 60);
             }
         }
 
-        public float ObtenirPourcentage()
+        public int ObtenirPourcentage()
         {
-            return pourcentage;
+            return (int)(pourcentage * 100);
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -79,6 +79,13 @@ namespace BBTA
 
             EventInput.EventInput.Initialize(Window);
 
+            //Etat Jeu
+            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
+            if (chargeurCarte.ChargementReussis)
+            {
+                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
+            }
+
             //Etat Accueil
             acc = new MenuAccueil(this);
 
@@ -88,12 +95,6 @@ namespace BBTA
             //Etat configuration
             config = new MenuConfiguration(this);
 
-            //Etat Jeu
-            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
-            }
             partie.Visible = true;
             base.Initialize();
         }
