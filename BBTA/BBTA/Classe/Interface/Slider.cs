@@ -16,7 +16,7 @@ namespace BBTA.Classe.Interface
         Clic
     }
 
-    class Slider
+    public class Slider
     {
         //sliderArrierePlan
         private Texture2D sliderArrierePlan; //Texture of the slider background
@@ -27,21 +27,20 @@ namespace BBTA.Classe.Interface
         //barre slider
         private Texture2D barre; //Texture of the slider background
         private Vector2 posBarre; //position of the slider background
-        private int largeurBarre;
-        private int hauteurBarre;
+        private float largeurBarre;
+        private float hauteurBarre;
 
         //slider
         private Texture2D btnSlider;
         private Vector2 posSlider;
-        private int largeurBouton;
-        private int hauteurBouton;
+        private float largeurBouton;
+        private float hauteurBouton;
 
         private MouseState etatAvant;
         private MouseState etatMaintenant;
         private EtatSlider etat;
 
-        //devider that we get a value between 0 - 100 
-        private float divider;
+        private float pourcentage;
 
         public Slider(Texture2D sliderArrierePlan, Vector2 posArrierePlan, Texture2D barre, Texture2D btnSlider)
         {
@@ -60,10 +59,9 @@ namespace BBTA.Classe.Interface
             hauteurBouton = btnSlider.Height;
             largeurBouton = btnSlider.Width;
 
-            etat = EtatSlider.Attente;
+            pourcentage = 0.5f;
 
-            //later we want to get values between 0 and 100 from our slider
-            divider = (sliderArrierePlan.Width - btnSlider.Width) / 100f;
+            etat = EtatSlider.Attente;
         }
 
         public void Deplacement()
@@ -72,22 +70,37 @@ namespace BBTA.Classe.Interface
             etatAvant = etatMaintenant;
             etatMaintenant = Mouse.GetState();
 
-            if (Resolution.MouseHelper.CurrentMousePosition.X >= posSlider.X - largeurBouton / 2f && Resolution.MouseHelper.CurrentMousePosition.X <= posSlider.X + largeurBouton / 2f)
+
+            if (Resolution.MouseHelper.CurrentMousePosition.Y >= posArrierePlan.Y - hauteurArrierePlan / 2f &&
+                Resolution.MouseHelper.CurrentMousePosition.Y <= posArrierePlan.Y + hauteurArrierePlan / 2f)
             {
-                if (Resolution.MouseHelper.CurrentMousePosition.Y >= posSlider.Y - hauteurBouton / 2f && Resolution.MouseHelper.CurrentMousePosition.Y <= posSlider.Y + hauteurBouton / 2f)
+                //Si clic il y a, mais sans relâchement, slider peut se déplacer
+                if (etatMaintenant.LeftButton == ButtonState.Pressed)
                 {
-                    //Si clic il y a, mais sans relâchement, slider peut se déplacer
-                    if (etatMaintenant.LeftButton == ButtonState.Pressed)
-                    {
-                        etat = EtatSlider.Clic;
-                    }
-                    //S'il y a un maintient, on peut déplacer le slider
-                    if (etatMaintenant.LeftButton == ButtonState.Pressed && etatAvant.LeftButton == ButtonState.Pressed)
-                    {
-                        posSlider.X = Resolution.MouseHelper.CurrentMousePosition.X;
-                    }
+                    etat = EtatSlider.Clic;
                 }
+                //S'il y a un maintient, on peut déplacer le slider
+                if (etatMaintenant.LeftButton == ButtonState.Pressed && etatAvant.LeftButton == ButtonState.Pressed)
+                {
+                    posSlider.X = Resolution.MouseHelper.CurrentMousePosition.X;
+                }
+                //Dépasse borne par la gauche
+                if (posSlider.X < posArrierePlan.X - largeurBarre / 2f + 30)
+                {
+                    posSlider.X = posArrierePlan.X - largeurBarre / 2f + 30;
+                }
+                //Dépasse borne par la droite
+                if (posSlider.X > posArrierePlan.X + largeurBarre / 2f - 30)
+                {
+                    posSlider.X = posArrierePlan.X + largeurBarre / 2f - 30;
+                }
+                pourcentage = (posSlider.X - (posArrierePlan.X - largeurBarre / 2f + 30)) / (largeurBarre - 60);
             }
+        }
+
+        public float ObtenirPourcentage()
+        {
+            return pourcentage;
         }
 
         public void Draw(SpriteBatch spriteBatch)

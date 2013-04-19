@@ -126,6 +126,9 @@
     <Compile Include="Classe\Elements\Projectile.cs" />
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
+    <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
+    <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
+    <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Interface\Slider.cs" />
     <Compile Include="Classe\Interface\IndiquateurArmeRestante.cs" />
@@ -200,7 +203,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Classe\IA\Robot\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

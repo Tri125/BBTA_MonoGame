@@ -17,7 +17,10 @@ namespace BBTA.Classe.Menus
         private EtatJeu prochainEtat;
 
         private Slider sliderEffet;
+        private float pourcentageEffet;
+
         private Slider sliderMusique;
+        private float pourcentageMusique;
 
         public MenuOptions(Game game)
             : base(game)
@@ -50,7 +53,10 @@ namespace BBTA.Classe.Menus
             btnRetour.Update(null);
             base.Update(gameTime);
             sliderEffet.Deplacement();
+            pourcentageEffet = sliderEffet.ObtenirPourcentage();
+
             sliderMusique.Deplacement();
+            pourcentageMusique = sliderMusique.ObtenirPourcentage();
         }
 
         public EtatJeu ObtenirEtat()
