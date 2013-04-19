@@ -17,7 +17,7 @@ namespace BBTA.Interface
 
     public class Bouton
     {
-        private Texture2D texture;
+        protected Texture2D texture;
         private Rectangle rectangleCollisionBouton;
         public Vector2 Position
         {
