@@ -28,7 +28,7 @@ namespace BBTA.Partie_De_Jeu
         private SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-
+        private IndicateurPuissance ip;
         private World mondePhysique;
         private int tempsEcouler;
         public SelectionArme sa;
@@ -121,6 +121,7 @@ namespace BBTA.Partie_De_Jeu
             tex.Add(Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
             sa = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), tex, Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
             sa.ArmeSelectionnee += new EventHandler(sa_ArmeSelectionnee);
+            ip = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
         }
 
         void sa_ArmeSelectionnee(object sender, EventArgs e)
@@ -161,6 +162,12 @@ namespace BBTA.Partie_De_Jeu
             sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
             vs.Position = equipeActive.JoueurActif.ObtenirPosition();
             vs.Update(gameTime);
+            ip.Position = equipeActive.JoueurActif.ObtenirPosition();
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                ip.estOuvert = true;
+            }
+            ip.Update(gameTime);
 
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
@@ -187,6 +194,7 @@ namespace BBTA.Partie_De_Jeu
             }
             vs.Draw(spriteBatch);
             sa.Draw(spriteBatch, GraphicsDevice);
+            ip.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

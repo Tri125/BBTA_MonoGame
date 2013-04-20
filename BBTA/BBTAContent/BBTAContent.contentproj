@@ -218,7 +218,13 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Ressources\InterfaceEnJeu\Puissance.png">
+      <Name>Puissance</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Ressources\Menus\Configuration\btnBas.png">
       <Name>btnBas</Name>

@@ -14,7 +14,6 @@ namespace BBTA.Interface
     {
         private Texture2D texture;
         private Texture2D textureArmes;
-        public Vector2 Position{get;set;}
         public Armes armeChoisie { get; set; }
         private float angleRotation;
         public bool Dessiner { get; set; }
