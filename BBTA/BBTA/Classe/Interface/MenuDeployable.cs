@@ -10,7 +10,7 @@ namespace BBTA.Interface
     public abstract class MenuDeployable
     {
         protected Texture2D texturePanneau;
-        private Rectangle tailleBouton;
+        protected Rectangle tailleBouton;
         private Vector2 position;
         public Vector2 Position 
         {

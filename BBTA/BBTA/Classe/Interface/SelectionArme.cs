@@ -35,7 +35,7 @@ namespace BBTA.Interface
             {
                 int hauteur = compteur/4;
                 Armes.Add(new IndiquateurArmeRestante(texturePanneau, new Rectangle(0, 319, 183, 91),
-                                                      new Vector2(Position.X - texturePanneau.Width/2f + 100, Position.Y + 100 + hauteur * 100),
+                                                      new Vector2(Position.X - texturePanneau.Width/2f + 100, Position.Y),
                                                       (Armes) compteur,
                                                       police));
                 Armes[compteur].Clic += new EventHandler(SelectionArme_Clic);
@@ -58,7 +58,7 @@ namespace BBTA.Interface
                 for (int compteur = 0; compteur < Armes.Count; compteur++)
                 {
                     int hauteur = compteur / 4;
-                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20, Position.Y - texturePanneau.Height + 60);
+                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20, Position.Y - tailleBouton.Height + 60);
 
                     Armes[compteur].Update(matriceCamera);
                 }
