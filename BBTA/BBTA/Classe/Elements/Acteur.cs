@@ -14,10 +14,11 @@ using FarseerPhysics.Common;
 
 namespace BBTA.Elements
 {
-    public abstract class Acteur:ObjetPhysiqueAnimer
+    public abstract class Acteur : ObjetPhysiqueAnimer
     {
         //Évênements----------------------------------------------------------------------------------------------
         public event EventHandler TourCompleter;
+        public event EventHandler Mort;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
         protected const float VITESSE_LATERALE = 6f;
@@ -43,25 +44,19 @@ namespace BBTA.Elements
         /// <param name="nbColonnes"></param>
         /// <param name="nbRangees"></param>
         /// <param name="milliSecParImage"></param>
-        public Acteur(Game jeu, World mondePhysique, float pointDeVie, Vector2 position, 
+        public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position,
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(jeu, mondePhysique, new CircleShape(0.42f, DENSITE), nbColonnes, nbRangees, milliSecParImage)
+            : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
             corpsPhysique.CollisionCategories = Category.Cat1;
             corpsPhysique.CollidesWith = Category.All & ~Category.Cat1;
-            corpsPhysique.Position = position; 
+            corpsPhysique.Position = position;
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
             estActif = false;
-        }
-
-        protected override void LoadContent()
-        {
-            texture = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
-            base.LoadContent();
         }
 
         protected void CompletionTour()
@@ -76,26 +71,16 @@ namespace BBTA.Elements
          * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
         public void RecevoirDegat(float energieExplosion, Vector2 positionExplosion)
         {
-            float puissanceRecue =  energieExplosion / Vector2.Distance(positionExplosion, corpsPhysique.Position);
+            float puissanceRecue = energieExplosion / Vector2.Distance(positionExplosion, corpsPhysique.Position);
             pointDeVie -= puissanceRecue;
-        }
-
-        /*Détermine si un acteur est mort*/
-        private bool KillMe()
-        {
             if (pointDeVie <= 0)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                Mort(this, new EventArgs());
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-
             if (veutSeDeplacer == true && estAuSol == true)
             {
                 Animer(gameTime, 0, 3);

@@ -10,15 +10,15 @@ using BBTA.Partie_De_Jeu;
 
 namespace BBTA.Elements
 {
-    public abstract class Projectile:ObjetPhysique
+    public abstract class Projectile : ObjetPhysique
     {
         private float energieExplosion;
         private World mondePhysique;
         public bool Explose { get; protected set; }
         protected bool EstEnMain = true;
 
-        public Projectile(Game jeu, World mondePhysique, Shape forme, Vector2 positionDepart, float energieExplosion)
-            : base(jeu, mondePhysique, forme)
+        public Projectile(World mondePhysique, Shape forme, Vector2 positionDepart, Texture2D texture, float energieExplosion)
+            : base(texture, mondePhysique, forme)
         {
             this.mondePhysique = mondePhysique;
             this.energieExplosion = energieExplosion;
@@ -28,15 +28,14 @@ namespace BBTA.Elements
             Explose = false;
         }
 
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
-            base.Update(gameTime);
         }
 
         public void Explosion(Carte carte, List<Acteur> Acteurs)
         {
-            carte.Explosion(corpsPhysique.Position*40, energieExplosion);
+            carte.Explosion(corpsPhysique.Position * 40, energieExplosion);
             for (int compteurJoueur = 0; compteurJoueur < Acteurs.Count; compteurJoueur++)
             {
                 Acteurs[compteurJoueur].RecevoirDegat(energieExplosion, corpsPhysique.Position);

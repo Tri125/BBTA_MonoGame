@@ -6,12 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
-using FarseerPhysics.Common;
 using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
 using BBTA.Classe.Outils;
-using BBTA.Interfaces;
-using IndependentResolutionRendering;
-
 namespace BBTA.Elements
 {
     /// <summary>
@@ -21,17 +18,14 @@ namespace BBTA.Elements
     /// Détermine, en vertu des informations provenent d'une explosion, si le bloc existe toujours
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Bloc: ObjetPhysique, IUtiliseMatriceCamera
+    public class Bloc:ObjetPhysique
     {
         //Variables-----------------------------------------------------------------------------------------------
         private TypeBloc type;
         private float echelle;
-        private int largeur;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
         private const float seuilResistance = 45;
-
-        public Matrix MatriceDeCamera { get; set; }
 
         /// <summary>
         /// Constructeur
@@ -40,8 +34,8 @@ namespace BBTA.Elements
         /// <param name="position">Position du bloc à l'écran (Coordonnées)</param>
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
-        public Bloc(Game jeu, World mondePhysique, Vector2 position, float tailleCote, TypeBloc type)
-            : base(jeu, mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(tailleCote, tailleCote), DENSITE))
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, TypeBloc type)
+            : base(texture, mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(tailleCote, tailleCote), DENSITE))
         {
             this.type = type;
             corpsPhysique.Position = position;
@@ -50,13 +44,6 @@ namespace BBTA.Elements
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 0.3f;
             echelle = 1.01f;
-        }
-
-        protected override void LoadContent()
-        {
-            texture = Game.Content.Load<Texture2D>(@"Ressources\blocs");
-            largeur = texture.Width / 5;
-            base.LoadContent();
         }
 
         /// <summary>
@@ -95,15 +82,13 @@ namespace BBTA.Elements
             }
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix() * MatriceDeCamera);
-            Rectangle selection = new Rectangle((int)type * largeur / 5, 0, largeur / 5, texture.Height);
-            Vector2 pointCentral = new Vector2(largeur / 5 / 2f, texture.Height / 2f);
+            Rectangle selection = new Rectangle((int)type * texture.Width / 5, 0, texture.Width / 5, texture.Height);
+            Vector2 pointCentral = new Vector2(texture.Width / 5 / 2f, texture.Height / 2f);
             spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), selection,
                              Color.White, 0, pointCentral, echelle,
                              SpriteEffects.None, 0);
-            spriteBatch.End();
         }
     }
 }
