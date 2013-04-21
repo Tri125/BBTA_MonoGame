@@ -22,25 +22,31 @@ namespace BBTA.Partie_De_Jeu
 {
     public class PartieJeu : DrawableGameComponent
     {
-
+        //Valeurs réliées aux conditions et réglements d'une partie---------------
         private const int TEMPS_TOUR_DEFAUT = 3000;
         private readonly int tempsTour;
-        private SpriteBatch spriteBatch;
-        MouseState avant;
-        MouseState now;
-        private IndicateurPuissance ip;
-        private World mondePhysique;
         private int tempsEcouler;
-        public SelectionArme sa;
 
+        //Valeurs et variables techniques-----------------------------------------
+        private SpriteBatch spriteBatch;
         private Camera2d camPartie;
-        private ViseurVisuel vs;
-        Carte carte;
-        int[] carteTuile;
-        List<Equipe> listeEquipes;
-        Equipe equipeActive;
+
+        //Éléments d'interface----------------------------------------------------
+        private IndicateurPuissance indicateurPuissance;
+        private ViseurVisuel viseur;
+        private SelectionArme selecteurArme;
+
+        //Varaibles issues du moteur physique Farseer-----------------------------
+        private World mondePhysique;
+
+        //Éléments de jeu---------------------------------------------------------
+        private Carte carte;
+        private int[] carteTuile;
+        private List<Equipe> listeEquipes;
+        private Equipe equipeActive;
         private int nbrEquipe1;
         private int nbrEquipe2;
+
         public List<Acteur> ListeActeur
         {
             get
@@ -91,7 +97,7 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"), Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
+            viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"), Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -119,16 +125,16 @@ namespace BBTA.Partie_De_Jeu
             ChangementEquipe();
             List<Texture2D> tex = new List<Texture2D>();
             tex.Add(Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
-            sa = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), tex, Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
-            sa.ArmeSelectionnee += new EventHandler(sa_ArmeSelectionnee);
-            ip = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
+            selecteurArme = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), tex, Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
+            selecteurArme.ArmeSelectionnee += new EventHandler(sa_ArmeSelectionnee);
+            indicateurPuissance = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
         }
 
         void sa_ArmeSelectionnee(object sender, EventArgs e)
         {
             equipeActive.JoueurActif.enModeTir = true;
-            vs.Dessiner = true;
-            vs.estOuvert = true;
+            viseur.Dessiner = true;
+            viseur.estOuvert = true;
         }
 
         /// <summary>
@@ -138,11 +144,6 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            avant = now;
-            now = Mouse.GetState();
-            Point nowPos = Resolution.MouseHelper.PositionSourisCamera(camPartie.transform);
-
-
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             foreach (Equipe equipe in listeEquipes)
@@ -153,21 +154,21 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && sa.estOuvert == false && !equipeActive.JoueurActif.enModeTir)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && selecteurArme.estOuvert == false && !equipeActive.JoueurActif.enModeTir)
             {
-                sa.estOuvert = true;
+                selecteurArme.estOuvert = true;
             }
 
-            sa.Position = equipeActive.JoueurActif.ObtenirPosition();
-            sa.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
-            vs.Position = equipeActive.JoueurActif.ObtenirPosition();
-            vs.Update(gameTime);
-            ip.Position = equipeActive.JoueurActif.ObtenirPosition();
+            selecteurArme.Position = equipeActive.JoueurActif.ObtenirPosition();
+            selecteurArme.Update(gameTime, camPartie.get_transformation(GraphicsDevice));
+            viseur.Position = equipeActive.JoueurActif.ObtenirPosition();
+            viseur.Update(gameTime);
+            indicateurPuissance.Position = equipeActive.JoueurActif.ObtenirPosition();
             if (Keyboard.GetState().IsKeyDown(Keys.R))
             {
-                ip.estOuvert = true;
+                indicateurPuissance.estOuvert = true;
             }
-            ip.Update(gameTime);
+            indicateurPuissance.Update(gameTime);
 
             camPartie.SuivreObjet(equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
             base.Update(gameTime);
@@ -192,9 +193,9 @@ namespace BBTA.Partie_De_Jeu
                     acteur.Draw(spriteBatch);
                 }
             }
-            vs.Draw(spriteBatch);
-            sa.Draw(spriteBatch, GraphicsDevice);
-            ip.Draw(spriteBatch);
+            viseur.Draw(spriteBatch);
+            selecteurArme.Draw(spriteBatch, GraphicsDevice);
+            indicateurPuissance.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
