@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
 using IndependentResolutionRendering;
+using BBTA.Interfaces;
 
 namespace BBTA
 {

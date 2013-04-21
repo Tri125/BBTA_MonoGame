@@ -27,8 +27,6 @@ namespace BBTA.Partie_De_Jeu
         private const int TEMPS_TOUR_DEFAUT = 3000;
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
-        MouseState avant;
-        MouseState now;
         private IndicateurPuissance ip;
         private World mondePhysique;
         private int tempsEcouler;
@@ -77,7 +75,6 @@ namespace BBTA.Partie_De_Jeu
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne / 2,
                             Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;
             base.Initialize();
-            gs.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             Game.Components.Add(gs);
             gs.CreerJoueurs(ref mondePhysique, carte.ListeApparition);
             gs.DrawOrder = 1;
@@ -92,7 +89,6 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
-            vs = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"), Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
@@ -109,6 +105,7 @@ namespace BBTA.Partie_De_Jeu
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
             camPartie.SuivreObjet(gs.equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            gs.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             base.Update(gameTime);
         }
 
