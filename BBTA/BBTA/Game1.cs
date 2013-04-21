@@ -79,12 +79,6 @@ namespace BBTA
 
             EventInput.EventInput.Initialize(Window);
 
-            //Etat Jeu
-            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
-            if (chargeurCarte.ChargementReussis)
-            {
-                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
-            }
 
             //Etat Accueil
             acc = new MenuAccueil(this);
@@ -95,28 +89,7 @@ namespace BBTA
             //Etat configuration
             config = new MenuConfiguration(this);
 
-            partie.Visible = true;
             base.Initialize();
-        }
-
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -148,7 +121,7 @@ namespace BBTA
                         //Vérifie si le component correspond à l'état en cour*/
                         if (!this.Components.Contains(acc)) //Le component n'est pas celui qui correspond à l'état
                         {
-                            this.Components.Clear();    //On l'éfface
+                            this.Components.Clear();
                             this.Components.Add(acc);   //Et on s'assure que ce soit le bon
                         }
                         EtatActuel = acc.ObtenirEtat();
@@ -180,6 +153,11 @@ namespace BBTA
                         if (!this.Components.Contains(partie))
                         {
                             this.Components.Clear();
+                            chargeurCarte.LectureCarte(@"Carte Jeu\lghill.xml");
+                            if (chargeurCarte.ChargementReussis)
+                            {
+                                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
+                            }
                             this.Components.Add(partie);
                         }
                         break;
@@ -195,21 +173,6 @@ namespace BBTA
                 }
                 base.Update(gameTime);
             }
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            Resolution.BeginDraw();
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix());
-            spriteBatch.End();
-
-            base.Draw(gameTime);
-
         }
     }
 }

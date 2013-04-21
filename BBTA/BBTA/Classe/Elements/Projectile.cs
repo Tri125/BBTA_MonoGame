@@ -17,8 +17,8 @@ namespace BBTA.Elements
         public bool Explose { get; protected set; }
         protected bool EstEnMain = true;
 
-        public Projectile(World mondePhysique, Shape forme, Vector2 positionDepart, Texture2D texture, float energieExplosion)
-            : base(texture, mondePhysique, forme)
+        public Projectile(Game jeu, World mondePhysique, Shape forme, Vector2 positionDepart, float energieExplosion)
+            : base(jeu, mondePhysique, forme)
         {
             this.mondePhysique = mondePhysique;
             this.energieExplosion = energieExplosion;
@@ -28,9 +28,10 @@ namespace BBTA.Elements
             Explose = false;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
+            base.Update(gameTime);
         }
 
         public void Explosion(Carte carte, List<Acteur> Acteurs)

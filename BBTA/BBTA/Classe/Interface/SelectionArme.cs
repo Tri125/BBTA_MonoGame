@@ -35,7 +35,7 @@ namespace BBTA.Interface
             {
                 int hauteur = compteur/4;
                 Armes.Add(new IndiquateurArmeRestante(texturePanneau, new Rectangle(0, 319, 183, 91),
-                                                      new Vector2(Position.X - texturePanneau.Width/2f + 100, Position.Y),
+                                                      new Vector2(Position.X - texturePanneau.Width / 2f + 100, Position.Y - tailleBouton.Height + 60),
                                                       (Armes) compteur,
                                                       police));
                 Armes[compteur].Clic += new EventHandler(SelectionArme_Clic);

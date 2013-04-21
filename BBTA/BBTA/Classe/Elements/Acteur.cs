@@ -43,9 +43,9 @@ namespace BBTA.Elements
         /// <param name="nbColonnes"></param>
         /// <param name="nbRangees"></param>
         /// <param name="milliSecParImage"></param>
-        public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position, 
+        public Acteur(Game jeu, World mondePhysique, float pointDeVie, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
+            : base(jeu, mondePhysique, new CircleShape(0.42f, DENSITE), nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
             corpsPhysique.CollisionCategories = Category.Cat1;
@@ -56,6 +56,12 @@ namespace BBTA.Elements
             corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
             estActif = false;
+        }
+
+        protected override void LoadContent()
+        {
+            texture = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
+            base.LoadContent();
         }
 
         protected void CompletionTour()

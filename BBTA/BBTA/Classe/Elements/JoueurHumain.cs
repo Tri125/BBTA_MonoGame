@@ -17,8 +17,8 @@ namespace BBTA.Elements
         private KeyboardState clavierMaintenant;
         private BBTA.Classe.Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionUtilisateur.InformationTouche;
 
-        public JoueurHumain(World mondePhysique, Texture2D texture, Vector2 position, float pointsVie, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(mondePhysique, pointsVie, texture, position, nbColonnes, nbRangees, milliSecParImage)
+        public JoueurHumain(Game jeu, World mondePhysique, Vector2 position, float pointsVie, int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            : base(jeu, mondePhysique, pointsVie, position, nbColonnes, nbRangees, milliSecParImage)
         {
         }
 

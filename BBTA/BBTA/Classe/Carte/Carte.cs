@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
 using IndependentResolutionRendering;
+using BBTA.Classe.Outils;
+using BBTA.Interfaces;
 
 namespace BBTA
 {
@@ -29,16 +31,20 @@ namespace BBTA
     /// Gère la destruction des blocs s'il y a lieu.
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Carte
+    public class Carte:DrawableGameComponent, IUtiliseMatriceCamera
     {
         //Variables-----------------------------------------------------------------------------------------------
         private Texture2D textureArrierePlan;
+        private SpriteBatch spriteBatch;
         private Bloc[] blocs;
         private int largeur;
         private int hauteur;
         private List<Vector2> listeApparition;
         //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
+
+        public Vector2 PositionCamera { get; set; }
+        public Matrix MatriceDeCamera { get; set; }
 
         public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
         /// <summary>
@@ -50,10 +56,10 @@ namespace BBTA
         /// <param name="textureBlocs">Texture des blocs</param>
         /// <param name="mondePhysique">World Farseer</param>
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
+        public Carte(Game jeu, int[] donneesBlocs, int largeurCarte, World mondePhysique)
+            :base(jeu)
         {
             this.listeApparition = new List<Vector2>();
-            this.textureArrierePlan = arrierePlan;
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
             blocs = new Bloc[donneesBlocs.Length];
@@ -64,15 +70,37 @@ namespace BBTA
                 {
                     //Position en mètres
                     Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
-                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
+                    blocs[compteurBlocs] = new Bloc(jeu, mondePhysique, positionBloc, TAILLE_BLOC, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
                 }
                 else
                     //Par convention, une case avec "-1" comme donnée signifie un lieu d'apparition pour les joueurs.
                     if(donneesBlocs[compteurBlocs] == (int)TypeBloc.Apparition)
                     {
-                        listeApparition.Add(new Vector2(metrePixel*((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel*((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
+                        listeApparition.Add(new Vector2(Conversion.MetreAuPixel(((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5)), 
+                                                        Conversion.MetreAuPixel(((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f)))));
                     }
             }
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            this.DrawOrder = 1;
+            foreach (Bloc item in blocs)
+            {
+                if (item != null)
+                {
+                    Game.Components.Add(item);
+                    item.DrawOrder = 2;
+                }
+            }
+        }
+
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            textureArrierePlan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
+            base.LoadContent();
         }
 
         /// <summary>
@@ -91,21 +119,13 @@ namespace BBTA
 	        }
         }
 
-        /// <summary>
-        /// Affiche les blocs nécessaires à l'écran
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 positionCamera)
+        public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Draw(textureArrierePlan, new Vector2(positionCamera.X-IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f,
-                                                           positionCamera.Y - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f), Color.White);
-            foreach (Bloc item in blocs)
-            {
-                if (item != null)
-                {
-                    item.Draw(spriteBatch);
-                }
-            }
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix() * MatriceDeCamera);
+            spriteBatch.Draw(textureArrierePlan, new Vector2(PositionCamera.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f,
+                                                           PositionCamera.Y - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f), Color.White);
+            spriteBatch.End();
+            base.Draw(gameTime);
         }
 
         private TypeBloc TypeDeBlocAGenerer(int[] blocs, int largeur, int identifiant)
