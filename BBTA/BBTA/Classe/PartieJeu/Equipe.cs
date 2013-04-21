@@ -71,7 +71,10 @@ namespace BBTA.Partie_De_Jeu
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            foreach (Acteur joueur in membresEquipe)
+            {
+                joueur.Draw(spriteBatch);
+            }
         }
 
         public void SupressionMembre(Acteur ancienMembre)

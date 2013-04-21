@@ -6,9 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
-using FarseerPhysics.Collision.Shapes;
-using FarseerPhysics.Common;
-using BBTA.Classe.Outils;
 namespace BBTA.Elements
 {
     /// <summary>
@@ -18,13 +15,14 @@ namespace BBTA.Elements
     /// Détermine, en vertu des informations provenent d'une explosion, si le bloc existe toujours
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Bloc:ObjetPhysique
+    public class Bloc : Sprite
     {
         //Variables-----------------------------------------------------------------------------------------------
+        private Body corpsPhysique;
+        private float metrePixel;
         private TypeBloc type;
-        private float echelle;
         //Constantes----------------------------------------------------------------------------------------------
-        private const float DENSITE = 1;
+        private const float DENSITE = 0;
         private const float seuilResistance = 45;
 
         /// <summary>
@@ -34,11 +32,12 @@ namespace BBTA.Elements
         /// <param name="position">Position du bloc à l'écran (Coordonnées)</param>
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
-        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, TypeBloc type)
-            : base(texture, mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(tailleCote, tailleCote), DENSITE))
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel, TypeBloc type)
+            : base(texture, position * metrePixel)
         {
             this.type = type;
-            corpsPhysique.Position = position;
+            this.metrePixel = metrePixel;
+            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
             corpsPhysique.CollisionCategories = Category.All;
             corpsPhysique.CollidesWith = Category.All;
             corpsPhysique.IsStatic = true;
@@ -58,7 +57,7 @@ namespace BBTA.Elements
             /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
              * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
-            float distance = Vector2.Distance(lieu, Conversion.MetreAuPixel(corpsPhysique.Position));
+            float distance = Vector2.Distance(lieu, Position);
             if (energie / distance > seuilResistance)
             {
                 return true;
@@ -84,10 +83,10 @@ namespace BBTA.Elements
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle selection = new Rectangle((int)type * texture.Width / 5, 0, texture.Width / 5, texture.Height);
-            Vector2 pointCentral = new Vector2(texture.Width / 5 / 2f, texture.Height / 2f);
-            spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), selection,
-                             Color.White, 0, pointCentral, echelle,
+            Rectangle selection = new Rectangle((int)type * largeur / 5, 0, largeur / 5, hauteur);
+            Vector2 pointCentral = new Vector2(largeur / 5 / 2f, hauteur / 2f);
+            spriteBatch.Draw(texture, corpsPhysique.Position * metrePixel, selection,
+                             Color.White, angleRotation, pointCentral, echelle,
                              SpriteEffects.None, 0);
         }
     }
