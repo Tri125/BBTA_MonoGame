@@ -63,7 +63,7 @@ namespace BBTA.Partie_De_Jeu
 
         public void Update(GameTime gameTime)
         {
-            foreach (Acteur joueur in ListeMembres)
+            foreach (JoueurHumain joueur in ListeMembres)
             {
                 joueur.Update(gameTime);
             }
@@ -71,7 +71,7 @@ namespace BBTA.Partie_De_Jeu
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Acteur joueur in membresEquipe)
+            foreach (JoueurHumain joueur in membresEquipe)
             {
                 joueur.Draw(spriteBatch);
             }
