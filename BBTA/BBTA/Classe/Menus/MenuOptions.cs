@@ -22,13 +22,13 @@ namespace BBTA.Classe.Menus
         private Slider sliderMusique;
         private int pourcentageMusique;
 
-        private BBTA.Classe.Option.Option.InfoSonore infoSon;
+        private BBTA.Classe.Option.Option OptionJeu;
 
         public MenuOptions(Game game)
             : base(game)
         {
             prochainEtat = EtatJeu.Options;
-            infoSon = Game1.chargeurOption.OptionUtilisateur.InformationSonore;
+            OptionJeu = Game1.chargeurOption.OptionUtilisateur;
         }
 
         protected override void LoadContent()
@@ -40,17 +40,18 @@ namespace BBTA.Classe.Menus
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
-                                       (float)infoSon.EffetSonore / 100);
+                                       (float)OptionJeu.InformationSonore.EffetSonore / 100);
 
             sliderMusique = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 325),
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
-                                        (float)infoSon.Musique / 100);
+                                        (float)OptionJeu.InformationSonore.Musique / 100);
             base.LoadContent();
         }
 
         void btnRetour_Clic(object sender, EventArgs e)
         {
+            Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
             prochainEtat = EtatJeu.Accueil;
         }
 
@@ -84,6 +85,13 @@ namespace BBTA.Classe.Menus
             sliderEffet.Draw(spriteBatch);
             sliderMusique.Draw(spriteBatch);
             spriteBatch.End();
+        }
+
+        private void Enregistrement()
+        {
+            OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
+            OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
+            Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
         }
     }
 }

@@ -19,10 +19,10 @@ namespace BBTA.Classe.Option
         #region Attribut
         private Option optionUtilisateur = new Option();
         private Option optionDefaut = new Option();
-        bool mauvaisUtilisateur;
-        bool mauvaisDefaut;
-        bool presentUtilisateur;
-        bool presentDefaut;
+        private bool mauvaisUtilisateur;
+        private bool mauvaisDefaut;
+        private bool presentUtilisateur;
+        private bool presentDefaut;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer = new XmlSerializer(typeof(Option));
@@ -121,9 +121,22 @@ namespace BBTA.Classe.Option
                 Console.WriteLine("Fichier defaut mal chargé : " + mauvaisDefaut);
             }
             Console.WriteLine("FINI");
+
+            if (mauvaisUtilisateur || mauvaisDefaut)
+            {
+                Console.WriteLine("INCAPABLE DE RÉPARER");
+                EchecTotal();
+
+            }
         }
 
-        public void Reparation()
+        private void EchecTotal()
+        {
+            optionDefaut = optionBase;
+            optionUtilisateur = optionBase;
+        }
+
+        private void Reparation()
         {
             if (mauvaisDefaut)
             {
@@ -153,7 +166,7 @@ namespace BBTA.Classe.Option
             OptionBase();
         }
 
-        public void EcritureOption(string FichierSortie, Option option)
+        private void EcritureOption(string FichierSortie, Option option)
         {
             try
             {
@@ -184,7 +197,13 @@ namespace BBTA.Classe.Option
 
         }
 
-        public void LectureOption(string FichierEntre, ref Option option)
+        public void EnregistrementUtilisateur(ref Option option)
+        {
+            EcritureOption(nomUtilisateur, option);
+            Initialisation();
+        }
+
+        private void LectureOption(string FichierEntre, ref Option option)
         {
 
             try
@@ -212,15 +231,6 @@ namespace BBTA.Classe.Option
                 }
             }
         }
-
-        //public XNATileMapEditor.BBTA_Map.InfoCarte InformationCarte()
-        //{
-        //    if (chargementReussis == true)
-        //    {
-        //        return carte.InformationCarte;
-        //    }
-        //    return null;
-        //}
     }
 }
 
