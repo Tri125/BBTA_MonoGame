@@ -36,8 +36,6 @@ namespace BBTA
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        
-
         public static Random hasard = new Random();
         //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
@@ -60,7 +58,7 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = true;
             Content.RootDirectory = "Content";
@@ -79,7 +77,6 @@ namespace BBTA
 
             EventInput.EventInput.Initialize(Window);
 
-
             //Etat Accueil
             acc = new MenuAccueil(this);
 
@@ -90,6 +87,12 @@ namespace BBTA
             config = new MenuConfiguration(this);
 
             base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            base.LoadContent();
         }
 
         /// <summary>
@@ -173,6 +176,13 @@ namespace BBTA
                 }
                 base.Update(gameTime);
             }
+        }
+        protected override void Draw(GameTime gameTime)
+        {
+            Resolution.BeginDraw();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix());
+            spriteBatch.End();
+            base.Draw(gameTime);
         }
     }
 }
