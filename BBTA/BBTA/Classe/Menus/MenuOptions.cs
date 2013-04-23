@@ -28,7 +28,7 @@ namespace BBTA.Classe.Menus
             : base(game)
         {
             prochainEtat = EtatJeu.Options;
-            OptionJeu = Game1.chargeurOption.OptionUtilisateur;
+            OptionJeu = Game1.chargeurOption.OptionActive;
         }
 
         protected override void LoadContent()

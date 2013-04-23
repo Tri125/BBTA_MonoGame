@@ -26,15 +26,15 @@ namespace BBTA.Interface
             angleRotation = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             KeyboardState clavier = Keyboard.GetState();
-            if (clavier.IsKeyDown(Game1.chargeurOption.OptionUtilisateur.InformationTouche.Gauche))
+            if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Gauche))
             {
                 angleRotation += MathHelper.ToRadians(3);
             }
-            else if (clavier.IsKeyDown(Game1.chargeurOption.OptionUtilisateur.InformationTouche.Droite))
+            else if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Droite))
             {
                 angleRotation -= MathHelper.ToRadians(3);
             }
