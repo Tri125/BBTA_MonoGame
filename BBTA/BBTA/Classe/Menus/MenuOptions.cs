@@ -22,10 +22,13 @@ namespace BBTA.Classe.Menus
         private Slider sliderMusique;
         private int pourcentageMusique;
 
+        private BBTA.Classe.Option.Option.InfoSonore infoSon;
+
         public MenuOptions(Game game)
             : base(game)
         {
             prochainEtat = EtatJeu.Options;
+            infoSon = Game1.chargeurOption.OptionUtilisateur.InformationSonore;
         }
 
         protected override void LoadContent()
@@ -37,12 +40,12 @@ namespace BBTA.Classe.Menus
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
-                                       0.75f);
+                                       (float)infoSon.EffetSonore / 100);
 
             sliderMusique = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 325),
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
-                                        0.75f);
+                                        (float)infoSon.Musique / 100);
             base.LoadContent();
         }
 
