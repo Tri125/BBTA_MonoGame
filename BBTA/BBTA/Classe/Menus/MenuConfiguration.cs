@@ -32,7 +32,7 @@ namespace BBTA.Classe.Menus
         {
             prochainEtat = EtatJeu.Configuration;
             //nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-           // nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+            //nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
         }
 
         protected override void LoadContent()
@@ -101,7 +101,6 @@ namespace BBTA.Classe.Menus
                 nbSoldatsJ2++;
             }
         }
-
 
         public override void Update(GameTime gameTime)
         {
