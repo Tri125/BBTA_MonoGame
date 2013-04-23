@@ -31,8 +31,8 @@ namespace BBTA.Classe.Menus
             : base(game)
         {
             prochainEtat = EtatJeu.Configuration;
-            nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+            //nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+           // nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
         }
 
         protected override void LoadContent()

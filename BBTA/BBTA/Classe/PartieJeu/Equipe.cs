@@ -21,11 +21,12 @@ namespace BBTA.Partie_De_Jeu
     {
         readonly private int numEquipe;
         private List<Acteur> membresEquipe;
+        private int nombreMembres;
         private bool notreTour;
         private Acteur joueurActif;
        
         public int NumEquipe { get { return numEquipe; } }
-        public int NbrMembre { get { return membresEquipe.Count(); } }
+        public int NbrMembre { get { return nombreMembres; } }
         public List<Acteur> ListeMembres { get { return membresEquipe; } }
         public Acteur JoueurActif { get { return joueurActif; } }
         public bool NotreTour { get { return notreTour; } }
@@ -35,22 +36,21 @@ namespace BBTA.Partie_De_Jeu
             this.membresEquipe = new List<Acteur>();
         }
 
-        public Equipe(int numEquipe)
+        public Equipe(int nombreEquipiers)
+            : this()
         {
-            this.membresEquipe = new List<Acteur>();
-            this.numEquipe = numEquipe;
+            this.nombreMembres = nombreEquipiers;
         }
+
 
         public Equipe(int numEquipe, List<Acteur> membresEquipe)
         {
             this.numEquipe = numEquipe;
-            this.membresEquipe = new List<Acteur>();
             this.membresEquipe = membresEquipe.ToList();
         }
 
-        public Equipe(int numEquipe, params Acteur[] membresEquipe)
+        public Equipe(int numEquipe, params Acteur[] membresEquipe):this(numEquipe)
         {
-            this.numEquipe = numEquipe;
             this.membresEquipe = new List<Acteur>();
             this.membresEquipe = membresEquipe.ToList();
         }
@@ -59,6 +59,22 @@ namespace BBTA.Partie_De_Jeu
         public void RajoutMembre(Acteur nouveauMembre)
         {
             membresEquipe.Add(nouveauMembre);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            foreach (JoueurHumain joueur in ListeMembres)
+            {
+                joueur.Update(gameTime);
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (JoueurHumain joueur in membresEquipe)
+            {
+                joueur.Draw(spriteBatch);
+            }
         }
 
         public void SupressionMembre(Acteur ancienMembre)

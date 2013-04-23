@@ -24,7 +24,9 @@ namespace BBTA.Interface
         private MouseState sourisAvant;
         private MouseState sourisApres;
         private List<IndiquateurArmeRestante> Armes = new List<IndiquateurArmeRestante>();
-        public event EventHandler ArmeSelectionnee;
+        public delegate void DelegateArmeSelectionnee(Armes armeSelectionnee);
+        public event DelegateArmeSelectionnee ArmeSelectionnee;
+        public event EventHandler SortieDuPanneau;
 
         public SelectionArme(Texture2D texturePanneau, List<Texture2D> texturesArmes, SpriteFont police, int delaiDeploiement = 500)
             :base(texturePanneau, new Rectangle(0,0,528,309), delaiDeploiement)
@@ -35,7 +37,7 @@ namespace BBTA.Interface
             {
                 int hauteur = compteur/4;
                 Armes.Add(new IndiquateurArmeRestante(texturePanneau, new Rectangle(0, 319, 183, 91),
-                                                      new Vector2(Position.X - texturePanneau.Width/2f + 100, Position.Y),
+                                                      new Vector2(Position.X - texturePanneau.Width / 2f + 100, Position.Y - tailleBouton.Height + 60),
                                                       (Armes) compteur,
                                                       police));
                 Armes[compteur].Clic += new EventHandler(SelectionArme_Clic);
@@ -44,7 +46,10 @@ namespace BBTA.Interface
 
         void SelectionArme_Clic(object sender, EventArgs e)
         {
-            ArmeSelectionnee(sender, new EventArgs());
+            if (ArmeSelectionnee != null)
+            {
+                ArmeSelectionnee((sender as IndiquateurArmeRestante).ObtenirType());
+            }
             estOuvert = false;
         }
 
@@ -66,13 +71,14 @@ namespace BBTA.Interface
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed && !aireOccupee.Contains(positionSouris))
                 {
                     estOuvert = false;
+                    SortieDuPanneau(this, new EventArgs());
                 }
             }
 
             base.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        public override void Draw(SpriteBatch spriteBatch)
         {
                 base.Draw(spriteBatch);
                 if (estDeploye == true && estOuvert == true)

@@ -38,8 +38,8 @@ namespace BBTA.Elements
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             Vector2 uniteXna = corpsPhysique.Position * 40;
-            spriteBatch.Draw(texture, uniteXna, null, Color.White, corpsPhysique.Rotation, 
-                new Vector2(texture.Width / 2f, texture.Height / 2f), 1, SpriteEffects.None, 0); 
+            spriteBatch.Draw(texture, uniteXna, null, Color.White, corpsPhysique.Rotation,
+                new Vector2(texture.Width / 2f, texture.Height / 2f), 1, SpriteEffects.None, 0);
         }
     }
 }

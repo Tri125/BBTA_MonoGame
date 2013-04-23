@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
 using IndependentResolutionRendering;
+using BBTA.Interfaces;
 
 namespace BBTA
 {
@@ -57,8 +58,8 @@ namespace BBTA
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
             blocs = new Bloc[donneesBlocs.Length];
-            for(int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
-            {                
+            for (int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
+            {
                 //Par convention, une case avec "1" comme donnée signifie une case de terre pour notre énumérateur.
                 if (donneesBlocs[compteurBlocs] == 1)
                 {
@@ -68,9 +69,9 @@ namespace BBTA
                 }
                 else
                     //Par convention, une case avec "-1" comme donnée signifie un lieu d'apparition pour les joueurs.
-                    if(donneesBlocs[compteurBlocs] == (int)TypeBloc.Apparition)
+                    if (donneesBlocs[compteurBlocs] == (int)TypeBloc.Apparition)
                     {
-                        listeApparition.Add(new Vector2(metrePixel*((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel*((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
+                        listeApparition.Add(new Vector2(metrePixel * ((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel * ((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
                     }
             }
         }
@@ -82,13 +83,13 @@ namespace BBTA
         public void Explosion(Vector2 lieu, float energie)
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
-	        {
-                if(blocs[compteurBloc].ExplosetIl(energie, lieu))
+            {
+                if (blocs[compteurBloc] != null && blocs[compteurBloc].ExplosetIl(energie, lieu))
                 {
-                    //Destruction du bloc
+                    //Destruction du bloc   
                     blocs[compteurBloc] = null;
                 }
-	        }
+            }
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace BBTA
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch, Vector2 positionCamera)
         {
-            spriteBatch.Draw(textureArrierePlan, new Vector2(positionCamera.X-IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2f,
+            spriteBatch.Draw(textureArrierePlan, new Vector2(positionCamera.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f,
                                                            positionCamera.Y - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f), Color.White);
             foreach (Bloc item in blocs)
             {
@@ -116,7 +117,7 @@ namespace BBTA
             }
             else
             {
-                if (blocs[identifiant - largeur] <= 0 )
+                if (blocs[identifiant - largeur] <= 0)
                 {
                     if (identifiant % largeur == 0)
                     {
@@ -150,7 +151,7 @@ namespace BBTA
                     return TypeBloc.Terre;
                 }
             }
-            
+
         }
 
         public Rectangle ObtenirTailleCarte()

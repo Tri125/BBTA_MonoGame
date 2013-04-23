@@ -20,7 +20,7 @@ namespace BBTA.Interface
             this.police = police;
         }
 
-        public Armes ObtenirTypeArme()
+        public Armes ObtenirType()
         {
             return type;
         }

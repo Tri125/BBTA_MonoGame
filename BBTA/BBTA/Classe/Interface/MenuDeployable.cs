@@ -26,7 +26,7 @@ namespace BBTA.Interface
         }
         protected Rectangle aireOccupee;
 
-        protected bool estDeploye = false;
+        public bool estDeploye { get; set; }
         public bool estOuvert{get;set;}
 
         protected float progressionDeploiement = 0;
@@ -47,6 +47,7 @@ namespace BBTA.Interface
                 this.tailleBouton = tailleBouton.Value;
             }
             estOuvert = false;
+            estDeploye = false;
         }
 
         public virtual void Update(GameTime gameTime)

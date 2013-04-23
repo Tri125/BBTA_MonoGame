@@ -15,15 +15,15 @@ namespace BBTA.Elements
     /// Détermine, en vertu des informations provenent d'une explosion, si le bloc existe toujours
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Bloc: Sprite
+    public class Bloc : Sprite
     {
         //Variables-----------------------------------------------------------------------------------------------
-        private Body corpsPhysique;
+        public Body corpsPhysique { get; set; }
         private float metrePixel;
         private TypeBloc type;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
-        private const float seuilResistance = 45;
+        private const float seuilResistance = 30;
 
         /// <summary>
         /// Constructeur
@@ -33,7 +33,7 @@ namespace BBTA.Elements
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
         public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel, TypeBloc type)
-            :base(texture, position*metrePixel)
+            : base(texture, position * metrePixel)
         {
             this.type = type;
             this.metrePixel = metrePixel;
@@ -60,19 +60,7 @@ namespace BBTA.Elements
             float distance = Vector2.Distance(lieu, Position);
             if (energie / distance > seuilResistance)
             {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
-        public bool MeDetruire()
-        {
-            if (corpsPhysique == null)
-            {
+                corpsPhysique.Dispose();
                 return true;
             }
             else
@@ -83,10 +71,10 @@ namespace BBTA.Elements
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle selection = new Rectangle((int)type * largeur/5, 0, largeur/5, hauteur);  
-            Vector2 pointCentral = new Vector2(largeur/5 / 2f, hauteur / 2f);
-            spriteBatch.Draw(texture, corpsPhysique.Position*metrePixel, selection,
-                             Color.White, angleRotation, pointCentral, echelle, 
+            Rectangle selection = new Rectangle((int)type * largeur / 5, 0, largeur / 5, hauteur);
+            Vector2 pointCentral = new Vector2(largeur / 5 / 2f, hauteur / 2f);
+            spriteBatch.Draw(texture, corpsPhysique.Position * metrePixel, selection,
+                             Color.White, angleRotation, pointCentral, echelle,
                              SpriteEffects.None, 0);
         }
     }
