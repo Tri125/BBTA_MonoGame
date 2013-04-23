@@ -19,15 +19,15 @@ namespace BBTA.Elements
         //Évênements----------------------------------------------------------------------------------------------
         public event EventHandler TourCompleter;
         public event EventHandler Mort;
+        public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
         protected const float VITESSE_LATERALE = 6f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 10f;
         public bool estAuSol { get; private set; }
-        public bool estActif { get; set; }
-        public bool enModeTir { get; set; }
         private bool veutSeDeplacer = false;
         public bool monTour = false;
+        public bool enModeTir { get; set; }
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
@@ -56,14 +56,18 @@ namespace BBTA.Elements
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
             corpsPhysique.Friction = 0;
-            estActif = false;
+            corpsPhysique.SleepingAllowed = false;
+            enModeTir = false;
         }
 
         protected void CompletionTour()
         {
             if (monTour == true)
             {
-                TourCompleter(this, EventArgs.Empty);
+                if (TourCompleter != null)
+                {
+                    TourCompleter(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -139,6 +143,12 @@ namespace BBTA.Elements
         public Vector2 ObtenirPosition()
         {
             return corpsPhysique.Position * 40;
+        }
+
+        protected void Tirer()
+        {
+            TirDemande(this, new EventArgs());
+            enModeTir = true;
         }
 
     }

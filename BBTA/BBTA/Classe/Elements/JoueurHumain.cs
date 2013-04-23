@@ -17,6 +17,7 @@ namespace BBTA.Elements
         private KeyboardState clavierMaintenant;
         private BBTA.Classe.Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionUtilisateur.InformationTouche;
 
+
         public JoueurHumain(World mondePhysique, Texture2D texture, Vector2 position, float pointsVie, int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(mondePhysique, pointsVie, texture, position, nbColonnes, nbRangees, milliSecParImage)
         {
@@ -29,6 +30,12 @@ namespace BBTA.Elements
                 clavierAvant = clavierMaintenant;
                 clavierMaintenant = Keyboard.GetState();
             }
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && enModeTir == false  && monTour == true)
+            {
+                Tirer();
+            }
+
             base.Update(gameTime);
 
             if (!enModeTir)

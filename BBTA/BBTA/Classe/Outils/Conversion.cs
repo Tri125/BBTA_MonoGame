@@ -37,7 +37,7 @@ namespace BBTA.Classe.Outils
 
         public static Vector2 PixelAuMetre(Vector2 pixel)
         {
-            return pixel * RATIO_METRE_PIXEL;
+            return pixel / RATIO_METRE_PIXEL;
         }
 
     }

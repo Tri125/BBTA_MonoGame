@@ -18,12 +18,12 @@ namespace BBTA.Elements
     public class Bloc : Sprite
     {
         //Variables-----------------------------------------------------------------------------------------------
-        private Body corpsPhysique;
+        public Body corpsPhysique { get; set; }
         private float metrePixel;
         private TypeBloc type;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
-        private const float seuilResistance = 45;
+        private const float seuilResistance = 30;
 
         /// <summary>
         /// Constructeur
@@ -60,19 +60,7 @@ namespace BBTA.Elements
             float distance = Vector2.Distance(lieu, Position);
             if (energie / distance > seuilResistance)
             {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
-        public bool MeDetruire()
-        {
-            if (corpsPhysique == null)
-            {
+                corpsPhysique.Dispose();
                 return true;
             }
             else

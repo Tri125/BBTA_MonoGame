@@ -27,38 +27,23 @@ namespace BBTA.Partie_De_Jeu
         private const int TEMPS_TOUR_DEFAUT = 3000;
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
-        private IndicateurPuissance ip;
         private World mondePhysique;
         private int tempsEcouler;
-        public SelectionArme sa;
-        GestionnaireActeurs gs;
+        GestionnaireActeurs gestionnaireEquipes;
+        GestionnaireMenusTir gestionnaireMenusTir;
+        GestionnaireProjectile gestionnaireProjectile;
         private Camera2d camPartie;
-        private ViseurVisuel vs;
         Carte carte;
         int[] carteTuile;
-
-        //public List<Acteur> ListeActeur
-        //{
-        //    get
-        //    {
-        //        List<Acteur> temp = new List<Acteur>();
-        //        foreach (Equipe equipe in listeEquipes)
-        //        {
-        //            foreach (Acteur acteur in equipe.ListeMembres)
-        //            {
-        //                temp.Add(acteur);
-        //            }
-        //        }
-        //        return temp;
-        //    }
-        //}
 
         public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
-            gs = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, true);
+            gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, true);
+            gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
+            gestionnaireProjectile = new GestionnaireProjectile(jeu);
         }
 
         /// <summary>
@@ -75,9 +60,34 @@ namespace BBTA.Partie_De_Jeu
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne / 2,
                             Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;
             base.Initialize();
-            Game.Components.Add(gs);
-            gs.CreerJoueurs(ref mondePhysique, carte.ListeApparition);
-            gs.DrawOrder = 1;
+            Game.Components.Add(gestionnaireEquipes);
+            gestionnaireEquipes.CreerJoueurs(ref mondePhysique, carte.ListeApparition);
+            gestionnaireEquipes.DrawOrder = 1;
+            gestionnaireEquipes.Tir += new GestionnaireActeurs.DelegateTirEntamme(gestionnaireEquipes_Tir);
+            gestionnaireMenusTir.ProcessusDeTirTerminer += new GestionnaireMenusTir.DelegateProcessusDeTirTerminer(gestionnaireMenusTir_ProcessusDeTirTerminer);
+            Game.Components.Add(gestionnaireMenusTir);
+            gestionnaireMenusTir.DrawOrder = 3;
+            Game.Components.Add(gestionnaireProjectile);
+            gestionnaireProjectile.Explosion += new GestionnaireProjectile.DelegateExplosion(gestionnaireProjectile_Explosion);
+            gestionnaireProjectile.DrawOrder = 2;
+            this.DrawOrder = 0;
+        }
+
+        void gestionnaireProjectile_Explosion(Vector2 position, float energieExplosion)
+        {
+             carte.Explosion(position, energieExplosion);
+        }
+
+        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
+        {
+            gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
+            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
+        }
+
+        void gestionnaireEquipes_Tir(Vector2 position)
+        {
+            gestionnaireMenusTir.Position = position;
+            gestionnaireMenusTir.DemarrerSequenceTir();
         }
 
 
@@ -103,9 +113,18 @@ namespace BBTA.Partie_De_Jeu
         {
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
-
-            camPartie.SuivreObjet(gs.equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
-            gs.matriceCamera = camPartie.get_transformation(GraphicsDevice);
+            gestionnaireEquipes.matriceCamera = camPartie.get_transformation(GraphicsDevice);
+            gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
+            gestionnaireMenusTir.Position = gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition();
+            if (gestionnaireProjectile.Enabled)
+            {
+                gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
+                camPartie.SuivreObjet(gestionnaireProjectile.Position, Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            }
+            else
+            {
+                camPartie.SuivreObjet(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition(), Game1.chargeurCarte.InformationCarte().NbRange * 40);
+            }
             base.Update(gameTime);
         }
 

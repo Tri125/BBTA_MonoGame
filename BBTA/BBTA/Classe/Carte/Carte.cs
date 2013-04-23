@@ -84,9 +84,9 @@ namespace BBTA
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
             {
-                if (blocs[compteurBloc].ExplosetIl(energie, lieu))
+                if (blocs[compteurBloc] != null && blocs[compteurBloc].ExplosetIl(energie, lieu))
                 {
-                    //Destruction du bloc
+                    //Destruction du bloc   
                     blocs[compteurBloc] = null;
                 }
             }
