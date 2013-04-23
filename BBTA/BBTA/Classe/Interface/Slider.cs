@@ -42,7 +42,7 @@ namespace BBTA.Classe.Interface
 
         private float pourcentage;
 
-        public Slider(Texture2D sliderArrierePlan, Vector2 posArrierePlan, Texture2D barre, Texture2D btnSlider)
+        public Slider(Texture2D sliderArrierePlan, Vector2 posArrierePlan, Texture2D barre, Texture2D btnSlider, float pourcentage)
         {
             this.sliderArrierePlan = sliderArrierePlan;
             this.posArrierePlan = posArrierePlan;
@@ -60,6 +60,8 @@ namespace BBTA.Classe.Interface
             largeurBouton = btnSlider.Width;
 
             etat = EtatSlider.Attente;
+
+            posSlider.X = pourcentage * (largeurBarre - 60) + (posArrierePlan.X - largeurBarre / 2f + 30);
         }
 
         public void Deplacement()

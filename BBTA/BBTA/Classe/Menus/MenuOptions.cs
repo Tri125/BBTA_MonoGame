@@ -36,11 +36,13 @@ namespace BBTA.Classe.Menus
 
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
-                                       Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"));
+                                       Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
+                                       0.75f);
 
             sliderMusique = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 325),
-                                       Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
-                                       Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"));
+                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
+                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
+                                        0.75f);
             base.LoadContent();
         }
 
