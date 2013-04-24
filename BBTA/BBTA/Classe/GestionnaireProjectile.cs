@@ -61,6 +61,11 @@ namespace BBTA.Classe
             this.Visible = false;
         }
 
+        public Projectile ObtenirProjectile()
+        {
+            return projectile;
+        }
+
         public override void Update(GameTime gameTime)
         {
             projectile.Update(gameTime);
