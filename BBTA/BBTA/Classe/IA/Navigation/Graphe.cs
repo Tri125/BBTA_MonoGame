@@ -22,45 +22,45 @@ namespace BBTA.Classe.IA.Navigation
         private int m_iNextNodeIndex;
 
 
-        //returns true if an edge is not already present in the graph. Used
-        //when adding edges to make sure no duplicates are created.
-        private bool UniqueEdge(int debut, int fin);
+        ////returns true if an edge is not already present in the graph. Used
+        ////when adding edges to make sure no duplicates are created.
+        //private bool UniqueEdge(int debut, int fin);
 
-        //iterates through all the edges in the graph and removes any that point
-        //to an invalidated node
-        private void CullInvalidEdges();
-
-
-        //returns the node at the given index
-        public NavNoeudGraph GetNode(int idx);
+        ////iterates through all the edges in the graph and removes any that point
+        ////to an invalidated node
+        //private void CullInvalidEdges();
 
 
-        //non const version
-        public NavArcGraph GetEdge(int from, int to);
+        ////returns the node at the given index
+        //public NavNoeudGraph GetNode(int idx);
+
+
+        ////non const version
+        //public NavArcGraph GetEdge(int from, int to);
 
 
         //retrieves the next free node index
         public int GetNextFreeNodeIndex { get { return m_iNextNodeIndex; } }
 
-        //adds a node to the graph and returns its index
-        public int AddNode(NavNoeudGraph node);
+        ////adds a node to the graph and returns its index
+        //public int AddNode(NavNoeudGraph node);
 
-        //removes a node by setting its index to invalid_node_index
-        public void RemoveNode(int node);
+        ////removes a node by setting its index to invalid_node_index
+        //public void RemoveNode(int node);
 
-        //Use this to add an edge to the graph. The method will ensure that the
-        //edge passed as a parameter is valid before adding it to the graph. If the
-        //graph is a digraph then a similar edge connecting the nodes in the opposite
-        //direction will be automatically added.
-        public void AddEdge(NavArcGraph edge);
+        ////Use this to add an edge to the graph. The method will ensure that the
+        ////edge passed as a parameter is valid before adding it to the graph. If the
+        ////graph is a digraph then a similar edge connecting the nodes in the opposite
+        ////direction will be automatically added.
+        //public void AddEdge(NavArcGraph edge);
 
-        //removes the edge connecting from and to from the graph (if present). If
-        //a digraph then the edge connecting the nodes in the opposite direction 
-        //will also be removed.
-        public void RemoveEdge(int from, int to);
+        ////removes the edge connecting from and to from the graph (if present). If
+        ////a digraph then the edge connecting the nodes in the opposite direction 
+        ////will also be removed.
+        //public void RemoveEdge(int from, int to);
 
-        //sets the cost of an edge
-        public void SetEdgeCost(int from, int to, float cost);
+        ////sets the cost of an edge
+        //public void SetEdgeCost(int from, int to, float cost);
 
         //returns the number of active + inactive nodes present in the graph
         public int NumNodes() { return NoeudGraphe.Count(); }
@@ -93,10 +93,10 @@ namespace BBTA.Classe.IA.Navigation
         }
 
         //returns true if the graph is directed
-        bool isDigraph() { return m_bDigraph; }
+        public bool isDigraph() { return m_bDigraph; }
 
         //returns true if the graph contains no nodes
-        bool isEmpty()
+        public bool isEmpty()
         {
             if (NoeudGraphe.Count == 0)
             {
@@ -108,21 +108,32 @@ namespace BBTA.Classe.IA.Navigation
             }
         }
 
-        //returns true if a node with the given index is present in the graph
-        bool isNodePresent(int nd);
+        ////returns true if a node with the given index is present in the graph
+        //public bool isNodePresent(int nd);
 
-        //returns true if an edge connecting the nodes 'to' and 'from'
-        //is present in the graph
-        bool isEdgePresent(int from, int to);
+        ////returns true if an edge connecting the nodes 'to' and 'from'
+        ////is present in the graph
+        //public bool isEdgePresent(int from, int to);
 
-        //methods for loading and saving graphs from an open file stream or from
-        //a file name 
-        bool Save(string nomFichier);
+        ////methods for loading and saving graphs from an open file stream or from
+        ////a file name 
+        //public bool Save(string nomFichier);
 
-        bool Load(string nomFichier);
+        //public bool Load(string nomFichier);
 
         //clears the graph ready for new node insertions
-        void Clear() { m_iNextNodeIndex = 0; NoeudGraphe.Clear(); ArcAdjacent.Clear(); }
+        public void Clear() { m_iNextNodeIndex = 0; NoeudGraphe.Clear(); ArcAdjacent.Clear(); }
+
+        public void RemoveEdges()
+        {
+            foreach (LinkedList<NavArcGraph> arc in ArcAdjacent)
+            {
+                arc.Clear();
+            }
+        }
+
+
+
 
 
 
@@ -133,9 +144,9 @@ namespace BBTA.Classe.IA.Navigation
         //------------------------------------------------------------------------
         private bool ArcUnique(int debut, int fin)
         {
-            foreach (var item in ArcAdjacent[debut])
+            foreach (NavArcGraph arc in ArcAdjacent[debut])
             {
-                if (item.IndexDest == fin)
+                if (arc.IndexDest == fin)
                 {
                     return false;
                 }
