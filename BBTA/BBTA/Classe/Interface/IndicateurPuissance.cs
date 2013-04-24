@@ -14,8 +14,8 @@ namespace BBTA.Interface
         private const int HAUTEUR_PANNEAU = 221;
         private const int HAUTEUR_INDICATEUR = 22;
         private const int PALIER_ENERGIE = 1;
-        private const int TEMPS_PALIER = 150;
-        private const int FORCE_MAXIMALE = 20;
+        private const int TEMPS_PALIER = 100;
+        private const int FORCE_MAXIMALE = 30;
         private const int POSITION_INITIALE_INDICATEUR = -17;
 
         //Variables-----------------------------------------
@@ -74,7 +74,7 @@ namespace BBTA.Interface
                 {
                     tempsEcouleDepuisDernierPalier -= TEMPS_PALIER;
                     forceDepart += 1;
-                    positionIndicateur = new Vector2(0, positionIndicateur.Y - 8);
+                    positionIndicateur = new Vector2(0, positionIndicateur.Y - 5);
                 }
 
                 /*Lorsque l'utilisateur cesse d'appuyer sur la touche "Espace", un événement est généré.

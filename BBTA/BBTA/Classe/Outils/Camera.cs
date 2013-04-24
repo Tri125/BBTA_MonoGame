@@ -90,7 +90,7 @@ namespace BBTA.Outils
             }
             pos = positionIntermediaire;
 
-            if (ObjetSuivi.ObtenirPosition().Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
+            if (positionIntermediaire.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
             {
                 Pos = new Vector2((int)pos.X, (int)hauteurCarte - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f);
             }

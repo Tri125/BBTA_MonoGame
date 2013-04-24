@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision.Shapes;
+using BBTA.Classe.Outils;
 
 namespace BBTA.Elements
 {
@@ -70,7 +71,7 @@ namespace BBTA.Elements
             int rangeeActuelle = imageEnCours / nbColonnes;
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle * largeur, rangeeActuelle * hauteur, largeur, hauteur);
-            spriteBatch.Draw(texture, corpsPhysique.Position * 40, selection, Color.White, corpsPhysique.Rotation,
+            spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), selection, Color.White, corpsPhysique.Rotation,
                              new Vector2(largeur / 2f, hauteur / 2f), 1, effet, 0);
         }
 
