@@ -118,7 +118,7 @@ namespace BBTA.Classe
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate,
-                              BlendState.AlphaBlend,null, null, null, null, 
+                              BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, 
                               Resolution.getTransformationMatrix() * matriceCamera);
             foreach (Equipe equipe in equipes)
             {

@@ -60,7 +60,7 @@ namespace BBTA
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
             Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
-            this.IsFixedTimeStep = true;
+            this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
             chargeurOption.Initialisation();
         }
