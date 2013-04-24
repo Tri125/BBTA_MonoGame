@@ -31,7 +31,7 @@ namespace BBTA.Elements
                 clavierMaintenant = Keyboard.GetState();
             }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && enModeTir == false  && monTour == true)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && enModeTir == false  && monTour == true && estAuSol == true)
             {
                 Tirer();
             }

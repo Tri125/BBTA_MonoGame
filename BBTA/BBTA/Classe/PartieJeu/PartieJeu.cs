@@ -73,8 +73,14 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireMenusTir.DrawOrder = 3;
             Game.Components.Add(gestionnaireProjectile);
             gestionnaireProjectile.Explosion += new GestionnaireProjectile.DelegateExplosion(gestionnaireProjectile_Explosion);
+            gestionnaireMenusTir.TirAvorte += new EventHandler(gestionnaireMenusTir_TirAvorte);
             gestionnaireProjectile.DrawOrder = 2;
             this.DrawOrder = 0;
+        }
+
+        void gestionnaireMenusTir_TirAvorte(object sender, EventArgs e)
+        {
+            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
 
         void gestionnaireProjectile_Explosion(Vector2 position, float energieExplosion)
@@ -96,13 +102,15 @@ namespace BBTA.Partie_De_Jeu
         {
             EstEnTransition = false;
             gestionnaireProjectile.Enabled = false;
+            gestionnaireEquipes.Enabled = true;
         }
 
         void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
         {
             gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
-            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
             gestionnaireProjectile.Enabled = true;
+            gestionnaireEquipes.Enabled = false;
+            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
 
         void gestionnaireEquipes_Tir(Vector2 position)
