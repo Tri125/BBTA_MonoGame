@@ -6,6 +6,7 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
+using BBTA.Classe.Outils;
 
 namespace BBTA.Elements
 {
@@ -14,6 +15,7 @@ namespace BBTA.Elements
         protected Body corpsPhysique;
         protected Texture2D texture;
         private Fixture joint;
+        protected float angleRotation = 0;
 
         public ObjetPhysique(Texture2D texture, World mondePhysique, Shape forme)
         {
@@ -22,18 +24,11 @@ namespace BBTA.Elements
             joint = corpsPhysique.CreateFixture(forme);
         }
 
-        public float AngleRotation
+        public Vector2 ObtenirPosition()
         {
-            get
-            {
-                return corpsPhysique.Rotation;
-            }
-
-            set
-            {
-                corpsPhysique.Rotation = value;
-            }
+            return Conversion.MetreAuPixel(corpsPhysique.Position);
         }
+        
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

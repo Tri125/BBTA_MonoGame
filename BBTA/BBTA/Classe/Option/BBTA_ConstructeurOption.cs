@@ -19,10 +19,11 @@ namespace BBTA.Classe.Option
         #region Attribut
         private Option optionUtilisateur = new Option();
         private Option optionDefaut = new Option();
-        bool mauvaisUtilisateur;
-        bool mauvaisDefaut;
-        bool presentUtilisateur;
-        bool presentDefaut;
+        private Option optionActive = new Option();
+        private bool mauvaisUtilisateur;
+        private bool mauvaisDefaut;
+        private bool presentUtilisateur;
+        private bool presentDefaut;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer = new XmlSerializer(typeof(Option));
@@ -36,8 +37,13 @@ namespace BBTA.Classe.Option
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
-        public Option OptionDefaut { get { return optionDefaut; } }
-        public Option OptionUtilisateur { get { return optionUtilisateur; } }
+        public Option OptionActive { get { return optionActive; } }
+
+        public BBTA_ConstructeurOption()
+        {
+            //On charge l'objet Option de base qui contient les paramètres d'usine du jeu.
+            OptionBase();
+        }
 
         private void OptionBase()
         {
@@ -121,9 +127,21 @@ namespace BBTA.Classe.Option
                 Console.WriteLine("Fichier defaut mal chargé : " + mauvaisDefaut);
             }
             Console.WriteLine("FINI");
+
+            if (mauvaisUtilisateur || mauvaisDefaut)
+            {
+                Console.WriteLine("INCAPABLE DE RÉPARER");
+                RetourBase();
+
+            }
+            else
+            {
+                RetourUtilisateur();
+            }
         }
 
-        public void Reparation()
+
+        private void Reparation()
         {
             if (mauvaisDefaut)
             {
@@ -147,13 +165,39 @@ namespace BBTA.Classe.Option
         }
 
 
-        public BBTA_ConstructeurOption()
+
+        private void LectureOption(string FichierEntre, ref Option option)
         {
-            //On charge l'objet Option de base qui contient les paramètres d'usine du jeu.
-            OptionBase();
+
+            try
+            {
+                lecteur = new XmlTextReader(FichierEntre);
+                option = (Option)serializer.Deserialize(lecteur);
+
+                chargementReussis = true;
+            }
+
+
+            catch (Exception ex)
+            {
+                option = null;
+                chargementReussis = false;
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            finally
+            {
+                if (lecteur != null)
+                {
+                    lecteur.Close();
+                }
+            }
         }
 
-        public void EcritureOption(string FichierSortie, Option option)
+
+
+        private void EcritureOption(string FichierSortie, Option option)
         {
             try
             {
@@ -184,43 +228,43 @@ namespace BBTA.Classe.Option
 
         }
 
-        public void LectureOption(string FichierEntre, ref Option option)
+        public void EnregistrementUtilisateur(ref Option option)
         {
+            EcritureOption(nomUtilisateur, option);
+            Initialisation();
+        }
 
-            try
+        public void RetourDefaut()
+        {
+            if (mauvaisDefaut == false && presentDefaut == true)
             {
-                lecteur = new XmlTextReader(FichierEntre);
-                option = (Option)serializer.Deserialize(lecteur);
-
-                chargementReussis = true;
+                optionActive = optionDefaut;
             }
-
-
-            catch (Exception ex)
+            else
             {
-                option = null;
-                chargementReussis = false;
-                Console.WriteLine(ex.Message);
-                return;
-            }
-
-            finally
-            {
-                if (lecteur != null)
-                {
-                    lecteur.Close();
-                }
+                optionActive = optionBase;
             }
         }
 
-        //public XNATileMapEditor.BBTA_Map.InfoCarte InformationCarte()
-        //{
-        //    if (chargementReussis == true)
-        //    {
-        //        return carte.InformationCarte;
-        //    }
-        //    return null;
-        //}
+
+        private void RetourUtilisateur()
+        {
+            if (mauvaisUtilisateur == false && presentUtilisateur == true)
+            {
+                optionActive = optionUtilisateur;
+            }
+            else
+            {
+                optionActive = optionBase;
+            }
+        }
+
+
+        private void RetourBase()
+        {
+            optionActive = optionBase;
+        }
+
     }
 }
 

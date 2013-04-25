@@ -30,6 +30,7 @@ namespace BBTA.Classe
         private Armes type;
         public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
+        public event EventHandler TirAvorte;
         public Matrix MatriceDeCamera{get;set;}
         public Vector2 Position { get; set; }
 
@@ -75,6 +76,10 @@ namespace BBTA.Classe
         void selecteur_SortieDuPanneau(object sender, EventArgs e)
         {
             prochainMode = ModeTir.nul;
+            if (TirAvorte != null)
+            {
+                TirAvorte(this, new EventArgs());
+            }
         }
 
         void viseur_Verouiller(object sender, EventArgs e)

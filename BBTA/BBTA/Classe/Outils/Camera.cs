@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using BBTA.Elements;
 
 namespace BBTA.Outils
 {
@@ -14,9 +15,16 @@ namespace BBTA.Outils
         public Matrix transform; // Matrix Transform
         public Vector2 pos; // Camera Position
         protected float rotation; // Camera Rotation
+        private int hauteurCarte;
+        public ObjetPhysique ObjetSuivi { get; set; }
+        private bool doitSeDeplacer = false;
+        public event EventHandler Verouiller;
+        private Vector2 distanceParcourir;
+        private const int VITESSE_TRANSITION = 1;
 
-        public Camera2d()
+        public Camera2d(int hauteurCarte)
         {
+            this.hauteurCarte = hauteurCarte;
             zoom = 1;
             rotation = 0.0f;
             pos = Vector2.Zero;
@@ -50,17 +58,45 @@ namespace BBTA.Outils
             return transform;
         }
 
-        public void SuivreObjet(Vector2 positionJoueur, int hauteurCarte)
+        public void SeDirigerVers(ObjetPhysique objet)
         {
+            doitSeDeplacer = true;
+            ObjetSuivi = objet;
+            distanceParcourir = Vector2.Subtract(ObjetSuivi.ObtenirPosition(), pos);
+        }
 
-            if (positionJoueur.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
+        public void Update(GameTime gameTime)
+        {
+            Vector2 positionIntermediaire = ObjetSuivi.ObtenirPosition();
+            if (doitSeDeplacer)
             {
-                Pos = new Vector2((int)positionJoueur.X, (int)hauteurCarte-IndependentResolutionRendering.Resolution.getVirtualViewport().Height/2f);
+                Vector2 deplacement = distanceParcourir;
+                deplacement.Normalize();
+                deplacement *= gameTime.ElapsedGameTime.Milliseconds * VITESSE_TRANSITION;
+                if (distanceParcourir.Length() > deplacement.Length())
+                {
+                    distanceParcourir -= deplacement;
+                    positionIntermediaire = ObjetSuivi.ObtenirPosition() - distanceParcourir;
+                }
+                else
+                {
+                    doitSeDeplacer = false;
+                    pos = positionIntermediaire;
+                    if (Verouiller != null)
+                    {
+                        Verouiller(this, new EventArgs());
+                    }
+                }
             }
+            pos = positionIntermediaire;
 
+            if (positionIntermediaire.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
+            {
+                Pos = new Vector2((int)pos.X, (int)hauteurCarte - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f);
+            }
             else
             {
-                Pos = new Vector2((int)positionJoueur.X, (int)positionJoueur.Y);
+                Pos = new Vector2((int)pos.X, (int)pos.Y);
             }
         }
     }

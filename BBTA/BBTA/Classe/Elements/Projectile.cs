@@ -50,7 +50,7 @@ namespace BBTA.Elements
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), positionSpriteSheet, Color.White,
-                             AngleRotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, SpriteEffects.None, 0);
+                             angleRotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, SpriteEffects.None, 0);
         }
 
     }
