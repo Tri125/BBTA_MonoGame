@@ -58,7 +58,7 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = true;
             Content.RootDirectory = "Content";
