@@ -66,6 +66,7 @@ namespace BBTA
                     //Position en mètres
                     Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
                     blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
+                    blocs[compteurBlocs].AnimationDestructionTerminee += new EventHandler(Carte_AnimationDestructionTerminee);
                 }
                 else
                     //Par convention, une case avec "-1" comme donnée signifie un lieu d'apparition pour les joueurs.
@@ -73,6 +74,17 @@ namespace BBTA
                     {
                         listeApparition.Add(new Vector2(metrePixel * ((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel * ((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
                     }
+            }
+        }
+
+        void Carte_AnimationDestructionTerminee(object sender, EventArgs e)
+        {
+            for (int nbBlocs = 0; nbBlocs < blocs.Length; nbBlocs++)
+            {
+                if (blocs[nbBlocs] != null && blocs[nbBlocs] == sender)
+                {
+                    blocs[nbBlocs] = null;
+                }
             }
         }
 
@@ -84,10 +96,20 @@ namespace BBTA
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
             {
-                if (blocs[compteurBloc] != null && blocs[compteurBloc].ExplosetIl(energie, lieu))
+                if (blocs[compteurBloc] != null)
                 {
-                    //Destruction du bloc   
-                    blocs[compteurBloc] = null;
+                    blocs[compteurBloc].Explose(energie, lieu);
+                }
+            }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            foreach (Bloc item in blocs)
+            {
+                if (item != null)
+                {
+                    item.Update(gameTime);
                 }
             }
         }

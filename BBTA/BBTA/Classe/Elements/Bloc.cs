@@ -21,9 +21,15 @@ namespace BBTA.Elements
         public Body corpsPhysique { get; set; }
         private float metrePixel;
         private TypeBloc type;
+        private bool enDestruction = false;
+        private int etapeDestruction = 0;
+        private int tempsDepuisEtapePrecedente = 0;
+        private const int TEMPS_ENTRE_ETAPES = 50;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
         private const float seuilResistance = 30;
+
+        public event EventHandler AnimationDestructionTerminee;
 
         /// <summary>
         /// Constructeur
@@ -52,7 +58,7 @@ namespace BBTA.Elements
         /// <param name="rayon">Rayon de l'explosion</param>
         /// <param name="lieu">Lieu d'origine de l'explosion</param>
         /// <returns>Si le bloc doit être détruit</returns>
-        public bool ExplosetIl(float energie, Vector2 lieu)
+        public void Explose(float energie, Vector2 lieu)
         {
             /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
@@ -61,18 +67,31 @@ namespace BBTA.Elements
             if (energie / distance > seuilResistance)
             {
                 corpsPhysique.Dispose();
-                return true;
+                enDestruction = true;
             }
-            else
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (enDestruction)
             {
-                return false;
+                tempsDepuisEtapePrecedente += gameTime.ElapsedGameTime.Milliseconds;
+                if (tempsDepuisEtapePrecedente > TEMPS_ENTRE_ETAPES)
+                {
+                    tempsDepuisEtapePrecedente -= TEMPS_ENTRE_ETAPES;
+                    etapeDestruction++;
+                }
+                if (etapeDestruction == 5 && AnimationDestructionTerminee != null)
+                {
+                    AnimationDestructionTerminee(this, new EventArgs());
+                }
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle selection = new Rectangle((int)type * largeur / 5, 0, largeur / 5, hauteur);
-            Vector2 pointCentral = new Vector2(largeur / 5 / 2f, hauteur / 2f);
+            Rectangle selection = new Rectangle((int)type * 40, etapeDestruction*40, 40, 40);
+            Vector2 pointCentral = new Vector2(20, 20);
             spriteBatch.Draw(texture, corpsPhysique.Position * metrePixel, selection,
                              Color.White, angleRotation, pointCentral, echelle,
                              SpriteEffects.None, 0);

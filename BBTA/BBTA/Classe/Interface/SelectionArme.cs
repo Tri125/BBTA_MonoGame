@@ -55,8 +55,7 @@ namespace BBTA.Interface
 
         public void Update(GameTime gameTime, Matrix matriceCamera)
         {
-            sourisAvant = sourisApres;
-            sourisApres = Mouse.GetState();
+            base.Update(gameTime);
             positionSouris = IndependentResolutionRendering.Resolution.MouseHelper.PositionSourisCamera(matriceCamera);
             if (estDeploye == true)
             {
@@ -74,8 +73,6 @@ namespace BBTA.Interface
                     SortieDuPanneau(this, new EventArgs());
                 }
             }
-
-            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

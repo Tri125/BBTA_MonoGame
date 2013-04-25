@@ -115,8 +115,7 @@ namespace BBTA.Partie_De_Jeu
 
         void gestionnaireEquipes_Tir(Vector2 position)
         {
-            gestionnaireMenusTir.Position = position;
-            gestionnaireMenusTir.DemarrerSequenceTir();
+            gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition());
         }
 
 
@@ -144,7 +143,6 @@ namespace BBTA.Partie_De_Jeu
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             if (EstEnTransition == false)
             {
-                gestionnaireMenusTir.Position = gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition();
                 if (gestionnaireProjectile.Enabled)
                 {
                     gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
@@ -155,6 +153,7 @@ namespace BBTA.Partie_De_Jeu
                     camPartie.ObjetSuivi = gestionnaireEquipes.equipeActive.JoueurActif;
                 }
             }
+            carte.Update(gameTime);
             camPartie.Update(gameTime);
             gestionnaireEquipes.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);

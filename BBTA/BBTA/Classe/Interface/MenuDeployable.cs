@@ -21,7 +21,7 @@ namespace BBTA.Interface
             set
             {
                 position = value;
-                aireOccupee = new Rectangle((int)value.X- texturePanneau.Width / 2, (int)value.Y - texturePanneau.Height, aireOccupee.Width, aireOccupee.Height);
+                aireOccupee = new Rectangle((int)value.X- aireOccupee.Width / 2, (int)value.Y - aireOccupee.Height, aireOccupee.Width, aireOccupee.Height);
             }
         }
         protected Rectangle aireOccupee;
@@ -77,7 +77,7 @@ namespace BBTA.Interface
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texturePanneau, Position, tailleBouton, Color.White * progressionDeploiement, 0,
-                             new Vector2(tailleBouton.Width/2, tailleBouton.Height), 
+                             new Vector2(tailleBouton.Width/2, aireOccupee.Height), 
                              progressionDeploiement, SpriteEffects.None, 0);
         }
     }

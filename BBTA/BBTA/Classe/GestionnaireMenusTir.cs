@@ -32,7 +32,7 @@ namespace BBTA.Classe
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
         public Matrix MatriceDeCamera{get;set;}
-        public Vector2 Position { get; set; }
+        private Vector2 position;
 
 
         public GestionnaireMenusTir(Game jeu)
@@ -57,12 +57,13 @@ namespace BBTA.Classe
             base.LoadContent();
         }
 
-        public void DemarrerSequenceTir()
+        public void DemarrerSequenceTir(Vector2 position)
         {
+            this.position = position;
             modeEncours = ModeTir.Selection;
-            selecteur.Position = new Vector2(Position.X, Position.Y - 50);
-            viseur.Position = Position;
-            indicateur.Position = new Vector2(Position.X, Position.Y - 50);
+            selecteur.Position = new Vector2(position.X, position.Y - 50);
+            viseur.Position = position;
+            indicateur.Position = new Vector2(position.X, position.Y - 50);
             selecteur.estOuvert = true;
         }
 
@@ -90,7 +91,7 @@ namespace BBTA.Classe
         void indicateur_ForceFinaleDeterminee(int forceFinale)
         {
             prochainMode = ModeTir.nul;
-            ProcessusDeTirTerminer(Conversion.PixelAuMetre(Position), viseur.ObtenirAngle(), forceFinale, type);
+            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle(), forceFinale, type);
             forceFinale = 0;
         }
 
@@ -108,7 +109,7 @@ namespace BBTA.Classe
                     break;
                 case ModeTir.Visee:
                     viseur.Update(gameTime);
-                    if (viseur.estOuvert == false && selecteur.estDeploye == false)
+                    if (viseur.estOuvert == false)
                     {
                         modeEncours = prochainMode;
                         indicateur.estOuvert = true;
@@ -116,9 +117,13 @@ namespace BBTA.Classe
                     break;
                 case ModeTir.DeterminerForce:
                     indicateur.Update(gameTime);
-                    if (indicateur.estOuvert == false && indicateur.estDeploye == false)
+                    if (indicateur.estOuvert == false)
                     {
-                        modeEncours = prochainMode;
+                        viseur.Update(gameTime);
+                        if (indicateur.estDeploye == false)
+                        {
+                            modeEncours = prochainMode;
+                        }
                     }
                     break;
                 default:
@@ -141,6 +146,7 @@ namespace BBTA.Classe
                     viseur.Draw(spriteBatch);
                     break;
                 case ModeTir.DeterminerForce:
+                    viseur.Draw(spriteBatch);
                     indicateur.Draw(spriteBatch);
                     break;
                 default:
