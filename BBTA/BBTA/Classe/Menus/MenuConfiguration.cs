@@ -46,16 +46,16 @@ namespace BBTA.Classe.Menus
             btnConfirmer.Clic += new EventHandler(btnConfirmer_Clic);
 
             //Boutons Incré/Déccré
-            btnBasJ1 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnBas"), new Vector2(810, 293), null);
+            btnBasJ1 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnBas"), new Vector2(960, 448), null);
             btnBasJ1.Clic += new EventHandler(btnBasJ1_Clic);
 
-            btnHautJ1 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(950, 293), null);
+            btnHautJ1 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(1100, 448), null);
             btnHautJ1.Clic += new EventHandler(btnHautJ1_Clic);
 
-            btnBasJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnBas"), new Vector2(1145, 293), null);
+            btnBasJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnBas"), new Vector2(960, 518), null);
             btnBasJ2.Clic += new EventHandler(btnBasJ2_Clic);
 
-            btnHautJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(1285, 293), null);
+            btnHautJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(1100, 518), null);
             btnHautJ2.Clic += new EventHandler(btnHautJ2_Clic);
 
             police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
@@ -133,11 +133,11 @@ namespace BBTA.Classe.Menus
 
             btnBasJ1.Draw(spriteBatch);
             btnHautJ1.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbSoldatsJ1.ToString(), new Vector2(862, 258), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            spriteBatch.DrawString(police, nbSoldatsJ1.ToString(), new Vector2(1010, 407), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 
             btnBasJ2.Draw(spriteBatch);
             btnHautJ2.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbSoldatsJ2.ToString(), new Vector2(1197, 258), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            spriteBatch.DrawString(police, nbSoldatsJ2.ToString(), new Vector2(1010, 483), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 
             spriteBatch.End();
         }
