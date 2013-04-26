@@ -47,7 +47,7 @@ namespace BBTA.Elements
             corpsPhysique.CollisionCategories = Category.All;
             corpsPhysique.CollidesWith = Category.All;
             corpsPhysique.IsStatic = true;
-            corpsPhysique.Friction = 0.3f;
+            corpsPhysique.Friction = 10f;
             echelle = 1.01f;
         }
 
