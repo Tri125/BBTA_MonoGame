@@ -79,12 +79,13 @@ namespace BBTA.Classe.Menus
 
         void btnDefaut_Clic(object sender, EventArgs e)
         {
-            Game1.chargeurOption.RetourDefaut();
-            //Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
+            RetourDefaut();
         }
 
         void btnAnnuler_Clic(object sender, EventArgs e)
         {
+            sliderEffet.DeplacementPourcentage((float)OptionJeu.InformationSonore.EffetSonore / 100);
+            sliderMusique.DeplacementPourcentage((float)OptionJeu.InformationSonore.Musique / 100);
             prochainEtat = EtatJeu.Accueil;
         }
 
@@ -140,6 +141,12 @@ namespace BBTA.Classe.Menus
             OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
             OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
             Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
+        }
+
+        private void RetourDefaut()
+        {
+            sliderEffet.DeplacementPourcentage ((float)Game1.chargeurOption.OptionDefaut.InformationSonore.EffetSonore/100);
+            sliderMusique.DeplacementPourcentage( (float)Game1.chargeurOption.OptionDefaut.InformationSonore.Musique / 100);
         }
     }
 }
