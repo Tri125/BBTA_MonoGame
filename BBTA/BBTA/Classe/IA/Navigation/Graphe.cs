@@ -22,24 +22,12 @@ namespace BBTA.Classe.IA.Navigation
         private int m_iNextNodeIndex;
 
 
-        ////iterates through all the edges in the graph and removes any that point
-        ////to an invalidated node
-        //private void CullInvalidEdges();
-
 
 
 
         //retrieves the next free node index
         public int GetNextFreeNodeIndex { get { return m_iNextNodeIndex; } }
 
-        ////adds a node to the graph and returns its index
-        //public int AddNode(NavNoeudGraph node);
-
-        ////removes a node by setting its index to invalid_node_index
-        //public void RemoveNode(int node);
-
-        ////sets the cost of an edge
-        //public void SetEdgeCost(int from, int to, float cost);
 
         //returns the number of active + inactive nodes present in the graph
         public int NumNodes() { return NoeudGraphe.Count(); }
@@ -88,9 +76,6 @@ namespace BBTA.Classe.IA.Navigation
         }
 
 
-
-
-        //public bool Load(string nomFichier);
 
         //clears the graph ready for new node insertions
         public void Clear() { m_iNextNodeIndex = 0; NoeudGraphe.Clear(); ArcAdjacent.Clear(); }
@@ -258,42 +243,123 @@ namespace BBTA.Classe.IA.Navigation
 
 
         //-------------------------- AddNode -------------------------------------
-//
-//  Given a node this method first checks to see if the node has been added
-//  previously but is now innactive. If it is, it is reactivated.
-//
-//  If the node has not been added previously, it is checked to make sure its
-//  index matches the next node index before being added to the graph
-//------------------------------------------------------------------------
-//int AddNode(NavNoeudGraph node)
-//{
-//  if (node.NumIndex < NoeudGraphe.Count())
-//  {
-//    //make sure the client is not trying to add a node with the same ID as
-//    //a currently active node
-//    assert (m_Nodes[node.Index()].Index() == invalid_node_index &&
-//      "<SparseGraph::AddNode>: Attempting to add a node with a duplicate ID");
-    
-//    m_Nodes[node.Index()] = node;
+        //
+        //  Given a node this method first checks to see if the node has been added
+        //  previously but is now innactive. If it is, it is reactivated.
+        //
+        //  If the node has not been added previously, it is checked to make sure its
+        //  index matches the next node index before being added to the graph
+        //------------------------------------------------------------------------
+        public int AddNode(NavNoeudGraph node)
+        {
+            if (node.NumIndex < NoeudGraphe.Count())
+            {
+                //make sure the client is not trying to add a node with the same ID as
+                //a currently active node
+                if (NoeudGraphe[node.NumIndex].NumIndex == (int)Navigation.MessageNoeud.index_invalide)
+                {
+                    NoeudGraphe[node.NumIndex] = node;
+                }
 
-//    return m_iNextNodeIndex;
-//  }
-  
-//  else
-//  {
-//    //make sure the new node has been indexed correctly
-//    assert (node.Index() == m_iNextNodeIndex && "<SparseGraph::AddNode>:invalid index");
+                return m_iNextNodeIndex;
+            }
 
-//    m_Nodes.push_back(node);
-//    m_Edges.push_back(EdgeList());
-
-//    return m_iNextNodeIndex++;
-//  }
-//}
+            //make sure the new node has been indexed correctly
+            if (node.NumIndex == m_iNextNodeIndex)
+            {
+                NoeudGraphe.Add(node);
+                ArcAdjacent.Add(new LinkedList<NavArcGraph>());
+                return m_iNextNodeIndex++;
 
 
+            }
+            return -1;
+        }
 
 
+        //----------------------- CullInvalidEdges ------------------------------------
+        //
+        //  iterates through all the edges in the graph and removes any that point
+        //  to an invalidated node
+        //-----------------------------------------------------------------------------
+        public void CullInvalidEdges()
+        {
+            foreach (LinkedList<NavArcGraph> listeArc in ArcAdjacent.ToList())
+            {
+                foreach (NavArcGraph arc in listeArc.ToList())
+                {
+                    if (NoeudGraphe[arc.IndexDest].NumIndex == (int)Navigation.MessageNoeud.index_invalide ||
+                        NoeudGraphe[arc.IndexProv].NumIndex == (int)Navigation.MessageNoeud.index_invalide)
+                    {
+                        listeArc.Remove(arc);
+                    }
+                }
+            }
+
+        }
+
+
+        //------------------------------- RemoveNode -----------------------------
+        //
+        //  Removes a node from the graph and removes any links to neighbouring
+        //  nodes
+        //------------------------------------------------------------------------
+        public void RemoveNode(int node)
+        {
+            if (node < NoeudGraphe.Count())
+            {
+                //set this node's index to invalid_node_index
+                NoeudGraphe[node].NumIndex = (int)Navigation.MessageNoeud.index_invalide;
+                //if the graph is not directed remove all edges leading to this node and then
+                //clear the edges leading from the node
+                if (!m_bDigraph)
+                {
+                    //visit each neighbour and erase any edges leading to this node
+                    foreach (NavArcGraph arc in ArcAdjacent[node].ToList())
+                    {
+
+                        foreach (NavArcGraph arc2 in ArcAdjacent[arc.IndexDest].ToList())
+                        {
+                            if (arc2.IndexDest == node)
+                            {
+                                ArcAdjacent[arc.IndexDest].Remove(arc2);
+                                break;
+                            }
+                        }
+
+                    }
+
+                    //finally, clear this node's edges
+                    ArcAdjacent[node].Clear();
+                }
+            }
+            //if a digraph remove the edges the slow way
+            else
+            {
+                CullInvalidEdges();
+            }
+        }
+
+        //-------------------------- SetEdgeCost ---------------------------------
+        //
+        //  Sets the cost of a specific edge
+        //------------------------------------------------------------------------
+        void SetEdgeCost(int from, int to, float NewCost)
+        {
+            //make sure the nodes given are valid
+            if (from < NoeudGraphe.Count() && to < NoeudGraphe.Count())
+            {
+                //visit each neighbour and erase any edges leading to this node
+                foreach (NavArcGraph arc in ArcAdjacent[from])
+                {
+                    if (arc.IndexDest == to)
+                    {
+                        arc.Cout_traverse = NewCost;
+                        break;
+                    }
+                }
+            }
+        }
 
 
 
@@ -302,46 +368,16 @@ namespace BBTA.Classe.IA.Navigation
         //  returns true if the edge is not present in the graph. Used when adding
         //  edges to prevent duplication
         //------------------------------------------------------------------------
-        private bool UniqueEdge(int debut, int fin)
+        public bool UniqueEdge(int from, int to)
         {
-            foreach (NavArcGraph arc in ArcAdjacent[debut])
+
+            foreach (NavArcGraph arc in ArcAdjacent[from])
             {
-                if (arc.IndexDest == fin)
+                if (arc.IndexDest == to)
                 {
                     return false;
                 }
             }
-            return true;
-        }
-
-
-
-        //-------------------------------- Save ---------------------------------------
-        public bool Save(string nomFichier)
-        {
-            //save the number of nodes
-            StreamWriter file = new System.IO.StreamWriter(nomFichier);
-            file.WriteLine(NoeudGraphe.Count());
-            //iterate through the graph nodes and save them
-            foreach (var item in NoeudGraphe)
-            {
-                file.WriteLine(item);
-            }
-
-            //save the number of edges
-            file.WriteLine(NumEdges());
-
-
-            //iterate through the edges and save them
-            for (int nodeIdx = 0; nodeIdx < NoeudGraphe.Count(); ++nodeIdx)
-            {
-
-                foreach (LinkedList<NavArcGraph> arc in ArcAdjacent)
-                {
-                    file.WriteLine(arc);
-                }
-            }
-            file.Close();
             return true;
         }
 
