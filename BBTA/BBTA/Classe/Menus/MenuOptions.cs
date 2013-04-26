@@ -13,17 +13,23 @@ namespace BBTA.Classe.Menus
     public class MenuOptions : MenuArrierePlan
     {
         private Texture2D lettrage;
-        //private Bouton Annuler;
-        private Bouton btnDefaut;
+
+        //Boutons menu
         private Bouton btnValider;
+        private Bouton btnDefaut;
+        private Bouton btnAnnuler;
+
+        //Bouton ClickNType
+        private Bouton btnGauche;
+        private Bouton btnDroite;
+        private Bouton btnSaut;
+        private Bouton btnTir;
+        private Bouton btnPause;
 
         private EtatJeu prochainEtat;
 
         private Slider sliderEffet;
-        private int pourcentageEffet;
-
         private Slider sliderMusique;
-        private int pourcentageMusique;
 
         private BBTA.Classe.Option.Option OptionJeu;
 
@@ -47,26 +53,56 @@ namespace BBTA.Classe.Menus
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
                                         (float)OptionJeu.InformationSonore.Musique / 100);
 
-            /*Annuler = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
-            Annuler.Clic += new EventHandler(btnRetour_Clic);*/
+            btnValider = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnValider"), new Vector2(1175, 600), null);
+            btnValider.Clic += new EventHandler(btnValider_Clic);
+
+            btnDefaut = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnDefaut"), new Vector2(1175, 700), null);
+            btnDefaut.Clic +=new EventHandler(btnDefaut_Clic);
+
+            btnAnnuler = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnAnnuler"), new Vector2(1175, 800), null);
+            btnAnnuler.Clic += new EventHandler(btnAnnuler_Clic);
+
+            btnGauche = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeGauche"), new Vector2(226, 500), null);
+            btnDroite = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeDroite"), new Vector2(655, 500), null);
+            btnSaut = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeSaut"), new Vector2(226, 574), null);
+            btnTir = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeTir"), new Vector2(655, 574), null);
+            btnPause = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypePause"), new Vector2(226, 648), null);
+
             base.LoadContent();
         }
 
-        void btnRetour_Clic(object sender, EventArgs e)
+        void btnValider_Clic(object sender, EventArgs e)
         {
             Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
             prochainEtat = EtatJeu.Accueil;
         }
 
+        void btnDefaut_Clic(object sender, EventArgs e)
+        {
+            Game1.chargeurOption.RetourDefaut();
+            //Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
+        }
+
+        void btnAnnuler_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Accueil;
+        }
+
         public override void Update(GameTime gameTime)
         {
-            //Annuler.Update(null);
             base.Update(gameTime);
             sliderEffet.Deplacement();
-            pourcentageEffet = sliderEffet.ObtenirPourcentage();
-
             sliderMusique.Deplacement();
-            pourcentageMusique = sliderMusique.ObtenirPourcentage();
+
+            btnValider.Update(null);
+            btnDefaut.Update(null);
+            btnAnnuler.Update(null);
+
+            btnGauche.Update(null);
+            btnDroite.Update(null);
+            btnSaut.Update(null);
+            btnTir.Update(null);
+            btnPause.Update(null);
         }
 
         public EtatJeu ObtenirEtat()
@@ -86,7 +122,16 @@ namespace BBTA.Classe.Menus
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
             sliderEffet.Draw(spriteBatch);
             sliderMusique.Draw(spriteBatch);
-            //Annuler.Draw(spriteBatch);
+
+            btnValider.Draw(spriteBatch);
+            btnDefaut.Draw(spriteBatch);
+            btnAnnuler.Draw(spriteBatch);
+
+            btnGauche.Draw(spriteBatch);
+            btnDroite.Draw(spriteBatch);
+            btnSaut.Draw(spriteBatch);
+            btnTir.Draw(spriteBatch);
+            btnPause.Draw(spriteBatch);
             spriteBatch.End();
         }
 

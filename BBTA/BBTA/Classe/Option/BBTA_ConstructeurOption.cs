@@ -195,8 +195,6 @@ namespace BBTA.Classe.Option
             }
         }
 
-
-
         private void EcritureOption(string FichierSortie, Option option)
         {
             try
@@ -246,7 +244,6 @@ namespace BBTA.Classe.Option
             }
         }
 
-
         private void RetourUtilisateur()
         {
             if (mauvaisUtilisateur == false && presentUtilisateur == true)
@@ -258,7 +255,6 @@ namespace BBTA.Classe.Option
                 optionActive = optionBase;
             }
         }
-
 
         private void RetourBase()
         {

@@ -71,6 +71,7 @@ namespace BBTA.Classe.Interface
             etatMaintenant = Mouse.GetState();
 
             pourcentage = (posSlider.X - (posArrierePlan.X - largeurBarre / 2f + 30)) / (largeurBarre - 60);
+            posSlider.X = pourcentage * (largeurBarre - 60) + (posArrierePlan.X - largeurBarre / 2f + 30);
 
             if (Resolution.MouseHelper.CurrentMousePosition.Y >= posArrierePlan.Y - hauteurArrierePlan / 2f &&
                 Resolution.MouseHelper.CurrentMousePosition.Y <= posArrierePlan.Y + hauteurArrierePlan / 2f)
