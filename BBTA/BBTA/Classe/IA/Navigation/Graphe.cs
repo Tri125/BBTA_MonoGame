@@ -29,12 +29,6 @@ namespace BBTA.Classe.IA.Navigation
         public int GetNextFreeNodeIndex { get { return m_iNextNodeIndex; } }
 
 
-        ////removes a node by setting its index to invalid_node_index
-        //public void RemoveNode(int node);
-
-        ////sets the cost of an edge
-        //public void SetEdgeCost(int from, int to, float cost);
-
         //returns the number of active + inactive nodes present in the graph
         public int NumNodes() { return NoeudGraphe.Count(); }
 
@@ -306,51 +300,66 @@ namespace BBTA.Classe.IA.Navigation
 
 
         //------------------------------- RemoveNode -----------------------------
-//
-//  Removes a node from the graph and removes any links to neighbouring
-//  nodes
-//------------------------------------------------------------------------
-//void SparseGraph<node_type, edge_type>::RemoveNode(int node)                                   
-//{
-//  assert(node < (int)m_Nodes.size() && "<SparseGraph::RemoveNode>: invalid node index");
+        //
+        //  Removes a node from the graph and removes any links to neighbouring
+        //  nodes
+        //------------------------------------------------------------------------
+        public void RemoveNode(int node)
+        {
+            if (node < NoeudGraphe.Count())
+            {
+                //set this node's index to invalid_node_index
+                NoeudGraphe[node].NumIndex = (int)Navigation.MessageNoeud.index_invalide;
+                //if the graph is not directed remove all edges leading to this node and then
+                //clear the edges leading from the node
+                if (!m_bDigraph)
+                {
+                    //visit each neighbour and erase any edges leading to this node
+                    foreach (NavArcGraph arc in ArcAdjacent[node].ToList())
+                    {
 
-//  //set this node's index to invalid_node_index
-//  m_Nodes[node].SetIndex(invalid_node_index);
+                        foreach (NavArcGraph arc2 in ArcAdjacent[arc.IndexDest].ToList())
+                        {
+                            if (arc2.IndexDest == node)
+                            {
+                                ArcAdjacent[arc.IndexDest].Remove(arc2);
+                                break;
+                            }
+                        }
 
-//  //if the graph is not directed remove all edges leading to this node and then
-//  //clear the edges leading from the node
-//  if (!m_bDigraph)
-//  {    
-//    //visit each neighbour and erase any edges leading to this node
-//    for (EdgeList::iterator curEdge = m_Edges[node].begin(); 
-//         curEdge != m_Edges[node].end();
-//         ++curEdge)
-//    {
-//      for (EdgeList::iterator curE = m_Edges[curEdge->To()].begin();
-//           curE != m_Edges[curEdge->To()].end();
-//           ++curE)
-//      {
-//         if (curE->To() == node)
-//         {
-//           curE = m_Edges[curEdge->To()].erase(curE);
+                    }
 
-//           break;
-//         }
-//      }
-//    }
+                    //finally, clear this node's edges
+                    ArcAdjacent[node].Clear();
+                }
+            }
+            //if a digraph remove the edges the slow way
+            else
+            {
+                CullInvalidEdges();
+            }
+        }
 
-//    //finally, clear this node's edges
-//    m_Edges[node].clear();
-//  }
-
-//  //if a digraph remove the edges the slow way
-//  else
-//  {
-//    CullInvalidEdges();
-//  }
-//}
-
-
+        //-------------------------- SetEdgeCost ---------------------------------
+        //
+        //  Sets the cost of a specific edge
+        //------------------------------------------------------------------------
+        void SetEdgeCost(int from, int to, float NewCost)
+        {
+            //make sure the nodes given are valid
+            if (from < NoeudGraphe.Count() && to < NoeudGraphe.Count())
+            {
+                //visit each neighbour and erase any edges leading to this node
+                foreach (NavArcGraph arc in ArcAdjacent[from])
+                {
+                    if (arc.IndexDest == to)
+                    {
+                        arc.Cout_traverse = NewCost;
+                        break;
+                    }
+                }
+            }
+        }
 
 
 
@@ -359,11 +368,12 @@ namespace BBTA.Classe.IA.Navigation
         //  returns true if the edge is not present in the graph. Used when adding
         //  edges to prevent duplication
         //------------------------------------------------------------------------
-        private bool UniqueEdge(int debut, int fin)
+        public bool UniqueEdge(int from, int to)
         {
-            foreach (NavArcGraph arc in ArcAdjacent[debut])
+
+            foreach (NavArcGraph arc in ArcAdjacent[from])
             {
-                if (arc.IndexDest == fin)
+                if (arc.IndexDest == to)
                 {
                     return false;
                 }
