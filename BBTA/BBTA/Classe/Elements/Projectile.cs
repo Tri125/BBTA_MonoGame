@@ -34,8 +34,6 @@ namespace BBTA.Elements
 
         public virtual void Update(GameTime gameTime)
         {
-            corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
-            angleRotation = corpsPhysique.Rotation;
             if (explose == true && Explosion != null)
             {
                 Explosion(Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));

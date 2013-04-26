@@ -43,11 +43,11 @@ namespace BBTA.Classe
             switch (type)
             {
                 case Armes.Roquette:
-                    projectile = new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + direction * 5, 
+                    projectile = new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(direction*50),
                                               direction, vitesse, texturesProjectiles);
                     break;
                 case Armes.Grenade:
-                    projectile = new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + direction * 5, direction, vitesse, texturesProjectiles);
+                    projectile = new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(direction*40), direction, vitesse, texturesProjectiles);
                     break;
                 default:
                     break;
