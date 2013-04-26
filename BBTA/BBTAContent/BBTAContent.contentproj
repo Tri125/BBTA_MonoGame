@@ -154,7 +154,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ressources\Menus\Options\btnRetour.png">
+    <Compile Include="Ressources\Menus\Configuration\btnRetour.png">
       <Name>btnRetour</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

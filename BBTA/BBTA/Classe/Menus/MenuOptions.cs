@@ -13,7 +13,10 @@ namespace BBTA.Classe.Menus
     public class MenuOptions : MenuArrierePlan
     {
         private Texture2D lettrage;
-        private Bouton btnRetour;
+        //private Bouton Annuler;
+        private Bouton btnDefaut;
+        private Bouton btnValider;
+
         private EtatJeu prochainEtat;
 
         private Slider sliderEffet;
@@ -34,9 +37,6 @@ namespace BBTA.Classe.Menus
         protected override void LoadContent()
         {
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
-            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
-            btnRetour.Clic += new EventHandler(btnRetour_Clic);
-
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
@@ -46,6 +46,9 @@ namespace BBTA.Classe.Menus
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
                                         Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnSlider"),
                                         (float)OptionJeu.InformationSonore.Musique / 100);
+
+            /*Annuler = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1200, 800), null);
+            Annuler.Clic += new EventHandler(btnRetour_Clic);*/
             base.LoadContent();
         }
 
@@ -57,7 +60,7 @@ namespace BBTA.Classe.Menus
 
         public override void Update(GameTime gameTime)
         {
-            btnRetour.Update(null);
+            //Annuler.Update(null);
             base.Update(gameTime);
             sliderEffet.Deplacement();
             pourcentageEffet = sliderEffet.ObtenirPourcentage();
@@ -81,9 +84,9 @@ namespace BBTA.Classe.Menus
             base.Draw(gameTime);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
-            btnRetour.Draw(spriteBatch);
             sliderEffet.Draw(spriteBatch);
             sliderMusique.Draw(spriteBatch);
+            //Annuler.Draw(spriteBatch);
             spriteBatch.End();
         }
 

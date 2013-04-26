@@ -38,8 +38,8 @@ namespace BBTA.Classe.Menus
         protected override void LoadContent()
         {
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\lettrageConfiguration");
-            
-            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnRetour"), new Vector2(1150, 800), null);
+
+            btnRetour = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnRetour"), new Vector2(1150, 800), null);
             btnRetour.Clic += new EventHandler(btnRetour_Clic);
             
             btnConfirmer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnConfirmer"), new Vector2(1150, 700), null);
