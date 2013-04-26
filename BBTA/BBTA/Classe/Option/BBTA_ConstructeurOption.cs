@@ -38,6 +38,7 @@ namespace BBTA.Classe.Option
 
         public bool ChargementReussis { get { return chargementReussis; } }
         public Option OptionActive { get { return optionActive; } }
+        public Option OptionDefaut { get { return optionDefaut; } }
 
         public BBTA_ConstructeurOption()
         {

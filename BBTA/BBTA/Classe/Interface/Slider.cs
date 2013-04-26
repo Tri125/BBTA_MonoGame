@@ -64,6 +64,21 @@ namespace BBTA.Classe.Interface
             posSlider.X = pourcentage * (largeurBarre - 60) + (posArrierePlan.X - largeurBarre / 2f + 30);
         }
 
+        public void DeplacementPourcentage(float pourcentage)
+        {
+            etat = EtatSlider.Attente;
+            if (pourcentage > 1f)
+            {
+                pourcentage = 1f;
+            }
+            else
+                if (pourcentage < 0f)
+                {
+                    pourcentage = 0f;
+                }
+            posSlider.X = pourcentage * (largeurBarre - 60) + (posArrierePlan.X - largeurBarre / 2f + 30);
+        }
+
         public void Deplacement()
         {
             etat = EtatSlider.Attente;
