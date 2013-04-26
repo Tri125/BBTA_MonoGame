@@ -9,15 +9,17 @@ using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using BBTA.Classe.Outils;
 
 namespace BBTA.Elements
 {
     public class Roquette : Projectile
     {
-        const float ENERGIE_EXPLOSION = 5000;
+        private const int RAYON_EXPLOSION_MAX = 10;
 
         public Roquette(World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
-            : base(mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(texture.Width / 80f, texture.Height / 80f), 1), positionSpriteSheet, positionDepart, texture, ENERGIE_EXPLOSION)
+            : base(mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(texture.Width / 80f, texture.Height / 80f), 1), 
+                   positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION_MAX)
         {
             direction.Normalize();
             corpsPhysique.ApplyLinearImpulse(direction*vitesse);

@@ -11,7 +11,7 @@ namespace BBTA.Interface
 {
     public enum Armes
     {
-        Roquette, 
+        Roquette = 0, 
         Grenade,
     }
 
@@ -19,25 +19,24 @@ namespace BBTA.Interface
     public class SelectionArme: MenuDeployable
     {
         public bool YaTilUneArmeSelectionne { get; set; }
-        private List<Texture2D> texturesArmes;
+        private Texture2D texturesArmes;
         private Point positionSouris;
-        private MouseState sourisAvant;
-        private MouseState sourisApres;
-        private List<IndiquateurArmeRestante> Armes = new List<IndiquateurArmeRestante>();
+
+        private List<IndicateurArmeRestante> Armes = new List<IndicateurArmeRestante>();
         public delegate void DelegateArmeSelectionnee(Armes armeSelectionnee);
         public event DelegateArmeSelectionnee ArmeSelectionnee;
         public event EventHandler SortieDuPanneau;
 
-        public SelectionArme(Texture2D texturePanneau, List<Texture2D> texturesArmes, SpriteFont police, int delaiDeploiement = 500)
+        public SelectionArme(Texture2D texturePanneau, Texture2D texturesArmes, SpriteFont police, int delaiDeploiement = 500)
             :base(texturePanneau, new Rectangle(0,0,528,309), delaiDeploiement)
         {
             this.texturesArmes = texturesArmes;
             YaTilUneArmeSelectionne = false;
-            for(int compteur = 0; compteur < texturesArmes.Count; compteur++)
+            for(int compteur = 0; compteur < texturesArmes.Height/30; compteur++)
             {
                 int hauteur = compteur/4;
-                Armes.Add(new IndiquateurArmeRestante(texturePanneau, new Rectangle(0, 319, 183, 91),
-                                                      new Vector2(Position.X - texturePanneau.Width / 2f + 100, Position.Y - tailleBouton.Height + 60),
+                Armes.Add(new IndicateurArmeRestante(texturePanneau, new Rectangle(0, 310 + 93*(compteur), 185, 93),
+                                                      new Vector2(Position.X - texturePanneau.Width / 2f + 100 * (compteur + 1), Position.Y - tailleBouton.Height + 60),
                                                       (Armes) compteur,
                                                       police));
                 Armes[compteur].Clic += new EventHandler(SelectionArme_Clic);
@@ -48,7 +47,7 @@ namespace BBTA.Interface
         {
             if (ArmeSelectionnee != null)
             {
-                ArmeSelectionnee((sender as IndiquateurArmeRestante).ObtenirType());
+                ArmeSelectionnee((sender as IndicateurArmeRestante).ObtenirType());
             }
             estOuvert = false;
         }
@@ -62,7 +61,7 @@ namespace BBTA.Interface
                 for (int compteur = 0; compteur < Armes.Count; compteur++)
                 {
                     int hauteur = compteur / 4;
-                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20, Position.Y - tailleBouton.Height + 60);
+                    Armes[compteur].Position = new Vector2(Position.X - texturePanneau.Width / 2f + 20 + 100 * (compteur+1), Position.Y - tailleBouton.Height + 60);
 
                     Armes[compteur].Update(matriceCamera);
                 }
@@ -80,7 +79,7 @@ namespace BBTA.Interface
                 base.Draw(spriteBatch);
                 if (estDeploye == true && estOuvert == true)
                 {
-                    foreach (Bouton item in Armes)
+                    foreach (IndicateurArmeRestante item in Armes)
                     {
                         item.Draw(spriteBatch);
                     }

@@ -13,16 +13,13 @@ namespace BBTA.Interface
     public class ViseurVisuel:MenuDeployable
     {
         private Texture2D texture;
-        private Texture2D textureArmes;
         public Armes armeChoisie { get; set; }
         private float angleRotation;
-        private SpriteEffects effet;
         public event EventHandler Verouiller;
 
-        public ViseurVisuel(Texture2D texture, Texture2D textureArmes):base(texture, null, 200)
+        public ViseurVisuel(Texture2D texture):base(texture, null, 200)
         {
             this.texture = texture;
-            this.textureArmes = textureArmes;
             angleRotation = 0;
         }
 
@@ -39,14 +36,7 @@ namespace BBTA.Interface
                 angleRotation -= MathHelper.ToRadians(3);
             }
 
-            if (Math.Abs(angleRotation % MathHelper.TwoPi) > MathHelper.PiOver2 && Math.Abs(angleRotation % (2 * Math.PI)) < MathHelper.PiOver2 * 3)
-            {
-                effet = SpriteEffects.FlipVertically;
-            }
-            else
-            {
-                effet = SpriteEffects.None;
-            }
+            angleRotation %= MathHelper.TwoPi;
 
             if (clavier.IsKeyDown(Keys.Space))
             {
@@ -61,8 +51,6 @@ namespace BBTA.Interface
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, null, Color.White * progressionDeploiement, angleRotation, new Vector2(texture.Width / 2f, texture.Height / 2f), progressionDeploiement, SpriteEffects.None, 0);
-            spriteBatch.Draw(textureArmes, new Vector2(Position.X, Position.Y+5), new Rectangle(0, (int)armeChoisie * 68, textureArmes.Width, 30), Color.White, 
-                             angleRotation, new Vector2(textureArmes.Width/2, textureArmes.Height/2), progressionDeploiement, effet, 0);
         }
 
         public Vector2 ObtenirAngle()

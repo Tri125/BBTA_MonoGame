@@ -11,6 +11,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
+using BBTA.Classe.Outils;
 
 namespace BBTA.Elements
 {
@@ -73,13 +74,13 @@ namespace BBTA.Elements
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
          * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
-        public void RecevoirDegat(float energieExplosion, Vector2 positionExplosion)
+        public void RecevoirDegat(Vector2 lieuExplosion, int rayonExplosion)
         {
-            float puissanceRecue = energieExplosion / Vector2.Distance(positionExplosion, corpsPhysique.Position);
-            pointDeVie -= puissanceRecue;
-            if (pointDeVie <= 0)
+            Vector2 direction = Vector2.Subtract(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
+            if (direction.Length() < rayonExplosion)
             {
-                Mort(this, new EventArgs());
+                direction.Normalize();
+                corpsPhysique.ApplyLinearImpulse(direction * rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion));
             }
         }
 

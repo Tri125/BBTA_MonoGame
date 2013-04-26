@@ -10,6 +10,7 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Classe
 {
@@ -20,7 +21,7 @@ namespace BBTA.Classe
         private Texture2D texturesProjectiles;
         private Projectile projectile;
         private SpriteBatch spriteBatch;
-        public delegate void DelegateExplosion(Vector2 position, float energieExplosion);
+        public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
 
         public GestionnaireProjectile(Game jeu)
@@ -33,7 +34,7 @@ namespace BBTA.Classe
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            texturesProjectiles = Game.Content.Load<Texture2D>(@"Ressources\Acteur\ActeurBleu");
+            texturesProjectiles = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\projectiles");
             base.LoadContent();
         }
 
@@ -42,9 +43,11 @@ namespace BBTA.Classe
             switch (type)
             {
                 case Armes.Roquette:
-                    projectile = new Roquette(mondePhysique, new Rectangle(0,0, texturesProjectiles.Width, texturesProjectiles.Height), new Vector2(position.X, position.Y-Conversion.PixelAuMetre(50)), direction, vitesse, texturesProjectiles);
+                    projectile = new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + direction * 5, 
+                                              direction, vitesse, texturesProjectiles);
                     break;
                 case Armes.Grenade:
+                    projectile = new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + direction * 5, direction, vitesse, texturesProjectiles);
                     break;
                 default:
                     break;
@@ -54,9 +57,9 @@ namespace BBTA.Classe
             projectile.Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
         }
 
-        void projectile_Explosion(Vector2 position, float energieExplosion)
+        void projectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            Explosion(position, energieExplosion);
+            Explosion(position, rayonExplosion);
             this.Enabled = false;
             this.Visible = false;
         }

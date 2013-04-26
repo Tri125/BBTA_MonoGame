@@ -84,6 +84,17 @@ namespace BBTA.Classe
             }
         }
 
+        public void Explosion(Vector2 lieu, int rayonExplosion)
+        {
+            foreach (Equipe equipe in equipes)
+            {
+                for (int nbJoueur = 0; nbJoueur < equipe.NbrMembre; nbJoueur++)
+                {
+                    equipe.ListeMembres[nbJoueur].RecevoirDegat(lieu, rayonExplosion);
+                }
+            }
+        }
+
         void GestionnaireActeurs_TirDemande(object sender, EventArgs e)
         {
             if (Tir != null)

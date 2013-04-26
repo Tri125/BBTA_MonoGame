@@ -92,13 +92,13 @@ namespace BBTA
         /// Détruit les blocs nécessaires suite à une explosion
         /// </summary>Lieu d'origine de l'explosion</param>
         /// <param name="energie">Énergie déployée par l'explosion</param>
-        public void Explosion(Vector2 lieu, float energie)
+        public void Explosion(Vector2 lieu, int rayonExplosion)
         {
             for (int compteurBloc = 0; compteurBloc < blocs.Length; compteurBloc++)
             {
                 if (blocs[compteurBloc] != null)
                 {
-                    blocs[compteurBloc].Explose(energie, lieu);
+                    blocs[compteurBloc].Explose(lieu, rayonExplosion);
                 }
             }
         }

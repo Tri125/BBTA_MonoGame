@@ -83,9 +83,10 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
 
-        void gestionnaireProjectile_Explosion(Vector2 position, float energieExplosion)
+        void gestionnaireProjectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            carte.Explosion(position, energieExplosion);
+            gestionnaireEquipes.Explosion(position, rayonExplosion);
+            carte.Explosion(position, rayonExplosion);
             compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
             compteReboursApresTir.Start();
             EstEnTransition = true;
