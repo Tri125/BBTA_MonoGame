@@ -153,6 +153,7 @@
     <Compile Include="Classe\Outils\Camera.cs" />
     <Compile Include="Classe\Outils\Conversion.cs" />
     <Compile Include="Classe\Outils\EventInput.cs" />
+    <Compile Include="Classe\Outils\TesteGraphe.cs" />
     <Compile Include="Classe\PartieJeu\Equipe.cs" />
     <Compile Include="Classe\PartieJeu\PartieJeu.cs" />
     <Compile Include="Classe\Resolution\Resolution.cs" />

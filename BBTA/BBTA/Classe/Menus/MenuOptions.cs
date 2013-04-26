@@ -20,12 +20,11 @@ namespace BBTA.Classe.Menus
         private Bouton btnAnnuler;
 
         //Bouton ClickNType
-        private BoutonClicEtEcris btnGauche;
-        private BoutonClicEtEcris btnDroite;
-        private BoutonClicEtEcris btnSaut;
-        private BoutonClicEtEcris btnTir;
-        private BoutonClicEtEcris btnPause;
-        private SpriteFont police;
+        private Bouton btnGauche;
+        private Bouton btnDroite;
+        private Bouton btnSaut;
+        private Bouton btnTir;
+        private Bouton btnPause;
 
         private EtatJeu prochainEtat;
 
@@ -43,8 +42,6 @@ namespace BBTA.Classe.Menus
 
         protected override void LoadContent()
         {
-            police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
-
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),
                                        Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\BarreSlider"),
@@ -58,21 +55,18 @@ namespace BBTA.Classe.Menus
 
             btnValider = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnValider"), new Vector2(1175, 600), null);
             btnValider.Clic += new EventHandler(btnValider_Clic);
+
             btnDefaut = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnDefaut"), new Vector2(1175, 700), null);
             btnDefaut.Clic +=new EventHandler(btnDefaut_Clic);
+
             btnAnnuler = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnAnnuler"), new Vector2(1175, 800), null);
             btnAnnuler.Clic += new EventHandler(btnAnnuler_Clic);
 
-            btnGauche = new BoutonClicEtEcris(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeGauche"), new Vector2(226, 500), null, OptionJeu.InformationTouche.Gauche.ToString(), police);
-            btnGauche.Clic +=new EventHandler(btnClicEtEcris_Clic);
-            btnDroite = new BoutonClicEtEcris(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeDroite"), new Vector2(655, 500), null, OptionJeu.InformationTouche.Droite.ToString(),  police);
-            btnDroite.Clic += new EventHandler(btnClicEtEcris_Clic);
-            btnSaut = new BoutonClicEtEcris(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeSaut"), new Vector2(226, 574), null, OptionJeu.InformationTouche.Saut.ToString(),  police);
-            btnSaut.Clic += new EventHandler(btnClicEtEcris_Clic);
-            btnTir = new BoutonClicEtEcris(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeTir"), new Vector2(655, 574), null, OptionJeu.InformationTouche.Tir.ToString(), police);
-            btnTir.Clic += new EventHandler(btnClicEtEcris_Clic);
-            btnPause = new BoutonClicEtEcris(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypePause"), new Vector2(226, 648), null, OptionJeu.InformationTouche.Pause.ToString(), police);
-            btnPause.Clic += new EventHandler(btnClicEtEcris_Clic);
+            btnGauche = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeGauche"), new Vector2(226, 500), null);
+            btnDroite = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeDroite"), new Vector2(655, 500), null);
+            btnSaut = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeSaut"), new Vector2(226, 574), null);
+            btnTir = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypeTir"), new Vector2(655, 574), null);
+            btnPause = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnClickNTypePause"), new Vector2(226, 648), null);
 
             base.LoadContent();
         }
@@ -82,19 +76,17 @@ namespace BBTA.Classe.Menus
             Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
             prochainEtat = EtatJeu.Accueil;
         }
+
         void btnDefaut_Clic(object sender, EventArgs e)
         {
-            Game1.chargeurOption.RetourDefaut();
-            //Game1.
-            Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
-        }
-        void btnAnnuler_Clic(object sender, EventArgs e)
-        {
-            prochainEtat = EtatJeu.Accueil;
+            RetourDefaut();
         }
 
-        void btnClicEtEcris_Clic(object sender, EventArgs e)
+        void btnAnnuler_Clic(object sender, EventArgs e)
         {
+            sliderEffet.DeplacementPourcentage((float)OptionJeu.InformationSonore.EffetSonore / 100);
+            sliderMusique.DeplacementPourcentage((float)OptionJeu.InformationSonore.Musique / 100);
+            prochainEtat = EtatJeu.Accueil;
         }
 
         public override void Update(GameTime gameTime)
@@ -149,6 +141,12 @@ namespace BBTA.Classe.Menus
             OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
             OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
             Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
+        }
+
+        private void RetourDefaut()
+        {
+            sliderEffet.DeplacementPourcentage ((float)Game1.chargeurOption.OptionDefaut.InformationSonore.EffetSonore/100);
+            sliderMusique.DeplacementPourcentage( (float)Game1.chargeurOption.OptionDefaut.InformationSonore.Musique / 100);
         }
     }
 }

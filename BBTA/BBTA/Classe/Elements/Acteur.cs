@@ -56,9 +56,9 @@ namespace BBTA.Elements
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
-            corpsPhysique.Friction = 0;
             corpsPhysique.SleepingAllowed = false;
             enModeTir = false;
+            corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
         }
 
         protected void CompletionTour()
@@ -86,6 +86,7 @@ namespace BBTA.Elements
 
         public override void Update(GameTime gameTime)
         {
+            corpsPhysique.Friction = 0;
             if (veutSeDeplacer == true && estAuSol == true)
             {
                 Animer(gameTime, 0, 3);
@@ -128,22 +129,23 @@ namespace BBTA.Elements
             {
                 estAuSol = false;
                 corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
-                corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
             }
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
-            if (contact.Manifold.LocalPoint.Y == -0.5f && contact.Manifold.LocalPoint.X == 0)
+            if (!estAuSol)
             {
-                estAuSol = true;
+                if (contact.Manifold.LocalPoint.Y == -0.5f && contact.Manifold.LocalPoint.X == 0)
+                {
+                    estAuSol = true;
+                }
+            }
+            else
+            {
+                corpsPhysique.LinearVelocity = Vector2.Zero;
             }
             return true;
-        }
-
-        public Vector2 ObtenirPosition()
-        {
-            return corpsPhysique.Position * 40;
         }
 
         protected void Tirer()

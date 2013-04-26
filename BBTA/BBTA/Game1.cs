@@ -19,6 +19,8 @@ using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
 using BBTA.Classe.Menus;using BBTA.Classe.Option;
 using EventInput;
+using BBTA.Classe.IA.Navigation;
+using BBTA.Classe.Outils;
 
 namespace BBTA
 {
@@ -44,7 +46,7 @@ namespace BBTA
         SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-
+        private TesteGraphe Testy;
         private MenuAccueil acc;
         private PartieJeu partie;
         private MenuOptions option;
@@ -85,6 +87,8 @@ namespace BBTA
 
             //Etat configuration
             config = new MenuConfiguration(this);
+
+            Testy = new TesteGraphe();
 
             base.Initialize();
         }

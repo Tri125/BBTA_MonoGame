@@ -11,7 +11,7 @@ namespace BBTA.Classe.IA.Navigation
         //Liste des noeuds fesant partie du graphe
         private List<NavNoeudGraph> NoeudGraphe;
 
-        private LinkedList<NavArcGraph> LienArc;
+        //private LinkedList<NavArcGraph> LienArc;
 
         //Une liste d'arc adjacent. L'index d'un noeud est relié avec les arcs de cette liste
         private List<LinkedList<NavArcGraph>> ArcAdjacent;
@@ -21,7 +21,12 @@ namespace BBTA.Classe.IA.Navigation
         //the index of the next node to be added
         private int m_iNextNodeIndex;
 
-
+        public Graphe(bool m_bDigraph)
+        {
+            this.m_bDigraph = m_bDigraph;
+            ArcAdjacent = new List<LinkedList<NavArcGraph>>();
+            NoeudGraphe = new List<NavNoeudGraph>();
+        }
 
 
 
