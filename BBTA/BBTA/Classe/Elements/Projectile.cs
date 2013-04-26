@@ -13,19 +13,19 @@ namespace BBTA.Elements
 {
     public abstract class Projectile : ObjetPhysique
     {
-        private float energieExplosion;
+        private readonly int rayonExplosion;
         protected bool explose = false;
         private World mondePhysique;
         protected bool EstEnMain = true;
         Rectangle positionSpriteSheet;
-        public delegate void DelegateExplosion(Vector2 position, float energieExplosion);
+        public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
 
-        public Projectile(World mondePhysique, Shape forme, Rectangle positionSpriteSheet, Vector2 positionDepart, Texture2D texture, float energieExplosion)
+        public Projectile(World mondePhysique, Shape forme, Rectangle positionSpriteSheet, Vector2 positionDepart, Texture2D texture, int rayonExplosion)
             : base(texture, mondePhysique, forme)
         {
             this.mondePhysique = mondePhysique;
-            this.energieExplosion = energieExplosion;
+            this.rayonExplosion = rayonExplosion;
             this.positionSpriteSheet = positionSpriteSheet;
             corpsPhysique.IsBullet = true;
             corpsPhysique.Position = positionDepart;
@@ -35,16 +35,12 @@ namespace BBTA.Elements
         public virtual void Update(GameTime gameTime)
         {
             corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
+            angleRotation = corpsPhysique.Rotation;
             if (explose == true && Explosion != null)
             {
-                Explosion(Conversion.MetreAuPixel(corpsPhysique.Position), energieExplosion);
+                Explosion(Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
                 corpsPhysique.Dispose();
             }
-        }
-
-        public Vector2 ObtenirPosition()
-        {
-            return Conversion.MetreAuPixel(corpsPhysique.Position);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -119,6 +119,7 @@
     <Compile Include="Classe\Elements\Bloc.cs" />
     <Compile Include="Classe\Carte\Carte.cs" />
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
+    <Compile Include="Classe\Elements\Grenade.cs" />
     <Compile Include="Classe\Elements\JoueurHumain.cs" />
     <Compile Include="Classe\Elements\ObjetPhysique.cs" />
     <Compile Include="Classe\Elements\ObjetPhysiqueAnimer.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Classe\IA\Navigation\NavArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
+    <Compile Include="Classe\Interface\ArmeAffiche.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Interface\IndicateurPuissance.cs" />
     <Compile Include="Classe\Interface\Slider.cs" />

@@ -7,13 +7,13 @@ using Microsoft.Xna.Framework;
 
 namespace BBTA.Interface
 {
-    public class IndiquateurArmeRestante:Bouton
+    public class IndicateurArmeRestante:Bouton
     {
         private SpriteFont police;
         public int nbArmeRestantes { get; set; }
         private Armes type;
 
-        public IndiquateurArmeRestante(Texture2D texture, Rectangle? boutonDansSpriteSheet, Vector2 position, Armes type, SpriteFont police)
+        public IndicateurArmeRestante(Texture2D texture, Rectangle? boutonDansSpriteSheet, Vector2 position, Armes type, SpriteFont police)
             : base(texture, position, boutonDansSpriteSheet)
         {
             this.type = type;

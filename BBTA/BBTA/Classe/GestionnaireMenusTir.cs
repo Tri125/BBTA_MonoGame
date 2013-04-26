@@ -8,6 +8,7 @@ using BBTA.Interface;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Classe
 {
@@ -21,18 +22,29 @@ namespace BBTA.Classe
 
     public class GestionnaireMenusTir:DrawableGameComponent, IUtiliseMatriceCamera
     {
+        //Modules de tir----------------------------------------------------------
         private IndicateurPuissance indicateur;
         private SelectionArme selecteur;
         private ViseurVisuel viseur;
+        private ArmeAffiche arme;
+
+        //Variables pour les transitions------------------------------------------
         private ModeTir modeEncours = ModeTir.nul;
         private ModeTir prochainMode;
-        private SpriteBatch spriteBatch;
+
+        //Variables pour l'affichage de l'arme à l'écran--------------------------
+        private Texture2D texturesArmes;
         private Armes type;
+
+        //Variables techniques----------------------------------------------------
+        private SpriteBatch spriteBatch;
+        public Matrix MatriceDeCamera { get; set; }
+        private Vector2 position;
+
+        //Événements--------------------------------------------------------------
         public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
-        public Matrix MatriceDeCamera{get;set;}
-        private Vector2 position;
 
 
         public GestionnaireMenusTir(Game jeu)
@@ -46,13 +58,13 @@ namespace BBTA.Classe
             spriteBatch = new SpriteBatch(GraphicsDevice);
             indicateur = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
             indicateur.ForceFinaleDeterminee += new IndicateurPuissance.delegueForceFinaleDeterminee(indicateur_ForceFinaleDeterminee);
-            List<Texture2D> armes = new List<Texture2D>();
-            armes.Add(Game.Content.Load<Texture2D>(@"Ressources\Roquette"));
-            selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), armes,
+            texturesArmes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\armesPanneau");
+            selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), 
+                                          texturesArmes,
                                           Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
             selecteur.ArmeSelectionnee += new SelectionArme.DelegateArmeSelectionnee(selecteur_ArmeSelectionnee);
             selecteur.SortieDuPanneau += new EventHandler(selecteur_SortieDuPanneau);
-            viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"), armes[0]);
+            viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
             viseur.Verouiller += new EventHandler(viseur_Verouiller);
             base.LoadContent();
         }
@@ -105,10 +117,15 @@ namespace BBTA.Classe
                     {
                         modeEncours = prochainMode;
                         viseur.estOuvert = true;
+                        arme = new ArmeAffiche(texturesArmes, type);
+                        arme.Position = new Vector2(position.X, position.Y + 5);
+                        arme.estOuvert = true;
                     }
                     break;
                 case ModeTir.Visee:
                     viseur.Update(gameTime);
+                    arme.angleRotation = Conversion.ValeurAngle(viseur.ObtenirAngle());
+                    arme.Update(gameTime);
                     if (viseur.estOuvert == false)
                     {
                         modeEncours = prochainMode;
@@ -119,7 +136,7 @@ namespace BBTA.Classe
                     indicateur.Update(gameTime);
                     if (indicateur.estOuvert == false)
                     {
-                        viseur.Update(gameTime);
+                        arme.estOuvert = false;
                         if (indicateur.estDeploye == false)
                         {
                             modeEncours = prochainMode;
@@ -144,10 +161,11 @@ namespace BBTA.Classe
                     break;
                 case ModeTir.Visee:
                     viseur.Draw(spriteBatch);
+                    arme.Draw(spriteBatch);
                     break;
                 case ModeTir.DeterminerForce:
-                    viseur.Draw(spriteBatch);
                     indicateur.Draw(spriteBatch);
+                    arme.Draw(spriteBatch);
                     break;
                 default:
                     break;

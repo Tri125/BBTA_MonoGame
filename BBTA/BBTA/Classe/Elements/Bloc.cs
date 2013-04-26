@@ -27,7 +27,7 @@ namespace BBTA.Elements
         private const int TEMPS_ENTRE_ETAPES = 50;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
-        private const float seuilResistance = 30;
+        private const float seuilResistance = 5;
 
         public event EventHandler AnimationDestructionTerminee;
 
@@ -58,13 +58,12 @@ namespace BBTA.Elements
         /// <param name="rayon">Rayon de l'explosion</param>
         /// <param name="lieu">Lieu d'origine de l'explosion</param>
         /// <returns>Si le bloc doit être détruit</returns>
-        public void Explose(float energie, Vector2 lieu)
+        public void Explose(Vector2 lieu, int rayonExplosion)
         {
             /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
              * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
              * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
-            float distance = Vector2.Distance(lieu, Position);
-            if (energie / distance > seuilResistance)
+            if (Vector2.Distance(lieu, Position) < rayonExplosion)
             {
                 corpsPhysique.Dispose();
                 enDestruction = true;

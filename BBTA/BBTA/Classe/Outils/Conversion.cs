@@ -40,5 +40,10 @@ namespace BBTA.Classe.Outils
             return pixel / RATIO_METRE_PIXEL;
         }
 
+        public static float ValeurAngle(Vector2 angle)
+        {
+            return (float)Math.Atan2(angle.Y, angle.X);
+        }
+
     }
 }
