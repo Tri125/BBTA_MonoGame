@@ -121,6 +121,7 @@
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
     <Compile Include="Classe\Elements\Grenade.cs" />
     <Compile Include="Classe\Elements\JoueurHumain.cs" />
+    <Compile Include="Classe\Elements\Mine.cs" />
     <Compile Include="Classe\Elements\ObjetPhysique.cs" />
     <Compile Include="Classe\Elements\ObjetPhysiqueAnimer.cs" />
     <Compile Include="Classe\Elements\Projectile.cs" />

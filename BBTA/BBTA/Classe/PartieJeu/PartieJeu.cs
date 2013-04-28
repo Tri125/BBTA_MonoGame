@@ -45,9 +45,10 @@ namespace BBTA.Partie_De_Jeu
         {
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
+            mondePhysique = new World(new Vector2(0, 20));
             gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, true);
             gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
-            gestionnaireProjectile = new GestionnaireProjectile(jeu);
+            gestionnaireProjectile = new GestionnaireProjectile(jeu, ref mondePhysique);
         }
 
         /// <summary>
@@ -59,7 +60,6 @@ namespace BBTA.Partie_De_Jeu
         public override void Initialize()
         {
             // TODO: Add your initialization logic here
-            mondePhysique = new World(new Vector2(0, 20));
             camPartie = new Camera2d(Conversion.MetreAuPixel(Game1.chargeurCarte.InformationCarte().NbRange));
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne / 2,
                             Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;
@@ -73,9 +73,20 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireMenusTir.DrawOrder = 3;
             Game.Components.Add(gestionnaireProjectile);
             gestionnaireProjectile.Explosion += new GestionnaireProjectile.DelegateExplosion(gestionnaireProjectile_Explosion);
+            gestionnaireProjectile.ProcessusTerminer += new EventHandler(gestionnaireProjectile_ProcessusTerminer);
             gestionnaireMenusTir.TirAvorte += new EventHandler(gestionnaireMenusTir_TirAvorte);
             gestionnaireProjectile.DrawOrder = 2;
             this.DrawOrder = 0;
+        }
+
+        void gestionnaireProjectile_ProcessusTerminer(object sender, EventArgs e)
+        {
+            if (compteReboursApresTir.Enabled == false)
+            {
+                compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
+                compteReboursApresTir.Start();
+            }
+            EstEnTransition = true;
         }
 
         void gestionnaireMenusTir_TirAvorte(object sender, EventArgs e)
@@ -85,11 +96,12 @@ namespace BBTA.Partie_De_Jeu
 
         void gestionnaireProjectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            gestionnaireEquipes.Explosion(position, rayonExplosion);
-            carte.Explosion(position, rayonExplosion);
             compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
             compteReboursApresTir.Start();
             EstEnTransition = true;
+            gestionnaireEquipes.Enabled = false;
+            gestionnaireEquipes.Explosion(position, rayonExplosion);
+            carte.Explosion(position, rayonExplosion);
         }
 
         void compteReboursApresTir_Elapsed(object sender, ElapsedEventArgs e)
@@ -102,14 +114,12 @@ namespace BBTA.Partie_De_Jeu
         void camPartie_Verouiller(object sender, EventArgs e)
         {
             EstEnTransition = false;
-            gestionnaireProjectile.Enabled = false;
             gestionnaireEquipes.Enabled = true;
         }
 
         void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
         {
             gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
-            gestionnaireProjectile.Enabled = true;
             gestionnaireEquipes.Enabled = false;
             gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
@@ -144,10 +154,9 @@ namespace BBTA.Partie_De_Jeu
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
             if (EstEnTransition == false)
             {
-                if (gestionnaireProjectile.Enabled)
+                if (gestionnaireProjectile.ObtenirProjectileEnMouvement() != null)
                 {
-                    gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
-                    camPartie.ObjetSuivi = gestionnaireProjectile.ObtenirProjectile();
+                    camPartie.ObjetSuivi = gestionnaireProjectile.ObtenirProjectileEnMouvement();
                 }
                 else
                 {
@@ -156,6 +165,7 @@ namespace BBTA.Partie_De_Jeu
             }
             carte.Update(gameTime);
             camPartie.Update(gameTime);
+            gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireEquipes.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
             base.Update(gameTime);

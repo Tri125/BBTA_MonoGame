@@ -17,18 +17,19 @@ namespace BBTA.Classe
     public class GestionnaireProjectile:DrawableGameComponent, IUtiliseMatriceCamera
     {
         public Matrix MatriceDeCamera { get; set; }
+        private bool enAction = false;
         public Vector2 Position { get; private set; }
         private Texture2D texturesProjectiles;
-        private Projectile projectile;
+        private List<Projectile> projectiles = new List<Projectile>();
         private SpriteBatch spriteBatch;
         public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
+        public event EventHandler ProcessusTerminer;
 
-        public GestionnaireProjectile(Game jeu)
+        public GestionnaireProjectile(Game jeu, ref World mondePhysique)
             : base(jeu)
         {
-            Enabled = false;
-            Visible = false;
+
         }
 
         protected override void LoadContent()
@@ -43,38 +44,66 @@ namespace BBTA.Classe
             switch (type)
             {
                 case Armes.Roquette:
-                    projectile = new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(direction*50),
-                                              direction, vitesse, texturesProjectiles);
+                    projectiles.Add(new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(direction * 60),
+                                              direction, vitesse, texturesProjectiles));
                     break;
                 case Armes.Grenade:
-                    projectile = new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(direction*40), direction, vitesse, texturesProjectiles);
+                    projectiles.Add(new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(direction*40), direction, vitesse, texturesProjectiles));
+                    break;
+                case Armes.Mine:
+                    projectiles.Add(new Mine(ref mondePhysique, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(direction * 40), direction, vitesse, texturesProjectiles));
+                    projectiles[projectiles.Count - 1].VitesseNulle += new EventHandler(GestionnaireProjectile_VitesseNulle);
                     break;
                 default:
                     break;
             }
-            Enabled = true;
-            Visible = true;
-            projectile.Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
+            projectiles[projectiles.Count - 1].Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
+            enAction = true;
         }
 
-        void projectile_Explosion(Vector2 position, int rayonExplosion)
+        void GestionnaireProjectile_VitesseNulle(object sender, EventArgs e)
+        {
+            enAction = false;
+            if (ProcessusTerminer != null)
+            {
+                ProcessusTerminer(this, new EventArgs());
+            }
+        }
+
+        void projectile_Explosion(Projectile projectileExplosant, Vector2 position, int rayonExplosion)
         {
             Explosion(position, rayonExplosion);
-            this.Enabled = false;
-            this.Visible = false;
+            projectiles.Remove(projectileExplosant);
+            ProcessusTerminer(this, new EventArgs());
         }
 
-        public Projectile ObtenirProjectile()
+        public Projectile ObtenirProjectileEnMouvement()
         {
-            return projectile;
+            if (projectiles.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return projectiles[projectiles.Count-1];
+            }
+        }
+
+        public bool YaAction()
+        {
+            return enAction;
         }
 
         public override void Update(GameTime gameTime)
         {
-            projectile.Update(gameTime);
-            if (projectile != null)
+            for(int nbProjectiles = 0; nbProjectiles < projectiles.Count; nbProjectiles++)
             {
-                Position = projectile.ObtenirPosition();
+                projectiles[nbProjectiles].Update(gameTime);
+            }
+
+            if (projectiles.Count > 0)
+            {
+                Position = projectiles[projectiles.Count - 1].ObtenirPosition();
             }
             else
             {
@@ -88,7 +117,10 @@ namespace BBTA.Classe
             spriteBatch.Begin(SpriteSortMode.Immediate, 
                               BlendState.AlphaBlend, null, null, null, null, 
                               Resolution.getTransformationMatrix() * MatriceDeCamera);
-            projectile.Draw(spriteBatch);
+            foreach (Projectile item in projectiles)
+            {
+                item.Draw(spriteBatch);   
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }

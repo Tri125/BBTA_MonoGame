@@ -13,6 +13,7 @@ namespace BBTA.Interface
     {
         Roquette = 0, 
         Grenade,
+        Mine
     }
 
 

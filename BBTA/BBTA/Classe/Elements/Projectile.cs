@@ -14,12 +14,14 @@ namespace BBTA.Elements
     public abstract class Projectile : ObjetPhysique
     {
         private readonly int rayonExplosion;
+        protected SpriteEffects retourner = SpriteEffects.None;
         protected bool explose = false;
         private World mondePhysique;
         protected bool EstEnMain = true;
-        Rectangle positionSpriteSheet;
-        public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
+        protected Rectangle positionSpriteSheet;
+        public delegate void DelegateExplosion(Projectile proejctileExplosant, Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
+        public event EventHandler VitesseNulle;
 
         public Projectile(World mondePhysique, Shape forme, Rectangle positionSpriteSheet, Vector2 positionDepart, Texture2D texture, int rayonExplosion)
             : base(texture, mondePhysique, forme)
@@ -36,15 +38,19 @@ namespace BBTA.Elements
         {
             if (explose == true && Explosion != null)
             {
-                Explosion(Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
+                Explosion(this, Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
                 corpsPhysique.Dispose();
+            }
+            if (corpsPhysique.LinearVelocity.Length() == 0 && VitesseNulle != null)
+            {
+                VitesseNulle(this, new EventArgs());
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), positionSpriteSheet, Color.White,
-                             angleRotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, SpriteEffects.None, 0);
+                             angleRotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
         }
 
     }

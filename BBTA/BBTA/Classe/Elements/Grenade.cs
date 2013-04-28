@@ -24,6 +24,7 @@ namespace BBTA.Classe.Elements
         {
             corpsPhysique.ApplyLinearImpulse(direction * vitesse);
             corpsPhysique.Restitution = 0.5f;
+            corpsPhysique.Rotation = Conversion.ValeurAngle(direction);
             compteReboursExplosion.Start();
             compteReboursExplosion.Elapsed += new ElapsedEventHandler(compteReboursExplosion_Elapsed);
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
@@ -38,16 +39,30 @@ namespace BBTA.Classe.Elements
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
             estAusol = true;
+            corpsPhysique.ApplyTorque(1);
             return true;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (corpsPhysique.Rotation >= MathHelper.TwoPi)
+            {
+                corpsPhysique.Rotation %= MathHelper.TwoPi;
+            }
+            while (corpsPhysique.Rotation < 0)
+            {
+                corpsPhysique.Rotation += MathHelper.TwoPi;
+            }
+            if (corpsPhysique.Rotation > MathHelper.PiOver2 && corpsPhysique.Rotation < MathHelper.PiOver2 * 3)
+            {
+                retourner = SpriteEffects.FlipVertically;
+            }
             if (estAusol)
             {
-                corpsPhysique.LinearDamping = 1;
+                corpsPhysique.LinearDamping = 2;
             }
+            angleRotation = corpsPhysique.Rotation;
         }
 
         void compteReboursExplosion_Elapsed(object sender, ElapsedEventArgs e)

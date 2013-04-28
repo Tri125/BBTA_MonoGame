@@ -143,7 +143,7 @@ namespace BBTA.Elements
             }
             else
             {
-                corpsPhysique.LinearVelocity = Vector2.Zero;
+                corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
             }
             return true;
         }
