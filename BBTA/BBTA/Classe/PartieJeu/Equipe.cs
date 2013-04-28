@@ -108,7 +108,16 @@ namespace BBTA.Partie_De_Jeu
         //Lorsque c'est le début du tour, le joueurActif est activé
         public void DebutTour()
         {
+            if (joueurActif == null)
+            {
+                joueurActif = membresEquipe[Game1.hasard.Next(membresEquipe.Count)];
+            }
+            else
+            {
+                joueurActif = membresEquipe[(membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
+            }
             joueurActif.monTour = true;
+
         }
         //Pour la transition entre équipe ----- LARGEMENT MAL FAIT POUR LE MOMENT
         public void ChangementEquipe()

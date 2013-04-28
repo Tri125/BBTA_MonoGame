@@ -73,6 +73,19 @@ namespace BBTA.Classe.Elements
                                             }
                                         },
                                         ref detectionAutourMine);
+                //AABB siDansLeVide = new AABB(corpsPhysique.Position - new Vector2(0.5f), corpsPhysique.Position + new Vector2(0.5f, 1.5f));
+                //bool objetRencontrer = false;
+                //mondePhysique.QueryAABB(fixture =>
+                //                        {
+                //                            objetRencontrer = true;
+                //                            return false;
+                //                        },
+                //                        ref siDansLeVide);
+                //if (objetRencontrer == false)
+                //{
+                //    explose = true;
+                //}
+
             }
             base.Update(gameTime);
         }

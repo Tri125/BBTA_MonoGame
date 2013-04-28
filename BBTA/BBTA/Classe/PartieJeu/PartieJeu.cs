@@ -86,6 +86,7 @@ namespace BBTA.Partie_De_Jeu
                 compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
                 compteReboursApresTir.Start();
             }
+            gestionnaireEquipes.ChangementEquipe();
             EstEnTransition = true;
         }
 

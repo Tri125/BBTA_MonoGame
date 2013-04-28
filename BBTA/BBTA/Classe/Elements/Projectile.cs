@@ -44,6 +44,7 @@ namespace BBTA.Elements
             if (corpsPhysique.LinearVelocity.Length() == 0 && VitesseNulle != null)
             {
                 VitesseNulle(this, new EventArgs());
+                VitesseNulle = null;
             }
         }
 

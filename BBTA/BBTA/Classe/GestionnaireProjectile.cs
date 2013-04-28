@@ -72,14 +72,18 @@ namespace BBTA.Classe
 
         void projectile_Explosion(Projectile projectileExplosant, Vector2 position, int rayonExplosion)
         {
+            enAction = false;
             Explosion(position, rayonExplosion);
             projectiles.Remove(projectileExplosant);
-            ProcessusTerminer(this, new EventArgs());
+            if (ProcessusTerminer != null)
+            {
+                ProcessusTerminer(this, new EventArgs());
+            }
         }
 
         public Projectile ObtenirProjectileEnMouvement()
         {
-            if (projectiles.Count == 0)
+            if (projectiles.Count == 0 || enAction == false)
             {
                 return null;
             }

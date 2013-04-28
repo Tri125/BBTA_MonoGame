@@ -27,7 +27,7 @@ namespace BBTA.Elements
         protected const float FORCE_MOUVEMENT_VERTICAL = 8f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
-        public bool monTour = false;
+        public bool monTour { get; set; }
         public bool enModeTir { get; set; }
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
@@ -59,17 +59,6 @@ namespace BBTA.Elements
             corpsPhysique.SleepingAllowed = false;
             enModeTir = false;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
-        }
-
-        protected void CompletionTour()
-        {
-            if (monTour == true)
-            {
-                if (TourCompleter != null)
-                {
-                    TourCompleter(this, EventArgs.Empty);
-                }
-            }
         }
 
         /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent

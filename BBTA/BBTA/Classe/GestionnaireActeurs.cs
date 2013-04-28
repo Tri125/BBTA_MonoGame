@@ -25,24 +25,6 @@ namespace BBTA.Classe
         public delegate void DelegateTirEntamme(Vector2 position);
         public event DelegateTirEntamme Tir;
 
-
-        //public List<Acteur> ListeActeur
-        //{
-        //    get
-        //    {
-        //        List<Acteur> temp = new List<Acteur>();
-        //        foreach (Equipe equipe in listeEquipes)
-        //        {
-        //            foreach (Acteur acteur in equipe.ListeMembres)
-        //            {
-        //                temp.Add(acteur);
-        //            }
-        //        }
-        //        return temp;
-        //    }
-        //}
-
-
         public GestionnaireActeurs(Game jeu, int nbJoueursEquipe1, int nbJoueursEquipe2, bool equipeAdverseHumaine)
             :base(jeu)
         {
@@ -80,7 +62,7 @@ namespace BBTA.Classe
                     }
                 }
                 equipeActive = equipes[Game1.hasard.Next(equipes.Count)];
-                ChangementEquipe();
+                equipeActive.DebutTour();
             }
         }
 
@@ -144,10 +126,8 @@ namespace BBTA.Classe
 
         public void ChangementEquipe()
         {
-            equipeActive.ChangementEquipe();
+            equipeActive.FinTour();
             equipeActive = equipes[(equipes.IndexOf(equipeActive) + 1) % equipes.Count()];
-            equipeActive.ChangementEquipe();
-            equipeActive.ChangementJoueur();
             equipeActive.DebutTour();
         }
 
