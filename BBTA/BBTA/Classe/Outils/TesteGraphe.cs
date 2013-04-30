@@ -77,7 +77,8 @@ namespace BBTA.Classe.Outils
             Graph.AddEdge(new NavArcGraph(4, 5, 3.0f));
             Graph.AddEdge(new NavArcGraph(0, 5, 1.0f));
 
-
+            Graph_SearchDijkstra recherche = new Graph_SearchDijkstra(ref Graph, 4, 2);
+            List<int> chemin = recherche.GetPathToTarget();
             timePerParse.Stop();
             temps = timePerParse.ElapsedMilliseconds;
 
