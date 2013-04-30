@@ -22,9 +22,11 @@ namespace BBTA.Elements
                    positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION_MAX)
         {
             direction.Normalize();
-            corpsPhysique.ApplyLinearImpulse(direction*vitesse);
+            corpsPhysique.LinearVelocity = direction * vitesse;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
+            corpsPhysique.CollidesWith = Category.All;
+            corpsPhysique.CollisionCategories = Category.All;
         }
 
         public override void Update(GameTime gameTime)

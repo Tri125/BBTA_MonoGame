@@ -38,16 +38,6 @@ namespace BBTA.Elements
             effet = SpriteEffects.None;
         }
 
-        /// <summary>
-        /// Met à jour le sprite
-        /// </summary>
-        /// <param name="gameTime"></param>
-        /// <param name="borduresDeFenetre">Rectangle délimitant la région où peut se déplacer le sprite</param>
-        public virtual void Update(GameTime gameTime)
-        {
-            Animer(gameTime, 0, nbImagesSequence);
-        }
-
         protected void Animer(GameTime gameTime, int posDebut, int posFin)
         {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;

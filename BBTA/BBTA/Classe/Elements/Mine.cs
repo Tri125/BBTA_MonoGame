@@ -21,6 +21,7 @@ namespace BBTA.Classe.Elements
         private const int DELAI_LUMIERE = 200;
         private World mondePhysique;
         private Timer compteRebours = new Timer(200);
+        public event EventHandler VitesseNulle;
 
         public Mine(ref World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
             : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(7), 5), positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION)
@@ -60,6 +61,7 @@ namespace BBTA.Classe.Elements
             if (corpsPhysique.IgnoreGravity)
             {
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
+                bool objetRencontrer = false;
                 mondePhysique.QueryAABB(Fixture =>
                                         {
                                             if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
@@ -69,24 +71,20 @@ namespace BBTA.Classe.Elements
                                             }
                                             else
                                             {
+                                                objetRencontrer = true;
                                                 return true;
                                             }
                                         },
                                         ref detectionAutourMine);
-                //AABB siDansLeVide = new AABB(corpsPhysique.Position - new Vector2(0.5f), corpsPhysique.Position + new Vector2(0.5f, 1.5f));
-                //bool objetRencontrer = false;
-                //mondePhysique.QueryAABB(fixture =>
-                //                        {
-                //                            objetRencontrer = true;
-                //                            return false;
-                //                        },
-                //                        ref siDansLeVide);
-                //if (objetRencontrer == false)
-                //{
-                //    explose = true;
-                //}
 
             }
+
+            if (corpsPhysique.LinearVelocity.Length() == 0 && VitesseNulle != null && compteRebours.Enabled == false)
+            {
+                VitesseNulle(this, new EventArgs());
+                VitesseNulle = null;
+            }
+
             base.Update(gameTime);
         }
 

@@ -18,8 +18,8 @@ namespace BBTA.Elements
         private BBTA.Classe.Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionActive.InformationTouche;
 
 
-        public JoueurHumain(World mondePhysique, Texture2D texture, Vector2 position, float pointsVie, int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(mondePhysique, pointsVie, texture, position, nbColonnes, nbRangees, milliSecParImage)
+        public JoueurHumain(World mondePhysique, Texture2D texture, Vector2 position, int nbColonnes, int nbRangees, int milliSecParImage = 50)
+            : base(mondePhysique, texture, position, nbColonnes, nbRangees, milliSecParImage)
         {
         }
 
@@ -37,7 +37,7 @@ namespace BBTA.Elements
 
             base.Update(gameTime);
 
-            if (!enModeTir)
+            if (!enModeTir && monTour == true)
             {
 
                 if (clavierMaintenant.IsKeyDown(optionClavier.Droite))

@@ -16,6 +16,8 @@ namespace BBTA.Elements
         protected Texture2D texture;
         private Fixture joint;
         protected float angleRotation = 0;
+        public event EventHandler Detruit;
+      
 
         public ObjetPhysique(Texture2D texture, World mondePhysique, Shape forme)
         {
@@ -27,6 +29,14 @@ namespace BBTA.Elements
         public Vector2 ObtenirPosition()
         {
             return Conversion.MetreAuPixel(corpsPhysique.Position);
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+            if (corpsPhysique.IsDisposed && Detruit != null)
+            {
+                Detruit(this, new EventArgs());
+            }
         }
         
 

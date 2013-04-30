@@ -141,6 +141,7 @@
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Interface\BoutonClicEtEcris.cs" />
     <Compile Include="Classe\Interface\IndicateurPuissance.cs" />
+    <Compile Include="Classe\Interface\menuDeployable_2.cs" />
     <Compile Include="Classe\Interface\Slider.cs" />
     <Compile Include="Classe\Interface\IndiquateurArmeRestante.cs" />
     <Compile Include="Classe\Interface\MenuDeployable.cs" />
