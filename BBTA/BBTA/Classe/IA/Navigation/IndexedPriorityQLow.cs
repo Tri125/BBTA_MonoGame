@@ -5,8 +5,7 @@ using System.Text;
 
 namespace BBTA.Classe.IA.Navigation
 {
-//    public class IndexedPriorityQLow <KeyType>
-//         where KeyType : System.IComparable<KeyType>
+//    public class IndexedPriorityQLow
 //    {
 //        //----------------------- IndexedPriorityQLow ---------------------------
 ////
@@ -15,7 +14,7 @@ namespace BBTA.Classe.IA.Navigation
 ////
 ////  The priority in this implementation is the lowest valued key
 ////------------------------------------------------------------------------
-//private  List<KeyType> m_vecKeys;
+//private  List<float> m_vecKeys;
 //        private List<int> m_Heap;
 //private List<int> m_invHeap;
 
@@ -75,13 +74,13 @@ namespace BBTA.Classe.IA.Navigation
   
 //  //you must pass the constructor a reference to the std::vector the PQ
 //  //will be indexing into and the maximum size of the queue.
-//  public IndexedPriorityQLow(ref List<KeyType> keys, int MaxSize)
+//  public IndexedPriorityQLow(ref List<float> keys, int MaxSize)
 //  {
 //      m_vecKeys = keys;
 //                                                m_iMaxSize = MaxSize;
 //                                                m_iSize = 0;
 //      m_Heap.Clear();
-//      m_Heap = new List<KeyType>(MaxSize+1);
+//      m_Heap = new List<float>(MaxSize+1);
 //    m_Heap.assign(MaxSize+1, 0);
 //    m_invHeap.assign(MaxSize+1, 0);
 //  }
