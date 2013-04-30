@@ -102,8 +102,7 @@ namespace BBTA.Classe.IA.Navigation
                 int NextClosestNode = pq.Pop();
 
                 //move this edge from the frontier to the shortest path tree
-                //m_ShortestPathTree[NextClosestNode] = m_SearchFrontier[NextClosestNode];
-                m_ShortestPathTree.Add(m_SearchFrontier[NextClosestNode]);
+                m_ShortestPathTree[NextClosestNode] = m_SearchFrontier[NextClosestNode];
 
                 //if the target has been found exit
                 if (NextClosestNode == m_iTarget) return;
@@ -169,6 +168,7 @@ namespace BBTA.Classe.IA.Navigation
                 nd = m_ShortestPathTree[nd].IndexProv;
                 path.Add(nd);
             }
+            path.Reverse();
             return path;
         }
 
