@@ -224,7 +224,7 @@ namespace BBTA.Classe.IA.Navigation
             {
                 if (!m_bDigraph)
                 {
-                    foreach (NavArcGraph arc in ArcAdjacent[to])
+                    foreach (NavArcGraph arc in ArcAdjacent[to].ToList())
                     {
                         if (arc.IndexDest == from)
                         {
@@ -234,7 +234,7 @@ namespace BBTA.Classe.IA.Navigation
                     }
                 }
 
-                foreach (NavArcGraph arc in ArcAdjacent[from])
+                foreach (NavArcGraph arc in ArcAdjacent[from].ToList())
                 {
                     if (arc.IndexDest == to)
                     {
@@ -373,7 +373,7 @@ namespace BBTA.Classe.IA.Navigation
         //  returns true if the edge is not present in the graph. Used when adding
         //  edges to prevent duplication
         //------------------------------------------------------------------------
-        public bool UniqueEdge(int from, int to)
+        private bool UniqueEdge(int from, int to)
         {
 
             foreach (NavArcGraph arc in ArcAdjacent[from])

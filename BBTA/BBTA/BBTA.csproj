@@ -132,6 +132,8 @@
     <Compile Include="Classe\GestionnaireProjectile.cs" />
     <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\Graphe.cs" />
+    <Compile Include="Classe\IA\Navigation\Graph_SearchDijkstra.cs" />
+    <Compile Include="Classe\IA\Navigation\IndexedPriorityQLow.cs" />
     <Compile Include="Classe\IA\Navigation\NavArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
