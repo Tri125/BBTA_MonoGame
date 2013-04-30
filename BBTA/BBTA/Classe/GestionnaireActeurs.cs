@@ -25,7 +25,10 @@ namespace BBTA.Classe
         public delegate void DelegateTirEntamme(Vector2 position);
         public event DelegateTirEntamme Tir;
 
-        public GestionnaireActeurs(Game jeu, int nbJoueursEquipe1, int nbJoueursEquipe2, bool equipeAdverseHumaine)
+        public delegate void DelegateMortDunJoueur(bool joueurActif);
+        public event DelegateMortDunJoueur MortDunJoueur;
+
+        public GestionnaireActeurs(Game jeu, int nbJoueursEquipe1, int nbJoueursEquipe2, Vector2 dimensionsCarte, bool equipeAdverseHumaine)
             :base(jeu)
         {
             this.equipeAdverseHumaine = equipeAdverseHumaine;
@@ -56,7 +59,7 @@ namespace BBTA.Classe
                         else
                         {
                             equipes[compteurEquipe].RajoutMembre(new JoueurHumain(mondePhysique, textureJoueur, PhaseApparition(ref positions),
-                                                                                  100, 3, 1, 75));                            
+                                                                                  3, 1, 75));                            
                         }
                         equipes[compteurEquipe].ListeMembres[compteurActeur].TirDemande += new EventHandler(GestionnaireActeurs_TirDemande);
                     }
@@ -75,6 +78,7 @@ namespace BBTA.Classe
                     equipe.ListeMembres[nbJoueur].RecevoirDegat(lieu, rayonExplosion);
                 }
             }
+
         }
 
         void GestionnaireActeurs_TirDemande(object sender, EventArgs e)
@@ -85,24 +89,13 @@ namespace BBTA.Classe
             }
         }
 
-        void GestionnaireActeurs_Mort(object sender, EventArgs e)
-        {
-            foreach (Equipe equipe in equipes)
-            {
-                if (equipe.ListeMembres.Contains(sender))
-                {
-                    equipe.SupressionMembre((sender as Acteur));
-                }
-            }
-        }
-
         public override void Update(GameTime gameTime)
         {
             foreach (Equipe equipe in equipes)
             {
-                foreach (Acteur item in equipe.ListeMembres)
+                for(int nbActeurs = 0; nbActeurs < equipe.NbrMembre; nbActeurs++)
                 {
-                    item.Update(gameTime);
+                    equipe.ListeMembres[nbActeurs].Update(gameTime);
                 }
             }
             base.Update(gameTime);

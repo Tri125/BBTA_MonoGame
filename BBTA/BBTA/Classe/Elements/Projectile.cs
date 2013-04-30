@@ -21,7 +21,6 @@ namespace BBTA.Elements
         protected Rectangle positionSpriteSheet;
         public delegate void DelegateExplosion(Projectile proejctileExplosant, Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
-        public event EventHandler VitesseNulle;
 
         public Projectile(World mondePhysique, Shape forme, Rectangle positionSpriteSheet, Vector2 positionDepart, Texture2D texture, int rayonExplosion)
             : base(texture, mondePhysique, forme)
@@ -34,18 +33,14 @@ namespace BBTA.Elements
             corpsPhysique.BodyType = BodyType.Dynamic;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (explose == true && Explosion != null)
             {
                 Explosion(this, Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
                 corpsPhysique.Dispose();
             }
-            if (corpsPhysique.LinearVelocity.Length() == 0 && VitesseNulle != null)
-            {
-                VitesseNulle(this, new EventArgs());
-                VitesseNulle = null;
-            }
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

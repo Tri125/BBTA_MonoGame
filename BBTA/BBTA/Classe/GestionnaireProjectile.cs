@@ -52,13 +52,23 @@ namespace BBTA.Classe
                     break;
                 case Armes.Mine:
                     projectiles.Add(new Mine(ref mondePhysique, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(direction * 40), direction, vitesse, texturesProjectiles));
-                    projectiles[projectiles.Count - 1].VitesseNulle += new EventHandler(GestionnaireProjectile_VitesseNulle);
+                    (projectiles[projectiles.Count - 1] as Mine).VitesseNulle += new EventHandler(GestionnaireProjectile_VitesseNulle);
                     break;
                 default:
                     break;
             }
             projectiles[projectiles.Count - 1].Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
+            projectiles[projectiles.Count - 1].Detruit +=new EventHandler(GestionnaireProjectile_Detruit);
             enAction = true;
+        }
+
+        void GestionnaireProjectile_Detruit(object sender, EventArgs e)
+        {
+            projectiles.Remove((sender as Projectile));
+            if(ProcessusTerminer != null)
+            {
+                ProcessusTerminer(this, new EventArgs());
+            }
         }
 
         void GestionnaireProjectile_VitesseNulle(object sender, EventArgs e)
@@ -74,11 +84,6 @@ namespace BBTA.Classe
         {
             enAction = false;
             Explosion(position, rayonExplosion);
-            projectiles.Remove(projectileExplosant);
-            if (ProcessusTerminer != null)
-            {
-                ProcessusTerminer(this, new EventArgs());
-            }
         }
 
         public Projectile ObtenirProjectileEnMouvement()
@@ -91,11 +96,6 @@ namespace BBTA.Classe
             {
                 return projectiles[projectiles.Count-1];
             }
-        }
-
-        public bool YaAction()
-        {
-            return enAction;
         }
 
         public override void Update(GameTime gameTime)

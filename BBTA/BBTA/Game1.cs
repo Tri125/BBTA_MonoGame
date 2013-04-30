@@ -163,7 +163,7 @@ namespace BBTA
                             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
                             if (chargeurCarte.ChargementReussis)
                             {
-                                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
+                                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne, chargeurCarte.InformationCarte().NbRange), 3, 3);
                             }
                             this.Components.Add(partie);
                         }

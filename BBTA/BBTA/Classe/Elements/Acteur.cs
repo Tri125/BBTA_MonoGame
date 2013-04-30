@@ -19,7 +19,7 @@ namespace BBTA.Elements
     {
         //Évênements----------------------------------------------------------------------------------------------
         public event EventHandler TourCompleter;
-        public event EventHandler Mort;
+
         public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
@@ -27,8 +27,10 @@ namespace BBTA.Elements
         protected const float FORCE_MOUVEMENT_VERTICAL = 8f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
-        public bool monTour { get; set; }
+        public bool monTour = false;
         public bool enModeTir { get; set; }
+        public string Nom { get; set; }
+        public Color CouleurEquipe{get;set;}
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
@@ -45,7 +47,7 @@ namespace BBTA.Elements
         /// <param name="nbColonnes"></param>
         /// <param name="nbRangees"></param>
         /// <param name="milliSecParImage"></param>
-        public Acteur(World mondePhysique, float pointDeVie, Texture2D texture, Vector2 position,
+        public Acteur(World mondePhysique, Texture2D texture, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
@@ -57,6 +59,7 @@ namespace BBTA.Elements
             corpsPhysique.FixedRotation = true;
             corpsPhysique.Restitution = 0f;
             corpsPhysique.SleepingAllowed = false;
+            corpsPhysique.Friction = 0;
             enModeTir = false;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
         }
@@ -69,56 +72,57 @@ namespace BBTA.Elements
             if (direction.Length() < rayonExplosion)
             {
                 direction.Normalize();
-                corpsPhysique.ApplyLinearImpulse(direction * rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion));
+                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
+                corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion);
+                pointDeVie -= distanceExplosion*4;
+                monTour = false;
+                if (pointDeVie < 0)
+                {
+                    corpsPhysique.Dispose();
+                }
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            corpsPhysique.Friction = 0;
-            if (veutSeDeplacer == true && estAuSol == true)
+            if (monTour == true)
             {
-                Animer(gameTime, 0, 3);
-            }
+                if (veutSeDeplacer == true && estAuSol == true)
+                {
+                    Animer(gameTime, 0, 3);
+                }
 
-            if (veutSeDeplacer == false)
-            {
-                corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+                if (veutSeDeplacer == false)
+                {
+                    corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+                }
+                else
+                {
+                    veutSeDeplacer = false;
+                }
             }
-            else
-            {
-                veutSeDeplacer = false;
-            }
+            base.Update(gameTime);
+            
         }
 
         protected void BougerADroite()
         {
-            if (monTour == true)
-            {
-                corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-                veutSeDeplacer = true;
-                effet = SpriteEffects.FlipHorizontally;
-            }
+            corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            veutSeDeplacer = true;
+            effet = SpriteEffects.FlipHorizontally;
         }
 
         protected void BougerAGauche()
-        {
-            if (monTour == true)
-            {
-                corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
-                veutSeDeplacer = true;
-                effet = SpriteEffects.None;
-            }
-
+        {          
+            corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
+            veutSeDeplacer = true;
+            effet = SpriteEffects.None;          
         }
 
         protected void Sauter()
         {
-            if (monTour == true)
-            {
-                estAuSol = false;
-                corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
-            }
+            estAuSol = false;
+            corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
@@ -130,9 +134,9 @@ namespace BBTA.Elements
                     estAuSol = true;
                 }
             }
-            else
+            if (monTour == false && corpsPhysique.LinearVelocity.Length() != 0 && contact.Manifold.LocalPoint.Y < 0)
             {
-                corpsPhysique.LinearVelocity = new Vector2(0, corpsPhysique.LinearVelocity.Y);
+                corpsPhysique.LinearVelocity = Vector2.Zero;
             }
             return true;
         }

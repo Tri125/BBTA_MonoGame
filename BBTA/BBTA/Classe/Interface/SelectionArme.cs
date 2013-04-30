@@ -19,7 +19,6 @@ namespace BBTA.Interface
 
     public class SelectionArme: MenuDeployable
     {
-        public bool YaTilUneArmeSelectionne { get; set; }
         private Texture2D texturesArmes;
         private Point positionSouris;
 
@@ -32,7 +31,6 @@ namespace BBTA.Interface
             :base(texturePanneau, new Rectangle(0,0,528,309), delaiDeploiement)
         {
             this.texturesArmes = texturesArmes;
-            YaTilUneArmeSelectionne = false;
             for(int compteur = 0; compteur < texturesArmes.Height/30; compteur++)
             {
                 int hauteur = compteur/4;
