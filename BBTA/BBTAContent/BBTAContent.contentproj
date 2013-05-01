@@ -42,6 +42,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ressources\Audio\BBTA_Musique.xap">
+      <Name>BBTA_Musique</Name>
+      <Importer>XactImporter</Importer>
+      <Processor>XactProcessor</Processor>
+    </Compile>
     <Compile Include="Ressources\test.png">
       <Name>test</Name>
       <Importer>TextureImporter</Importer>
@@ -298,14 +303,6 @@
   <ItemGroup>
     <Compile Include="CompteRebours.spritefont">
       <Name>CompteRebours</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <SubType>Designer</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SecondesRestantes.spritefont">
-      <Name>SecondesRestantes</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <SubType>Designer</SubType>

@@ -51,6 +51,9 @@ namespace BBTA
         private PartieJeu partie;
         private MenuOptions option;
         private MenuConfiguration config;
+        private AudioEngine engine;
+        private SoundBank soundBank;
+        private WaveBank waveBank;
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
@@ -89,6 +92,12 @@ namespace BBTA
             config = new MenuConfiguration(this);
 
             Testy = new TesteGraphe();
+
+            engine = new AudioEngine(@"Content\Ressources\Audio\BBTA_Musique.xgs");
+            waveBank = new WaveBank(engine, @"Content\Ressources\Audio\Wave Bank.xwb");
+            soundBank = new SoundBank(engine, @"Content\Ressources\Audio\Sound Bank.xsb");
+            Cue cue = soundBank.GetCue("menu");
+            cue.Play();
 
             base.Initialize();
         }
