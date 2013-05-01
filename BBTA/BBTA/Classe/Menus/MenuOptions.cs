@@ -12,6 +12,9 @@ namespace BBTA.Classe.Menus
 {
     public class MenuOptions : MenuArrierePlan
     {
+        private event EventHandler ChangementVolume;
+        private bool initierAudio;
+
         private Texture2D lettrage;
 
         //Boutons menu
@@ -32,6 +35,16 @@ namespace BBTA.Classe.Menus
         private Slider sliderMusique;
 
         private BBTA.Classe.Option.Option OptionJeu;
+
+        public void InitControlAudio(GestionSon.GestionMusique gestionnaire)
+        {
+            if (initierAudio == false)
+            {
+                ChangementVolume += gestionnaire.ChangementVolume;
+                ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
+                initierAudio = true;
+            }
+        }
 
         public MenuOptions(Game game)
             : base(game)
@@ -57,7 +70,7 @@ namespace BBTA.Classe.Menus
             btnValider.Clic += new EventHandler(btnValider_Clic);
 
             btnDefaut = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnDefaut"), new Vector2(1175, 700), null);
-            btnDefaut.Clic +=new EventHandler(btnDefaut_Clic);
+            btnDefaut.Clic += new EventHandler(btnDefaut_Clic);
 
             btnAnnuler = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\btnAnnuler"), new Vector2(1175, 800), null);
             btnAnnuler.Clic += new EventHandler(btnAnnuler_Clic);
@@ -141,12 +154,13 @@ namespace BBTA.Classe.Menus
             OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
             OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
             Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
+            ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
         }
 
         private void RetourDefaut()
         {
-            sliderEffet.DeplacementPourcentage ((float)Game1.chargeurOption.OptionDefaut.InformationSonore.EffetSonore/100);
-            sliderMusique.DeplacementPourcentage( (float)Game1.chargeurOption.OptionDefaut.InformationSonore.Musique / 100);
+            sliderEffet.DeplacementPourcentage((float)Game1.chargeurOption.OptionDefaut.InformationSonore.EffetSonore / 100);
+            sliderMusique.DeplacementPourcentage((float)Game1.chargeurOption.OptionDefaut.InformationSonore.Musique / 100);
         }
     }
 }

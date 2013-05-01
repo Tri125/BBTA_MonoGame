@@ -50,7 +50,7 @@ namespace BBTA
         MouseState now;
         private TesteGraphe Testy;
         private GestionMusique gestionnaireMusique;
-        public event EventHandler ChangementEtat;
+        private event EventHandler ChangementEtat;
         private MenuAccueil acc;
         private PartieJeu partie;
         private MenuOptions option;
@@ -83,6 +83,10 @@ namespace BBTA
 
             EventInput.EventInput.Initialize(Window);
 
+            gestionnaireMusique = new GestionMusique(this);
+            this.Components.Add(gestionnaireMusique);
+            ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
+
             //Etat Accueil
             acc = new MenuAccueil(this);
 
@@ -94,9 +98,6 @@ namespace BBTA
 
             Testy = new TesteGraphe();
 
-            gestionnaireMusique = new GestionMusique(this);
-            this.Components.Add(gestionnaireMusique);
-            ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
             base.Initialize();
         }
 
@@ -104,6 +105,7 @@ namespace BBTA
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ChangementEtat(this.EtatActuel, EventArgs.Empty);
+            option.InitControlAudio(gestionnaireMusique);
             base.LoadContent();
         }
 
@@ -114,6 +116,7 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            gestionnaireMusique.Update(gameTime);
             EtatPrecedent = EtatActuel;
             if (this.IsActive)
             {

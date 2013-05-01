@@ -34,6 +34,12 @@ namespace BBTA.Classe.GestionSon
             base.LoadContent();
         }
 
+
+        public override void Update(GameTime gameTime)
+        {
+            moteur.Update();
+        }
+
         private Cue ObtenirCue(int num)
         {
             switch (num)
@@ -51,6 +57,19 @@ namespace BBTA.Classe.GestionSon
                     return banqueSon.GetCue("menu");
             }
         }
+
+        public void ChangementVolume(object sender, EventArgs eventArgs)
+        {
+            if (sender as Option.Option.InfoSonore != null)
+            {
+                Option.Option.InfoSonore info = sender as Option.Option.InfoSonore;
+                AudioCategory categorieAudio = moteur.GetCategory("Music");
+                categorieAudio.SetVolume((float)info.Musique / 100);
+
+            }
+        }
+
+
 
         public void ChangementEtatJeu(object sender, EventArgs eventArgs)
         {
