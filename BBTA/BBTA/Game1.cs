@@ -48,7 +48,7 @@ namespace BBTA
         SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-        private TesteGraphe Testy;
+        private OutilGraphe Testy;
         private GestionMusique gestionnaireMusique;
         private event EventHandler ChangementEtat;
         private MenuAccueil acc;
@@ -96,7 +96,7 @@ namespace BBTA
             //Etat configuration
             config = new MenuConfiguration(this);
 
-            Testy = new TesteGraphe();
+            Testy = new OutilGraphe(this);
 
             base.Initialize();
         }
