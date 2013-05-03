@@ -12,25 +12,36 @@ namespace BBTA.Classe.Carte
 {
     public class BlocBooleen
     {
-        const int[] ID_BLOC_NON_SOLIDE = { -1, 0 };
         private Vector2 position;
         private bool estSolide;
 
 
         public BlocBooleen()
         {
-
         }
 
-        public BlocBooleen(Bloc blocJeu)
+        public BlocBooleen(Vector2 position)
+        {
+            this.estSolide = false;
+            this.position = position;
+        }
+
+        public BlocBooleen(int[] idNonSolide, Bloc blocJeu)
         {
             this.position = blocJeu.Position;
-
+            this.estSolide = DeterminerSoliditer(idNonSolide, blocJeu.Type);
         }
 
-        public bool DeterminerSoliditer(TypeBloc typeB)
+        public bool DeterminerSoliditer(int[] idNonSolide, TypeBloc typeBloc)
         {
-            return false;
+            foreach (int identifiant in idNonSolide)
+            {
+                if ((int)typeBloc == identifiant)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
