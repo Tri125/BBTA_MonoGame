@@ -39,8 +39,9 @@ namespace BBTA
         private readonly int largeur;
         private readonly int hauteur;
         private List<Vector2> listeApparition;
-        private CarteBoolien carteBool;
-        //Constantes----------------------------------------------------------------------------------------------
+        private Vector2 deplacementPrev = new Vector2(2, -1);
+        private Vector2 deplacementTotal = Vector2.Zero;
+        private CarteBoolien carteBool;        //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
 
         public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
@@ -132,6 +133,25 @@ namespace BBTA
         {
             spriteBatch.Draw(textureArrierePlan, new Vector2(positionCamera.X - IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2f,
                                                            positionCamera.Y - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f), Color.White);
+            foreach (Bloc item in blocs)
+            {
+                if (item != null)
+                {
+                    item.Draw(spriteBatch);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Affiche les blocs nécessaires à l'écran
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void Previsualisation(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Vector2 position)
+        {
+            Viewport viewPortPrecedent = graphicsDevice.Viewport; 
+
+            spriteBatch.Draw(textureArrierePlan, deplacementTotal, Color.White);
+
             foreach (Bloc item in blocs)
             {
                 if (item != null)

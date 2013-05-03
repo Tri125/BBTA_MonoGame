@@ -107,7 +107,9 @@ namespace BBTA.Classe.Menus
             base.Update(gameTime);
             sliderEffet.Deplacement();
             sliderMusique.Deplacement();
-
+            OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
+            OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
+            
             btnValider.Update(null);
             btnDefaut.Update(null);
             btnAnnuler.Update(null);

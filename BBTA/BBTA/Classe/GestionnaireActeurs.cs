@@ -43,7 +43,7 @@ namespace BBTA.Classe
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
-            //infosJoueur = new AffichageNom(Game.Content.Load<SpriteFont>(@"CompteRebours"));
+            infosJoueur = new AffichageNom(Game.Content.Load<SpriteFont>(@"CompteRebours"), Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\vie"));
             base.LoadContent();
         }
 
@@ -70,6 +70,7 @@ namespace BBTA.Classe
                 }
                 equipeActive = equipes[Game1.hasard.Next(equipes.Count)];
                 equipeActive.DebutTour();
+                infosJoueur.estOuvert = true;
             }
         }
 
@@ -78,6 +79,7 @@ namespace BBTA.Classe
             if (Tir != null)
             {
                 Tir(position, munitions);
+                infosJoueur.estOuvert = false;
             }
         }
 
@@ -96,6 +98,7 @@ namespace BBTA.Classe
             {
                 equipe.Update(gameTime);
             }
+            infosJoueur.Position = equipeActive.JoueurActif.ObtenirPosition();
             base.Update(gameTime);
         }
 
@@ -108,7 +111,8 @@ namespace BBTA.Classe
             {
                 equipe.Draw(spriteBatch);
             }
-            //infosJoueur.Draw(spriteBatch, equipeActive.couleur, equipeActive.JoueurActif.ObtenirPosition(), "40");
+            infosJoueur.Draw(spriteBatch, Color.Red, equipeActive.JoueurActif.ObtenirPosition(), "90");
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -118,6 +122,7 @@ namespace BBTA.Classe
             equipeActive.FinTour();
             equipeActive = equipes[(equipes.IndexOf(equipeActive) + 1) % equipes.Count()];
             equipeActive.DebutTour();
+            infosJoueur.estOuvert = true;
         }
 
 
