@@ -21,7 +21,7 @@ namespace BBTA.Classe
         private bool equipeAdverseHumaine;
         private List<Equipe> equipes = new List<Equipe>();
         private SpriteBatch spriteBatch;
-        //private AffichageNom infosJoueur;
+        private AffichageNom infosJoueur;
 
         public Equipe equipeActive { get; private set; }
 

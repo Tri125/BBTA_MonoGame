@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
 
-namespace BBTA.Classe.Carte
+namespace BBTA
 {
     public class BlocBooleen
     {

@@ -141,6 +141,7 @@
     <Compile Include="Classe\IA\Navigation\NavArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
+    <Compile Include="Classe\Interface\AffichageNom.cs" />
     <Compile Include="Classe\Interface\ArmeAffiche.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Interface\BoutonClicEtEcris.cs" />
