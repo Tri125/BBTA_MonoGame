@@ -20,6 +20,7 @@ using FarseerPhysics.Collision.Shapes;
 using BBTA.Classe;
 using System.Timers;
 using BBTA.Classe.Outils;
+using BBTA.Classe.IA.Robot;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -127,6 +128,8 @@ namespace BBTA.Partie_De_Jeu
 
         void gestionnaireEquipes_Tir(Vector2 position)
         {
+            SystemeTrajectoire systemeTrajectoire = new SystemeTrajectoire();
+            systemeTrajectoire.ObtenirPositions(gestionnaireEquipes.equipeActive.JoueurActif, gestionnaireEquipes.equipeActive.JoueurActif);
             gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition());
         }
 

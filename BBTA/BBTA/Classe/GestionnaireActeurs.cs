@@ -20,7 +20,9 @@ namespace BBTA.Classe
         private List<Equipe> equipes = new List<Equipe>();
         private SpriteBatch spriteBatch;
 
+
         public Equipe equipeActive { get; private set; }
+        public Equipe equipeAttente { get; private set; }
 
         public delegate void DelegateTirEntamme(Vector2 position);
         public event DelegateTirEntamme Tir;
@@ -127,6 +129,7 @@ namespace BBTA.Classe
         public void ChangementEquipe()
         {
             equipeActive.FinTour();
+            equipeAttente = equipeActive;
             equipeActive = equipes[(equipes.IndexOf(equipeActive) + 1) % equipes.Count()];
             equipeActive.DebutTour();
         }
