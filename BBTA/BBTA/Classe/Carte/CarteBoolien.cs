@@ -44,6 +44,11 @@ namespace BBTA.Classe.Carte
 
         }
 
+        private void TransformationTableau2D()
+        {
+
+        }
+
        
 
 
