@@ -60,13 +60,14 @@ namespace BBTA.Interface
 
         void SelectionArme_Clic(object sender, EventArgs e)
         {
-            if ((sender as IndicateurArmeRestante).nbArmeRestantes >= 0)
+            if ((sender as IndicateurArmeRestante).nbArmeRestantes > 0)
             {
                 if (ArmeSelectionnee != null)
                 {
                     ArmeSelectionnee((sender as IndicateurArmeRestante).ObtenirType());
                 }
                 estOuvert = false;
+                (sender as IndicateurArmeRestante).nbArmeRestantes--;
             }
         }
 

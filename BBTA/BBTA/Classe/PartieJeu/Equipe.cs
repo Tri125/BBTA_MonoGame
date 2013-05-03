@@ -15,6 +15,7 @@ using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
 using BBTA.Classe.Elements;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -29,9 +30,8 @@ namespace BBTA.Partie_De_Jeu
                 return equipiers.Capacity;
             }
         }
-        private Color couleur;
+        public Color couleur { get; set; }
         public Armement Munitions { get; set; }
-
         public delegate void DelegateTirDemande(Vector2 position, Armement munitions);
 
         public event DelegateTirDemande TirDemande;
@@ -91,6 +91,7 @@ namespace BBTA.Partie_De_Jeu
             foreach (Acteur joueur in equipiers)
             {
                 joueur.Draw(spriteBatch);
+
             }
         }
 

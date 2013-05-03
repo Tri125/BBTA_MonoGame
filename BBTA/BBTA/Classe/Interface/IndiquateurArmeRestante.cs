@@ -18,15 +18,6 @@ namespace BBTA.Interface
         {
             this.type = type;
             this.police = police;
-            this.Clic += new EventHandler(IndicateurArmeRestante_Clic);
-        }
-
-        void IndicateurArmeRestante_Clic(object sender, EventArgs e)
-        {
-            if (nbArmeRestantes > 0)
-            {
-                nbArmeRestantes--;
-            }
         }
 
         public Armes ObtenirType()

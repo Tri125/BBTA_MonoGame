@@ -12,13 +12,13 @@ using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using BBTA.Classe.Outils;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Elements
 {
     public abstract class Acteur : ObjetPhysiqueAnimer
     {
         //Évênements----------------------------------------------------------------------------------------------
-        public event EventHandler TourCompleter;
 
         public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace BBTA.Elements
         public bool monTour = false;
         public bool enModeTir { get; set; }
         public string Nom { get; set; }
-        public Color CouleurEquipe{get;set;}
+        private AffichageNom infosJoueurs;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 

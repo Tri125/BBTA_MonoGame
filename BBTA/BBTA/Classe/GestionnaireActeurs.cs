@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Elements;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Classe
 {
@@ -20,6 +21,7 @@ namespace BBTA.Classe
         private bool equipeAdverseHumaine;
         private List<Equipe> equipes = new List<Equipe>();
         private SpriteBatch spriteBatch;
+        private AffichageNom infosJoueur;
 
         public Equipe equipeActive { get; private set; }
 
@@ -41,6 +43,7 @@ namespace BBTA.Classe
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
+            infosJoueur = new AffichageNom(Game.Content.Load<SpriteFont>(@"CompteRebours"));
             base.LoadContent();
         }
 
@@ -105,6 +108,7 @@ namespace BBTA.Classe
             {
                 equipe.Draw(spriteBatch);
             }
+            infosJoueur.Draw(spriteBatch, equipeActive.couleur, equipeActive.JoueurActif.ObtenirPosition(), "40");
             spriteBatch.End();
             base.Draw(gameTime);
         }

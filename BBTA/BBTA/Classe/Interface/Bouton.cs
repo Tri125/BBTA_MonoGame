@@ -74,7 +74,7 @@ namespace BBTA.Interface
 
             if(rectangleCollisionBouton.Contains(positionSouris))
             {
-                if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released)
+                if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released && Clic != null)
                 {
                     Clic(this, new EventArgs());
                 }
