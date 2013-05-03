@@ -47,5 +47,23 @@ namespace BBTA.Classe.Outils
             Console.WriteLine(temps);
             Console.WriteLine("J'aime les tacos");
         }
+
+        protected override void LoadContent()
+        {
+            base.LoadContent();
+        }
+
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+
+        public override void Draw(GameTime gameTime)
+        {
+
+            base.Draw(gameTime);
+        }
     }
 }
