@@ -30,7 +30,7 @@ namespace BBTA.Elements
         public bool monTour = false;
         public bool enModeTir { get; set; }
         public string Nom { get; set; }
-        private AffichageNom infosJoueurs;
+        //private AffichageNom infosJoueurs;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
