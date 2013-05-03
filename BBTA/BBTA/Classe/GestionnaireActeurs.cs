@@ -8,6 +8,7 @@ using BBTA.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using IndependentResolutionRendering;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Classe
 {
@@ -22,7 +23,7 @@ namespace BBTA.Classe
 
         public Equipe equipeActive { get; private set; }
 
-        public delegate void DelegateTirEntamme(Vector2 position);
+        public delegate void DelegateTirEntamme(Vector2 position, Armement munitions);
         public event DelegateTirEntamme Tir;
 
         public delegate void DelegateMortDunJoueur(bool joueurActif);
@@ -32,8 +33,8 @@ namespace BBTA.Classe
             :base(jeu)
         {
             this.equipeAdverseHumaine = equipeAdverseHumaine;
-            this.equipes.Add(new Equipe(nbJoueursEquipe1));
-            this.equipes.Add(new Equipe(nbJoueursEquipe2));
+            this.equipes.Add(new Equipe(Color.Blue, nbJoueursEquipe1));
+            this.equipes.Add(new Equipe(Color.Firebrick, nbJoueursEquipe2));
         }
 
         protected override void LoadContent()
@@ -50,7 +51,7 @@ namespace BBTA.Classe
                 joueursFurentIlsCreer = true;
                 for (int compteurEquipe = 0; compteurEquipe < 2; compteurEquipe++)
                 {
-                    for (int compteurActeur = 0; compteurActeur < equipes[compteurEquipe].NbrMembre; compteurActeur++)
+                    for (int compteurActeur = 0; compteurActeur < equipes[compteurEquipe].NombreJoueursOriginel; compteurActeur++)
                     {
                         if (!equipeAdverseHumaine && compteurEquipe == 1)
                         {
@@ -61,11 +62,19 @@ namespace BBTA.Classe
                             equipes[compteurEquipe].RajoutMembre(new JoueurHumain(mondePhysique, textureJoueur, PhaseApparition(ref positions),
                                                                                   3, 1, 75));                            
                         }
-                        equipes[compteurEquipe].ListeMembres[compteurActeur].TirDemande += new EventHandler(GestionnaireActeurs_TirDemande);
                     }
+                    equipes[compteurEquipe].TirDemande += new Equipe.DelegateTirDemande(GestionnaireActeurs_TirDemande);
                 }
                 equipeActive = equipes[Game1.hasard.Next(equipes.Count)];
                 equipeActive.DebutTour();
+            }
+        }
+
+        void GestionnaireActeurs_TirDemande(Vector2 position, Armement munitions)
+        {
+            if (Tir != null)
+            {
+                Tir(position, munitions);
             }
         }
 
@@ -73,30 +82,16 @@ namespace BBTA.Classe
         {
             foreach (Equipe equipe in equipes)
             {
-                for (int nbJoueur = 0; nbJoueur < equipe.NbrMembre; nbJoueur++)
-                {
-                    equipe.ListeMembres[nbJoueur].RecevoirDegat(lieu, rayonExplosion);
-                }
+                equipe.RecevoirDegats(lieu, rayonExplosion);
             }
 
-        }
-
-        void GestionnaireActeurs_TirDemande(object sender, EventArgs e)
-        {
-            if (Tir != null)
-            {
-                Tir((sender as Acteur).ObtenirPosition());
-            }
         }
 
         public override void Update(GameTime gameTime)
         {
             foreach (Equipe equipe in equipes)
             {
-                for(int nbActeurs = 0; nbActeurs < equipe.NbrMembre; nbActeurs++)
-                {
-                    equipe.ListeMembres[nbActeurs].Update(gameTime);
-                }
+                equipe.Update(gameTime);
             }
             base.Update(gameTime);
         }
@@ -108,10 +103,7 @@ namespace BBTA.Classe
                               Resolution.getTransformationMatrix() * matriceCamera);
             foreach (Equipe equipe in equipes)
             {
-                foreach (Acteur item in equipe.ListeMembres)
-                {
-                    item.Draw(spriteBatch);
-                }
+                equipe.Draw(spriteBatch);
             }
             spriteBatch.End();
             base.Draw(gameTime);

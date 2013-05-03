@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using BBTA.Elements;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Interface
 {
@@ -21,6 +22,21 @@ namespace BBTA.Interface
     {
         private Texture2D texturesArmes;
         private Point positionSouris;
+
+        public Armement Munitions
+        {
+            get
+            {
+                return new Armement(Armes[1].nbArmeRestantes, Armes[2].nbArmeRestantes, Armes[0].nbArmeRestantes);
+            }
+            set
+            {
+                foreach (IndicateurArmeRestante arme in Armes)
+                {
+                    arme.nbArmeRestantes = value[arme.ObtenirType()];
+                }
+            }
+        }
 
         private List<IndicateurArmeRestante> Armes = new List<IndicateurArmeRestante>();
         public delegate void DelegateArmeSelectionnee(Armes armeSelectionnee);
@@ -44,11 +60,14 @@ namespace BBTA.Interface
 
         void SelectionArme_Clic(object sender, EventArgs e)
         {
-            if (ArmeSelectionnee != null)
+            if ((sender as IndicateurArmeRestante).nbArmeRestantes >= 0)
             {
-                ArmeSelectionnee((sender as IndicateurArmeRestante).ObtenirType());
+                if (ArmeSelectionnee != null)
+                {
+                    ArmeSelectionnee((sender as IndicateurArmeRestante).ObtenirType());
+                }
+                estOuvert = false;
             }
-            estOuvert = false;
         }
 
         public void Update(GameTime gameTime, Matrix matriceCamera)

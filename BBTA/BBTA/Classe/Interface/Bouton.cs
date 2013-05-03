@@ -63,7 +63,7 @@ namespace BBTA.Interface
                                                               (int)boutonDansSprite.Width/2, (int)boutonDansSprite.Height); 
         }
 
-        public void Update(Matrix? matriceCamera)
+        public virtual void Update(Matrix? matriceCamera)
         {
             if (!matriceCamera.HasValue)
             {

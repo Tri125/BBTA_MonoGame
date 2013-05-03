@@ -21,6 +21,7 @@ using BBTA.Classe;
 using System.Timers;
 using BBTA.Classe.Outils;
 using System.Text;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -140,15 +141,16 @@ namespace BBTA.Partie_De_Jeu
             tempsEcouler = tempsTour;
         }
 
-        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
+        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions)
         {
+            gestionnaireEquipes.equipeActive.Munitions = munitions;
             gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
             gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
 
-        void gestionnaireEquipes_Tir(Vector2 position)
+        void gestionnaireEquipes_Tir(Vector2 position, Armement munitions)
         {
-            gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition());
+            gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition(), munitions);
         }
 
         /// <summary>
