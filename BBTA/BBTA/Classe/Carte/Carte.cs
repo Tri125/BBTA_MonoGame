@@ -40,7 +40,7 @@ namespace BBTA
         private List<Vector2> listeApparition;
         private Vector2 deplacementPrev = new Vector2(2, -1);
         private Vector2 deplacementTotal = Vector2.Zero;
-        private CarteBoolien carteBool;        //Constantes----------------------------------------------------------------------------------------------
+        private CarteBoolieen carteBool;        //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
 
         public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
@@ -59,7 +59,7 @@ namespace BBTA
             this.textureArrierePlan = arrierePlan;
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
-            this.carteBool = new CarteBoolien(largeurCarte, hauteur);
+            this.carteBool = new CarteBoolieen(largeurCarte, hauteur);
             blocs = new Bloc[donneesBlocs.Length];
 
             for (int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)

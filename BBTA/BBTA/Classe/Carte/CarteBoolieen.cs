@@ -10,18 +10,18 @@ using BBTA.Elements;
 
 namespace BBTA
 {
-    public class CarteBoolien
+    public class CarteBoolieen
     {
         private int[] ID_BLOC_NON_SOLIDE = { -1, 0 };
         private  List<BlocBooleen> doneesBlocs;
         private readonly int largeurCarte;
         private readonly int hauteurCarte;
 
-        public CarteBoolien()
+        public CarteBoolieen()
         {
         }
 
-        public CarteBoolien(int largeurCarte, int hauteurCarte)
+        public CarteBoolieen(int largeurCarte, int hauteurCarte)
         {
             this.largeurCarte = largeurCarte;
             this.hauteurCarte = hauteurCarte;
