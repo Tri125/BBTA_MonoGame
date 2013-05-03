@@ -172,7 +172,6 @@ namespace BBTA
                         if (!this.Components.Contains(partie))
                         {
                             this.Components.Clear();
-                            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
                             if (chargeurCarte.ChargementReussis)
                             {
                                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne, chargeurCarte.InformationCarte().NbRange), 3, 3);

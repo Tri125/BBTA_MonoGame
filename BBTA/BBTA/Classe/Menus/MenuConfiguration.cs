@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using BBTA.Interface;
 using Microsoft.Xna.Framework;
 using IndependentResolutionRendering;
+using System.IO;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Classe.Menus
 {
@@ -15,6 +17,7 @@ namespace BBTA.Classe.Menus
         private Bouton btnRetour;
         private Bouton btnConfirmer;
         private EtatJeu prochainEtat;
+
 
         //Incrémenteur/Déccrémenteur nb soldats
         private int nbSoldatsJ1;
@@ -26,13 +29,36 @@ namespace BBTA.Classe.Menus
         private Bouton btnHautJ2;
 
         private SpriteFont police;
+        private SelecteurCarte carte;
 
         public MenuConfiguration(Game game)
             : base(game)
         {
             prochainEtat = EtatJeu.Configuration;
-            //nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            //nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+            string[] chemins = Directory.GetFiles("Carte Jeu", "*.xml");
+            Game1.chargeurCarte.LectureCarte(chemins[0]);
+            nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+            nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
+            carte = new SelecteurCarte(game, new Rectangle(50, 300, 700, 500), chemins);
+            Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
+            Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
+        }
+
+        void Components_ComponentRemoved(object sender, GameComponentCollectionEventArgs e)
+        {
+            if (e.GameComponent == this)
+            {
+                Game.Components.Remove(carte);
+            } 
+        }
+
+        void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
+        {
+            if (!Game.Components.Contains(carte) && e.GameComponent == this)
+            {
+                Game.Components.Add(carte);
+                carte.DrawOrder = this.DrawOrder + 1;
+            }          
         }
 
         protected override void LoadContent()
@@ -74,14 +100,14 @@ namespace BBTA.Classe.Menus
 
         void btnBasJ1_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ1 > Game1.chargeurCarte.InformationCarte().NbJoueurMin / 2)
+            if (nbSoldatsJ1 > Game1.chargeurCarte.InformationCarte().NbJoueurMin/2)
             {
                 nbSoldatsJ1--;
             }
         }
         void btnHautJ1_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ1 < Game1.chargeurCarte.InformationCarte().NbJoueurMax / 2)
+            if (nbSoldatsJ1 < Game1.chargeurCarte.InformationCarte().NbJoueurMax/2)
             {
                 nbSoldatsJ1++;
             }
@@ -89,14 +115,14 @@ namespace BBTA.Classe.Menus
 
         void btnBasJ2_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ2 > Game1.chargeurCarte.InformationCarte().NbJoueurMin / 2)
+            if (nbSoldatsJ2 > Game1.chargeurCarte.InformationCarte().NbJoueurMin/2)
             {
                 nbSoldatsJ2--;
             }
         }
         void btnHautJ2_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ2 < Game1.chargeurCarte.InformationCarte().NbJoueurMax / 2)
+            if (nbSoldatsJ2 < Game1.chargeurCarte.InformationCarte().NbJoueurMax/2)
             {
                 nbSoldatsJ2++;
             }
