@@ -27,7 +27,7 @@ namespace BBTA.Classe.IA.Robot
             PositionCible = cible;
         }
 
-        public void TesterCourbe(Carte carte)
+        public void DeterminerAngleVitesse(Carte carte)
         {
             //Test vitesse
             for (float vitesse = 1; vitesse <= 30; vitesse++)
@@ -45,6 +45,7 @@ namespace BBTA.Classe.IA.Robot
                         int h = 8;
                     }
 
+                    //Si la courbe au point de la cible l'atteint à + ou - un pourcentage... utiliser l'angle et vitesse
                     if (positionY == PositionCible.Y)
                     {
                         vitesseIdeal = vitesse;

@@ -21,6 +21,7 @@ namespace BBTA.Elements
         public Body corpsPhysique { get; set; }
         private float metrePixel;
         private TypeBloc type;
+        public TypeBloc Type { get { return type; } }
         private bool enDestruction = false;
         private int etapeDestruction = 0;
         private int tempsDepuisEtapePrecedente = 0;

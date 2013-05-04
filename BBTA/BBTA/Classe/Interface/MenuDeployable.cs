@@ -27,7 +27,7 @@ namespace BBTA.Interface
         protected Rectangle aireOccupee;
 
         public bool estDeploye { get; set; }
-        public bool estOuvert{get;set;}
+        public bool estOuvert;
 
         protected float progressionDeploiement = 0;
         int delaiOuvertureFermeture;

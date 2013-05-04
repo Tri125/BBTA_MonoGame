@@ -48,7 +48,7 @@ namespace BBTA
         SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-        private TesteGraphe Testy;
+        private OutilGraphe Testy;
         private GestionMusique gestionnaireMusique;
         private event EventHandler ChangementEtat;
         private MenuAccueil acc;
@@ -64,7 +64,8 @@ namespace BBTA
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
@@ -96,7 +97,7 @@ namespace BBTA
             //Etat configuration
             config = new MenuConfiguration(this);
 
-            Testy = new TesteGraphe();
+            Testy = new OutilGraphe(this);
 
             base.Initialize();
         }
@@ -172,7 +173,6 @@ namespace BBTA
                         if (!this.Components.Contains(partie))
                         {
                             this.Components.Clear();
-                            chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
                             if (chargeurCarte.ChargementReussis)
                             {
                                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne, chargeurCarte.InformationCarte().NbRange), 1, 1);

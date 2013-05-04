@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
 using BBTA.Classe.Interface;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Classe
 {
@@ -42,7 +43,7 @@ namespace BBTA.Classe
         private Vector2 position;
 
         //Événements--------------------------------------------------------------
-        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type);
+        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
 
@@ -69,11 +70,12 @@ namespace BBTA.Classe
             base.LoadContent();
         }
 
-        public void DemarrerSequenceTir(Vector2 position)
+        public void DemarrerSequenceTir(Vector2 position, Armement munitions)
         {
             this.position = position;
             modeEncours = ModeTir.Selection;
             selecteur.Position = new Vector2(position.X, position.Y - 50);
+            selecteur.Munitions = munitions;
             viseur.Position = position;
             indicateur.Position = new Vector2(position.X, position.Y - 50);
             selecteur.estOuvert = true;
@@ -103,7 +105,7 @@ namespace BBTA.Classe
         void indicateur_ForceFinaleDeterminee(int forceFinale)
         {
             prochainMode = ModeTir.nul;
-            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle(), forceFinale, type);
+            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle(), forceFinale, type, selecteur.Munitions);
             forceFinale = 0;
         }
 

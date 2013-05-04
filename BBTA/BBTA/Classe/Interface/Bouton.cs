@@ -63,7 +63,7 @@ namespace BBTA.Interface
                                                               (int)boutonDansSprite.Width/2, (int)boutonDansSprite.Height); 
         }
 
-        public void Update(Matrix? matriceCamera)
+        public virtual void Update(Matrix? matriceCamera)
         {
             if (!matriceCamera.HasValue)
             {
@@ -74,7 +74,7 @@ namespace BBTA.Interface
 
             if(rectangleCollisionBouton.Contains(positionSouris))
             {
-                if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released)
+                if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released && Clic != null)
                 {
                     Clic(this, new EventArgs());
                 }

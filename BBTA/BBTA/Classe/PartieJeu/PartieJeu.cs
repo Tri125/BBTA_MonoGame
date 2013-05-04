@@ -21,6 +21,7 @@ using BBTA.Classe;
 using System.Timers;
 using BBTA.Classe.Outils;
 using System.Text;
+using BBTA.Classe.Elements;
 using BBTA.Classe.IA.Robot;
 
 namespace BBTA.Partie_De_Jeu
@@ -31,13 +32,15 @@ namespace BBTA.Partie_De_Jeu
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
         private SpriteFont policeCompte;
+        private SpriteFont policeNbJoueurs;
         private Color CouleurSecondes = Color.DarkGray;
         private Texture2D secondesRestantes;
         private bool EstEnTransition = false;
         private Timer compteReboursApresTir = new Timer(2000); 
         private World mondePhysique;
         private int tempsEcouler;
-        GestionnaireActeurs gestionnaireEquipes;
+        private List<Equipe> equipes = new List<Equipe>();
+        private Equipe equipeActive;
         GestionnaireMenusTir gestionnaireMenusTir;
         GestionnaireProjectile gestionnaireProjectile;
         private Camera2d camPartie;
@@ -50,10 +53,17 @@ namespace BBTA.Partie_De_Jeu
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
             tempsEcouler = tempsTour;
+            equipes.Add(new Equipe(Color.Firebrick, nbrEquipe1, true));
+            equipes.Add(new Equipe(Color.Blue, nbrEquipe2, true));
+            foreach (Equipe equipe in equipes)
+            {
+                equipe.TirDemande += new Equipe.DelegateTirDemande(equipe_TirDemande);
+            }
             mondePhysique = new World(new Vector2(0, 20));
-            gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, dimensionsCarte, true);
             gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
             gestionnaireProjectile = new GestionnaireProjectile(jeu, ref mondePhysique);
+            gestionnaireMenusTir.Visible = false;
+            gestionnaireProjectile.Visible = false;
         }
 
         /// <summary>
@@ -68,20 +78,13 @@ namespace BBTA.Partie_De_Jeu
             camPartie = new Camera2d(Conversion.MetreAuPixel(Game1.chargeurCarte.InformationCarte().NbRange));
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne / 2,
                             Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;
-            base.Initialize();
-            Game.Components.Add(gestionnaireEquipes);
-            gestionnaireEquipes.CreerJoueurs(ref mondePhysique, carte.ListeApparition);
-            gestionnaireEquipes.DrawOrder = 1;
-            gestionnaireEquipes.Tir += new GestionnaireActeurs.DelegateTirEntamme(gestionnaireEquipes_Tir);
+            base.Initialize();            
             gestionnaireMenusTir.ProcessusDeTirTerminer += new GestionnaireMenusTir.DelegateProcessusDeTirTerminer(gestionnaireMenusTir_ProcessusDeTirTerminer);
             Game.Components.Add(gestionnaireMenusTir);
-            gestionnaireMenusTir.DrawOrder = 3;
             Game.Components.Add(gestionnaireProjectile);
             gestionnaireProjectile.Explosion += new GestionnaireProjectile.DelegateExplosion(gestionnaireProjectile_Explosion);
             gestionnaireProjectile.ProcessusTerminer += new EventHandler(gestionnaireProjectile_ProcessusTerminer);
             gestionnaireMenusTir.TirAvorte += new EventHandler(gestionnaireMenusTir_TirAvorte);
-            gestionnaireProjectile.DrawOrder = 2;
-            this.DrawOrder = 0;
             camPartie.Verouiller += new EventHandler(camPartie_Verouiller);
         }
 
@@ -92,12 +95,38 @@ namespace BBTA.Partie_De_Jeu
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
+            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange,
+                              Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
+                              mondePhysique, 40);
+            Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
+            List<Vector2> pointsApparitions = PhaseApparition(carte.ListeApparition);
+            foreach (Equipe equipe in equipes)
+            {
+                for (int nbJoueursAjoutes = 0; nbJoueursAjoutes < equipe.NombreJoueursOriginel && pointsApparitions.Count > 0; nbJoueursAjoutes++)
+                {
+                    if (equipe.EstHumain == true)
+                    {
+                        equipe.RajoutMembre(new JoueurHumain(mondePhysique, textureJoueur, pointsApparitions[0],
+                                                             3, 1, 100));
+                        pointsApparitions.RemoveRange(0, 1);
+                    }
+                }
+            }
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
             secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
+            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
+            equipeActive = equipes[0];
+            equipeActive.DebutTour();
+        }
+
+
+        void equipe_TirDemande(Vector2 position, Armement munitions)
+        {
+            gestionnaireMenusTir.DemarrerSequenceTir(equipeActive.JoueurActif.ObtenirPosition(), munitions);
         }
 
         void gestionnaireProjectile_ProcessusTerminer(object sender, EventArgs e)
@@ -106,14 +135,14 @@ namespace BBTA.Partie_De_Jeu
             {
                 compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
                 compteReboursApresTir.Start();
-                gestionnaireEquipes.ChangementEquipe();
+                ChangementEquipe();
             }
             EstEnTransition = true;
         }
 
         void gestionnaireMenusTir_TirAvorte(object sender, EventArgs e)
         {
-            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
+            equipeActive.JoueurActif.enModeTir = false;
         }
 
         void gestionnaireProjectile_Explosion(Vector2 position, int rayonExplosion)
@@ -121,15 +150,18 @@ namespace BBTA.Partie_De_Jeu
             compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
             compteReboursApresTir.Start();
             EstEnTransition = true;
-            gestionnaireEquipes.Explosion(position, rayonExplosion);
+            foreach (Equipe equipe in equipes)
+            {
+                equipe.RecevoirDegats(position, rayonExplosion);
+            }
             carte.Explosion(position, rayonExplosion);
-            gestionnaireEquipes.ChangementEquipe();
+            ChangementEquipe();
         }
 
         void compteReboursApresTir_Elapsed(object sender, ElapsedEventArgs e)
         {
             compteReboursApresTir.Stop();
-            camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
+            camPartie.SeDirigerVers(equipeActive.JoueurActif);
         }
 
         void camPartie_Verouiller(object sender, EventArgs e)
@@ -138,23 +170,11 @@ namespace BBTA.Partie_De_Jeu
             tempsEcouler = tempsTour;
         }
 
-        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
+        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions)
         {
+            equipeActive.Munitions = munitions;
             gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
-            gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
-        }
-
-        void gestionnaireEquipes_Tir(Vector2 position)
-        {
-            //Testing purpose/////////////////////////////////////////////////////////////////////////////////
-            SystemeTrajectoire systemeTrajectoire = new SystemeTrajectoire();
-            Vector2 test = new Vector2(380, 180);
-            systemeTrajectoire.ObtenirPositions(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition(), test);
-            systemeTrajectoire.TesterCourbe(carte);
-            //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-            gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition());
+            equipeActive.JoueurActif.enModeTir = false;
         }
 
         /// <summary>
@@ -166,6 +186,11 @@ namespace BBTA.Partie_De_Jeu
         {
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+            foreach (Equipe equipe in equipes)
+            {
+                equipe.Update(gameTime);
+            }
+
             if (EstEnTransition == false)
             {
                 if (gestionnaireProjectile.ObtenirProjectileEnMouvement() != null)
@@ -174,7 +199,7 @@ namespace BBTA.Partie_De_Jeu
                 }
                 else
                 {
-                    camPartie.ObjetSuivi = gestionnaireEquipes.equipeActive.JoueurActif;
+                    camPartie.ObjetSuivi = equipeActive.JoueurActif;
 
                     if (tempsEcouler > 0)
                     {
@@ -183,15 +208,14 @@ namespace BBTA.Partie_De_Jeu
                     else
                     {
                         EstEnTransition = true;
-                        gestionnaireEquipes.ChangementEquipe();
-                        camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
+                        ChangementEquipe();
+                        camPartie.SeDirigerVers(equipeActive.JoueurActif);
                     }
                 }
             }
             carte.Update(gameTime);
             camPartie.Update(gameTime);
             gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
-            gestionnaireEquipes.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
 
             for (int nbCorps = 0; nbCorps < mondePhysique.BodyList.Count; nbCorps++)
@@ -203,11 +227,11 @@ namespace BBTA.Partie_De_Jeu
                 }
             }
 
-            if (gestionnaireEquipes.equipeActive.JoueurActif == null)
+            if (equipeActive.JoueurActif == null)
             {
                 EstEnTransition = true;
-                gestionnaireEquipes.ChangementEquipe();
-                camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
+                ChangementEquipe();
+                camPartie.SeDirigerVers(equipeActive.JoueurActif);
             }
 
             base.Update(gameTime);
@@ -217,7 +241,13 @@ namespace BBTA.Partie_De_Jeu
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
             carte.Draw(spriteBatch, camPartie.Pos);
+            foreach (Equipe equipe in equipes)
+            {
+                equipe.Draw(spriteBatch);
+            }
             spriteBatch.End();
+            gestionnaireProjectile.Draw(gameTime);
+            gestionnaireMenusTir.Draw(gameTime);
             base.Draw(gameTime);
             spriteBatch.Begin();
 
@@ -231,9 +261,32 @@ namespace BBTA.Partie_De_Jeu
             }
             spriteBatch.Draw(secondesRestantes, new Vector2(GraphicsDevice.Viewport.Width / 2 - secondesRestantes.Width/2, 0), Color.White);
             spriteBatch.DrawString(policeCompte, temps, new Vector2(GraphicsDevice.Viewport.Width / 2 - 130, 0), CouleurSecondes);
+            spriteBatch.DrawString(policeNbJoueurs, equipes[0].TailleEquipe.ToString(), new Vector2(150, -5), Color.Firebrick);
+            spriteBatch.DrawString(policeNbJoueurs, equipes[1].TailleEquipe.ToString(), new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width - 150, -5), Color.Blue);
             CouleurSecondes = Color.DarkGray;
             spriteBatch.End();
             DrawOrder = 0;
         }
+
+        public void ChangementEquipe()
+        {
+            equipeActive.FinTour();
+            equipeActive = equipes[(equipes.IndexOf(equipeActive) + 1) % equipes.Count()];
+            equipeActive.DebutTour();
+        }
+
+
+        private List<Vector2> PhaseApparition(List<Vector2> listeApparition)
+        {
+            List<Vector2> melangee = new List<Vector2>();
+            while(listeApparition.Count > 0)
+            {
+                int numHasard = Game1.hasard.Next(listeApparition.Count);
+                Vector2 apparition = Conversion.PixelAuMetre(listeApparition[numHasard]);
+                listeApparition.Remove(listeApparition[numHasard]);
+                melangee.Add(apparition);
+            }
+            return melangee;
+        }        
     }
 }

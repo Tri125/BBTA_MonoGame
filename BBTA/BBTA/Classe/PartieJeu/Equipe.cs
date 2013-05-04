@@ -14,73 +14,78 @@ using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
+using BBTA.Classe.Elements;
+using BBTA.Classe.Interface;
 
 namespace BBTA.Partie_De_Jeu
 {
     public class Equipe
     {
-        readonly private int numEquipe;
-        private List<Acteur> membresEquipe;
-        private int nombreMembres;
-        private bool notreTour;
-        private Acteur joueurActif;
-
-        public int nbRoquette { get; set; }
-        private int nbGrenade { get; set; }
-        private int nbMine { get; set; }
-
-        public delegate void DelegateJoueursTousMorts(int numEquipe);
-        public event DelegateJoueursTousMorts JoueursTousMorts;
+        private readonly bool estHumain;
+        public bool EstHumain { get { return estHumain; } }
+        private List<Acteur> equipiers = new List<Acteur>();
+        public int TailleEquipe { get { return equipiers.Count; } }
+        public Acteur JoueurActif { get; private set; }
         
-       
-        public int NumEquipe { get { return numEquipe; } }
-        public int NbrMembre { get { return nombreMembres; } }
-        public List<Acteur> ListeMembres { get { return membresEquipe; } }
-        public Acteur JoueurActif { get { return joueurActif; } }
-        public bool NotreTour { get { return notreTour; } }
-
-        public Equipe()
+        public int NombreJoueursOriginel
         {
-            this.membresEquipe = new List<Acteur>();
-            nbRoquette = 6;
-            nbGrenade = 5;
-            nbMine = 3;
+            get
+            {
+                return equipiers.Capacity;
+            }
         }
+        public Color couleur { get; set; }
+        public Armement Munitions { get; set; }
+        public delegate void DelegateTirDemande(Vector2 position, Armement munitions);
 
-        public Equipe(int nombreEquipiers)
-            : this()
+        public event DelegateTirDemande TirDemande;
+        public event EventHandler JoueursTousMorts;
+      
+
+        public Equipe(Color couleur, int nbJoueurs, bool estHumain)
         {
-            this.nombreMembres = nombreEquipiers;
-        }
-
-
-        public Equipe(int numEquipe, List<Acteur> membresEquipe)
-        {
-            this.numEquipe = numEquipe;
-            this.membresEquipe = membresEquipe.ToList();
-        }
-
-        public Equipe(int numEquipe, params Acteur[] membresEquipe):this(numEquipe)
-        {
-            this.membresEquipe = new List<Acteur>();
-            this.membresEquipe = membresEquipe.ToList();
+            this.estHumain = estHumain;
+            this.couleur = couleur;
+            this.equipiers.Capacity = nbJoueurs;
+            Munitions = new Armement();
         }
 
 
         public void RajoutMembre(Acteur nouveauMembre)
         {
-            membresEquipe.Add(nouveauMembre);
+            equipiers.Add(nouveauMembre);
             nouveauMembre.Detruit += new EventHandler(nouveauMembre_Detruit);
+            nouveauMembre.TirDemande += new EventHandler(nouveauMembre_TirDemande);
+        }
+
+        void nouveauMembre_TirDemande(object sender, EventArgs e)
+        {
+            if (TirDemande != null)
+            {
+                TirDemande((sender as Acteur).ObtenirPosition(), Munitions);
+            }
         }
 
         void nouveauMembre_Detruit(object sender, EventArgs e)
         {
-            SupressionMembre((sender as Acteur));
+            equipiers.Remove(sender as Acteur);
+            if (equipiers.Count == 0 && JoueursTousMorts != null)
+            {
+                JoueursTousMorts(this, new EventArgs());
+            }
+        }
+
+        public void RecevoirDegats(Vector2 lieuExplosion, int rayonExplosion)
+        {
+            for (int nbJoueurs = 0; nbJoueurs < equipiers.Count; nbJoueurs++)
+            {
+                equipiers[nbJoueurs].RecevoirDegat(lieuExplosion, rayonExplosion);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (JoueurHumain joueur in ListeMembres)
+            foreach (Acteur joueur in equipiers.ToList())
             {
                 joueur.Update(gameTime);
             }
@@ -88,74 +93,41 @@ namespace BBTA.Partie_De_Jeu
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (JoueurHumain joueur in membresEquipe)
+            foreach (Acteur joueur in equipiers)
             {
                 joueur.Draw(spriteBatch);
-            }
-        }
-
-        public void SupressionMembre(Acteur ancienMembre)
-        {
-            foreach (Acteur membre in membresEquipe.ToList())
-            {
-                if (membre == ancienMembre)
-                {
-                    membresEquipe.Remove(ancienMembre);
-                    nombreMembres--;
-                    if (nombreMembres == 0 && JoueursTousMorts != null)
-                    {
-                        JoueursTousMorts(numEquipe);
-                    }
-                }
             }
         }
 
         //Pour enregistrer le prochain joueur de l'équipe à jouer
         public void ChangementJoueur()
         {
-            if (membresEquipe.Count != 0 && joueurActif == null)
+            if (equipiers.Count != 0 && JoueurActif == null)
             {
-                joueurActif = membresEquipe[Game1.hasard.Next(membresEquipe.Count)];
+                JoueurActif = equipiers[Game1.hasard.Next(equipiers.Count)];
             }
             else
             {
-                joueurActif = membresEquipe[(membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
+                JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
             }
         }
         //Lorsque le tour est fini, le joueurActif est désactivé
         public void FinTour()
         {
-            joueurActif.monTour = false;
+            JoueurActif.monTour = false;
         }
         //Lorsque c'est le début du tour, le joueurActif est activé
         public void DebutTour()
         {
-            if (joueurActif == null)
+            if (JoueurActif == null)
             {
-                joueurActif = membresEquipe[Game1.hasard.Next(membresEquipe.Count)];
+                JoueurActif = equipiers[Game1.hasard.Next(equipiers.Count)];
             }
             else
             {
-                joueurActif = membresEquipe[(membresEquipe.IndexOf(joueurActif) + 1) % membresEquipe.Count()];
+                JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
             }
-            joueurActif.monTour = true;
-
-        }
-        //Pour la transition entre équipe ----- LARGEMENT MAL FAIT POUR LE MOMENT
-        public void ChangementEquipe()
-        {
-            if (notreTour == false)
-            {
-                notreTour = true;
-                return;
-            }
-
-
-            if (notreTour == true)
-            {
-                notreTour = false;
-                return;
-            }
+            JoueurActif.monTour = true;
         }
     }
 }

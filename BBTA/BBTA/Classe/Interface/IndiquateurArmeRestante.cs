@@ -28,7 +28,12 @@ namespace BBTA.Interface
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbArmeRestantes.ToString(), new Vector2(Position.X + 65, Position.Y), Color.White);
+            StringBuilder nbArmes = new StringBuilder(nbArmeRestantes.ToString());
+            if (nbArmeRestantes < 10)
+            {
+                nbArmes.Insert(0, "0");
+            }
+            spriteBatch.DrawString(police, nbArmes.ToString(), new Vector2(Position.X + 60, Position.Y+5), Color.White);
         }
     }
 }
