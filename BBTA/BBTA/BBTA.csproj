@@ -130,7 +130,6 @@
     <Compile Include="Classe\Elements\Projectile.cs" />
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
-    <Compile Include="Classe\GestionnaireActeurs.cs" />
     <Compile Include="Classe\GestionnaireMenusTir.cs" />
     <Compile Include="Classe\GestionnaireProjectile.cs" />
     <Compile Include="Classe\GestionAudio\GestionMusique.cs" />
