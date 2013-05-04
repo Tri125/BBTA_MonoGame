@@ -23,14 +23,14 @@ namespace BBTA.Elements
         public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
-        protected const float VITESSE_LATERALE = 3f;
-        protected const float FORCE_MOUVEMENT_VERTICAL = 8f;
+        protected const float VITESSE_LATERALE = 1.6f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 4f;
         public bool estAuSol { get; private set; }
         private bool veutSeDeplacer = false;
         public bool monTour = false;
         public bool enModeTir { get; set; }
         public string Nom { get; set; }
-        private AffichageNom infosJoueurs;
+        //private AffichageNom infosJoueurs;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 

@@ -29,7 +29,7 @@ namespace BBTA.Classe.Menus
         private Bouton btnHautJ2;
 
         private SpriteFont police;
-        private SelecteurCarte carte;
+        //private SelecteurCarte carte;
 
         public MenuConfiguration(Game game)
             : base(game)
@@ -39,7 +39,7 @@ namespace BBTA.Classe.Menus
             Game1.chargeurCarte.LectureCarte(chemins[0]);
             nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
             nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            carte = new SelecteurCarte(game, new Rectangle(50, 300, 700, 500), chemins);
+            //carte = new SelecteurCarte(game, new Rectangle(50, 300, 700, 500), chemins);
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
         }
@@ -48,17 +48,17 @@ namespace BBTA.Classe.Menus
         {
             if (e.GameComponent == this)
             {
-                Game.Components.Remove(carte);
+                //Game.Components.Remove(carte);
             } 
         }
 
         void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
         {
-            if (!Game.Components.Contains(carte) && e.GameComponent == this)
-            {
-                Game.Components.Add(carte);
-                carte.DrawOrder = this.DrawOrder + 1;
-            }          
+            //if (!Game.Components.Contains(carte) && e.GameComponent == this)
+            //{
+            //    Game.Components.Add(carte);
+            //    carte.DrawOrder = this.DrawOrder + 1;
+            //}          
         }
 
         protected override void LoadContent()

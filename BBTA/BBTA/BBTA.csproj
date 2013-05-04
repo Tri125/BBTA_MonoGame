@@ -115,6 +115,8 @@
   <ItemGroup>
     <Compile Include="Classe\Carte\BBTA_Map.cs" />
     <Compile Include="Classe\Carte\BBTA_MapFileBuilder.cs" />
+    <Compile Include="Classe\Carte\BlocBooleen.cs" />
+    <Compile Include="Classe\Carte\CarteBoolieen.cs" />
     <Compile Include="Classe\Elements\Acteur.cs" />
     <Compile Include="Classe\Elements\Armement.cs" />
     <Compile Include="Classe\Elements\Bloc.cs" />

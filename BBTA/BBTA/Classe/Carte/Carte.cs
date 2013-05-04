@@ -36,13 +36,12 @@ namespace BBTA
         //Variables-----------------------------------------------------------------------------------------------
         private Texture2D textureArrierePlan;
         private Bloc[] blocs;
-        private int largeur;
-        private int hauteur;
+        private readonly int largeur;
+        private readonly int hauteur;
         private List<Vector2> listeApparition;
         private Vector2 deplacementPrev = new Vector2(2, -1);
         private Vector2 deplacementTotal = Vector2.Zero;
-
-        //Constantes----------------------------------------------------------------------------------------------
+        private CarteBoolieen carteBool;        //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
 
         public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
@@ -55,13 +54,15 @@ namespace BBTA
         /// <param name="textureBlocs">Texture des blocs</param>
         /// <param name="mondePhysique">World Farseer</param>
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
+        public Carte(int[] donneesBlocs, int largeurCarte, int hauteurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
             this.listeApparition = new List<Vector2>();
             this.textureArrierePlan = arrierePlan;
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
+            this.carteBool = new CarteBoolieen(largeurCarte, hauteurCarte);
             blocs = new Bloc[donneesBlocs.Length];
+
             for (int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)
             {
                 //Par convention, une case avec "1" comme donnée signifie une case de terre pour notre énumérateur.
@@ -71,13 +72,19 @@ namespace BBTA
                     Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
                     blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
                     blocs[compteurBlocs].AnimationDestructionTerminee += new EventHandler(Carte_AnimationDestructionTerminee);
+                    //Rajout de BlocBooleen dans CarteBooleen
+                    carteBool.RajoutBloc(blocs[compteurBlocs], positionBloc);
                 }
                 else
+                {
+                    Vector2 positionBloc = new Vector2(metrePixel * ((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel * ((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f)));
+                    carteBool.RajoutBloc(blocs[compteurBlocs], positionBloc);
                     //Par convention, une case avec "-1" comme donnée signifie un lieu d'apparition pour les joueurs.
                     if (donneesBlocs[compteurBlocs] == (int)TypeBloc.Apparition)
                     {
                         listeApparition.Add(new Vector2(metrePixel * ((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5), metrePixel * ((compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f))));
                     }
+                }
             }
         }
 
