@@ -68,7 +68,7 @@ namespace BBTA.Partie_De_Jeu
 
         void nouveauMembre_Detruit(object sender, EventArgs e)
         {
-            equipiers.ToList().Remove(sender as Acteur);
+            equipiers.Remove(sender as Acteur);
             if (equipiers.Count == 0 && JoueursTousMorts != null)
             {
                 JoueursTousMorts(this, new EventArgs());
@@ -85,7 +85,7 @@ namespace BBTA.Partie_De_Jeu
 
         public void Update(GameTime gameTime)
         {
-            foreach (Acteur joueur in equipiers)
+            foreach (Acteur joueur in equipiers.ToList())
             {
                 joueur.Update(gameTime);
             }
