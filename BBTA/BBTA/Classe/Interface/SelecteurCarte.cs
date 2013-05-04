@@ -25,6 +25,7 @@ namespace BBTA.Classe.Interface
         private MouseState sourisMaintenant;
         private int numCarteEnCours = 0;
         private int deplacementHorizontalCarte = 0;
+        private bool estChargee;
 
 
         public SelecteurCarte(Game jeu, Rectangle dimmensions, string[] chemins)
@@ -55,6 +56,7 @@ namespace BBTA.Classe.Interface
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
             carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+            estChargee = true;
             parDessus = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\Carte");
             base.LoadContent();
         }
@@ -63,21 +65,26 @@ namespace BBTA.Classe.Interface
         {
             sourisAvant = sourisMaintenant;
             sourisMaintenant = Mouse.GetState();
-            if(sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length-1)
+            if (sourisAvant.ScrollWheelValue != sourisMaintenant.ScrollWheelValue)
             {
-                numCarteEnCours++;
-                Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
-                deplacementHorizontalCarte = 0;
-                carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                    Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+                if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length - 1)
+                {
+                    numCarteEnCours++;
+                }
+                else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
+                {
+                    numCarteEnCours--;
+                }
+                estChargee = false;
             }
-            else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
+
+            if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
             {
-                numCarteEnCours--;
                 Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
                 deplacementHorizontalCarte = 0;
                 carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
                     Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+                estChargee = true;
             }
             base.Update(gameTime);
         }
