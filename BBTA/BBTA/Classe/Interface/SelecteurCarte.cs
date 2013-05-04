@@ -74,14 +74,18 @@ namespace BBTA.Classe.Interface
         public override void Draw(GameTime gameTime)
         {
             Viewport ecranEntier = GraphicsDevice.Viewport;
-            GraphicsDevice.Viewport = new Viewport(dimmensions);
-            float echelle = (float)dimmensions.Height / ecranEntier.Height;
-            Matrix redimmensionnemnet = Matrix.CreateTranslation(new Vector3(+deplacementHorizontalCarte, 0, 0)) * Matrix.CreateScale(echelle) ;
+            float ratio = (float)ecranEntier.Width / IndependentResolutionRendering.Resolution.getVirtualViewport().Width;
+
+            GraphicsDevice.Viewport = new Viewport(new Rectangle((int)(dimmensions.X * ratio + ecranEntier.X),(int)(dimmensions.Y * ratio + ecranEntier.Y),
+                                                                 (int)(dimmensions.Width*ratio), (int)(dimmensions.Height*ratio)));
+            float echelle = (float)dimmensions.Height / IndependentResolutionRendering.Resolution.getVirtualViewport().Height;
+            Matrix redimmensionnemnet = Matrix.CreateTranslation(new Vector3(deplacementHorizontalCarte*ratio, 0, 0)) * Matrix.CreateScale(echelle) ;
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix() * redimmensionnemnet);
-            carte.Draw(spriteBatch, new Vector2(ecranEntier.Width / 2 - deplacementHorizontalCarte, ecranEntier.Height / 2));
+            carte.Draw(spriteBatch, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width/ 2 - deplacementHorizontalCarte, 
+                                                IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2));
             spriteBatch.End();
             GraphicsDevice.Viewport = ecranEntier;
-            if (deplacementHorizontalCarte + ecranEntier.Width / 2 >= carte.ObtenirTailleCarte().Width)
+            if (carte.ObtenirTailleCarte().Right + deplacementHorizontalCarte > IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2)
             {
                 deplacementHorizontalCarte--;
             }

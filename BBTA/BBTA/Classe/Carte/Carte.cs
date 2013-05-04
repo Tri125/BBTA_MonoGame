@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using BBTA.Elements;
 using IndependentResolutionRendering;
 using BBTA.Interfaces;
+using BBTA.Classe.Outils;
 
 namespace BBTA
 {
@@ -200,7 +201,7 @@ namespace BBTA
 
         public Rectangle ObtenirTailleCarte()
         {
-            return new Rectangle(0, 0, largeur, hauteur);
+            return new Rectangle(0, 0, Conversion.MetreAuPixel(largeur), hauteur);
         }
     }
 }

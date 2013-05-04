@@ -91,7 +91,6 @@ namespace BBTA.Partie_De_Jeu
             foreach (Acteur joueur in equipiers)
             {
                 joueur.Draw(spriteBatch);
-
             }
         }
 
