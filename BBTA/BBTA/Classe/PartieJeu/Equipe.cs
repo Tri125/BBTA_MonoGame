@@ -63,7 +63,7 @@ namespace BBTA.Partie_De_Jeu
 
         void nouveauMembre_Detruit(object sender, EventArgs e)
         {
-            equipiers.Remove(sender as Acteur);
+            equipiers.ToList().Remove(sender as Acteur);
             if (equipiers.Count == 0 && JoueursTousMorts != null)
             {
                 JoueursTousMorts(this, new EventArgs());
