@@ -35,7 +35,7 @@ namespace BBTA.Classe.Menus
             : base(game)
         {
             prochainEtat = EtatJeu.Configuration;
-            string[] chemins = Directory.GetFiles("Carte Jeu", "*.xml");
+            string[] chemins = Directory.GetFiles("Carte Jeu");
             Game1.chargeurCarte.LectureCarte(chemins[0]);
             nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
             nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;

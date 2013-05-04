@@ -31,6 +31,7 @@ namespace BBTA.Partie_De_Jeu
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
         private SpriteFont policeCompte;
+        private SpriteFont policeNbJoueurs;
         private Color CouleurSecondes = Color.DarkGray;
         private Texture2D secondesRestantes;
         private bool EstEnTransition = false;
@@ -54,6 +55,9 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, dimensionsCarte, true);
             gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
             gestionnaireProjectile = new GestionnaireProjectile(jeu, ref mondePhysique);
+            gestionnaireEquipes.Visible = false;
+            gestionnaireMenusTir.Visible = false;
+            gestionnaireProjectile.Visible = false;
         }
 
         /// <summary>
@@ -71,17 +75,13 @@ namespace BBTA.Partie_De_Jeu
             base.Initialize();
             Game.Components.Add(gestionnaireEquipes);
             gestionnaireEquipes.CreerJoueurs(ref mondePhysique, carte.ListeApparition);
-            gestionnaireEquipes.DrawOrder = 1;
             gestionnaireEquipes.Tir += new GestionnaireActeurs.DelegateTirEntamme(gestionnaireEquipes_Tir);
             gestionnaireMenusTir.ProcessusDeTirTerminer += new GestionnaireMenusTir.DelegateProcessusDeTirTerminer(gestionnaireMenusTir_ProcessusDeTirTerminer);
             Game.Components.Add(gestionnaireMenusTir);
-            gestionnaireMenusTir.DrawOrder = 3;
             Game.Components.Add(gestionnaireProjectile);
             gestionnaireProjectile.Explosion += new GestionnaireProjectile.DelegateExplosion(gestionnaireProjectile_Explosion);
             gestionnaireProjectile.ProcessusTerminer += new EventHandler(gestionnaireProjectile_ProcessusTerminer);
             gestionnaireMenusTir.TirAvorte += new EventHandler(gestionnaireMenusTir_TirAvorte);
-            gestionnaireProjectile.DrawOrder = 2;
-            this.DrawOrder = 0;
             camPartie.Verouiller += new EventHandler(camPartie_Verouiller);
         }
 
@@ -98,6 +98,7 @@ namespace BBTA.Partie_De_Jeu
             // TODO: use this.Content to load your game content here
             policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
             secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
+            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
         }
 
 
@@ -214,6 +215,9 @@ namespace BBTA.Partie_De_Jeu
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
             carte.Draw(spriteBatch, camPartie.Pos);
             spriteBatch.End();
+            gestionnaireEquipes.Draw(gameTime);
+            gestionnaireProjectile.Draw(gameTime);
+            gestionnaireMenusTir.Draw(gameTime);
             base.Draw(gameTime);
             spriteBatch.Begin();
 
