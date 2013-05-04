@@ -35,8 +35,8 @@ namespace BBTA.Classe
             :base(jeu)
         {
             this.equipeAdverseHumaine = equipeAdverseHumaine;
-            this.equipes.Add(new Equipe(Color.Blue, nbJoueursEquipe1));
-            this.equipes.Add(new Equipe(Color.Firebrick, nbJoueursEquipe2));
+            //this.equipes.Add(new Equipe(Color.Firebrick, nbJoueursEquipe1));
+            //this.equipes.Add(new Equipe(Color.Blue, nbJoueursEquipe2));
         }
 
         protected override void LoadContent()

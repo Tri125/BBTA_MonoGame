@@ -21,8 +21,12 @@ namespace BBTA.Partie_De_Jeu
 {
     public class Equipe
     {
+        private readonly bool estHumain;
+        public bool EstHumain { get { return estHumain; } }
         private List<Acteur> equipiers = new List<Acteur>();
+        public int TailleEquipe { get { return equipiers.Count; } }
         public Acteur JoueurActif { get; private set; }
+        
         public int NombreJoueursOriginel
         {
             get
@@ -38,8 +42,9 @@ namespace BBTA.Partie_De_Jeu
         public event EventHandler JoueursTousMorts;
       
 
-        public Equipe(Color couleur, int nbJoueurs)
+        public Equipe(Color couleur, int nbJoueurs, bool estHumain)
         {
+            this.estHumain = estHumain;
             this.couleur = couleur;
             this.equipiers.Capacity = nbJoueurs;
             Munitions = new Armement();
