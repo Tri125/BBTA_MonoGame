@@ -13,18 +13,69 @@ namespace XNATileMapEditor
     public class BBTA_MapFileBuilder
     {
         #region Attribut
+        private readonly uint MEMOIRE_TAMPON;
+        private readonly string EXTENSION;
+        private readonly string DOSSIER_CARTE;
+        private List<string> chemin;
         private BBTA_Map carte;
+        private BBTA_Map[] carteTampon;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
-        private XmlSerializer serializer = new XmlSerializer(typeof(BBTA_Map));
+        private XmlSerializer serializer;
         private bool chargementReussis;
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
 
 
-        public BBTA_MapFileBuilder()
+        public BBTA_MapFileBuilder(uint memoireTampon, string extensionCarte, string dossierCarte)
         {
+            this.MEMOIRE_TAMPON = memoireTampon;
+            this.EXTENSION = extensionCarte;
+            this.DOSSIER_CARTE = dossierCarte;
+            carteTampon = new BBTA_Map[MEMOIRE_TAMPON];
+            serializer = new XmlSerializer(typeof(BBTA_Map));
+        }
+
+
+        public void ChercheFichierCarte()
+        {
+            chemin = new List<string>();
+
+            try
+            {
+                foreach (string fichier in Directory.GetFiles(DOSSIER_CARTE, EXTENSION))
+                {
+                        chemin.Add(fichier);
+                }
+            }
+            catch (System.Exception excpt)
+            {
+                Console.WriteLine(excpt.Message);
+            }
+
+        }
+
+
+        //public BBTA_Map ChargementTampon()
+        //{
+        //    if (chemin != null && chemin.Count != 0)
+        //    {
+
+        //    }
+        //}
+
+
+
+        public void TesteFichierCarte()
+        {
+            foreach (string cheminCarte in chemin.ToList())
+            {
+                if (!LectureCarte(cheminCarte))
+                {
+                    chemin.Remove(cheminCarte);
+                }
+            }
         }
 
         public void EcritureCarte(string FichierSortie, BBTA_Map carte)
@@ -32,8 +83,6 @@ namespace XNATileMapEditor
             try
             {
                 ecriveur = new XmlTextWriter(FichierSortie, null);
-                //ecriveur.Formatting = Formatting.Indented;
-                //ecriveur.Indentation = 4;
                 ecriveur.WriteStartDocument();
 
                 serializer.Serialize(ecriveur, carte);
@@ -58,15 +107,15 @@ namespace XNATileMapEditor
             
         }
 
-        public void LectureCarte(string FichierEntre)
+        public bool LectureCarte(string FichierEntre)
         {
 
             try
             {
                 lecteur = new XmlTextReader(FichierEntre);
                 carte = (BBTA_Map)serializer.Deserialize(lecteur);
-
                 chargementReussis = true;
+                return true;           
             }
 
 
@@ -75,7 +124,7 @@ namespace XNATileMapEditor
                 carte = null;
                 chargementReussis = false;
                 Console.WriteLine(ex.Message);
-                return;
+                return false;
             }
 
             finally
@@ -127,15 +176,5 @@ namespace XNATileMapEditor
             }
             return null;
         }
-
-
-        //public List<TuileEditeur> TuileEditeur()
-        //{
-        //    if (chargementReussis == true)
-        //    {
-        //        return carte.ListTuile;
-        //    }
-        //    return null;
-        //}
     }
 }
