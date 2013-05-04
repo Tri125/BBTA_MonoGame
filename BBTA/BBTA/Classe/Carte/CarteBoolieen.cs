@@ -18,6 +18,8 @@ namespace BBTA
         private readonly int largeurCarte;
         private readonly int hauteurCarte;
 
+        public BlocBooleen[,] Tableau2DCarte{ get { return donneesTab2D;}}
+
         public CarteBoolieen()
         {
         }
@@ -46,7 +48,7 @@ namespace BBTA
 
         }
 
-        private void TransformationTableau2D()
+        public void TransformationTableau2D()
         {
             if (donneesBlocs.Count() == donneesTab2D.Length)
             {

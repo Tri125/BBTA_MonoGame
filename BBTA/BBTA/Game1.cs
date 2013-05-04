@@ -55,7 +55,7 @@ namespace BBTA
         private PartieJeu partie;
         private MenuOptions option;
         private MenuConfiguration config;
-        static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder();
+        static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder(3, "*.xml", "Carte Jeu");
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
         {
@@ -69,6 +69,8 @@ namespace BBTA
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
             chargeurOption.Initialisation();
+            chargeurCarte.ChercheFichierCarte();
+            chargeurCarte.TesteFichierCarte();
         }
 
         /// <summary>
