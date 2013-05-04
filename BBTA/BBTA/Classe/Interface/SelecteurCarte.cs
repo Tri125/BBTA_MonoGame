@@ -65,18 +65,17 @@ namespace BBTA.Classe.Interface
         {
             sourisAvant = sourisMaintenant;
             sourisMaintenant = Mouse.GetState();
-            if (sourisAvant.ScrollWheelValue != sourisMaintenant.ScrollWheelValue)
+
+            if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length - 1)
             {
-                if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length - 1)
-                {
-                    numCarteEnCours++;
-                }
-                else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
-                {
-                    numCarteEnCours--;
-                }
+                numCarteEnCours++;
                 estChargee = false;
             }
+            else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
+            {
+                numCarteEnCours--;
+                estChargee = false;
+            }            
 
             if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
             {
