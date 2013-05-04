@@ -130,6 +130,7 @@
     <Compile Include="Classe\GestionnaireActeurs.cs" />
     <Compile Include="Classe\GestionnaireMenusTir.cs" />
     <Compile Include="Classe\GestionnaireProjectile.cs" />
+    <Compile Include="Classe\GestionAudio\GestionMusique.cs" />
     <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\Graphe.cs" />
     <Compile Include="Classe\IA\Navigation\Graph_SearchDijkstra.cs" />

@@ -9,12 +9,12 @@ namespace BBTA.Classe.IA.Navigation
     public class Graphe
     {
         //Liste des noeuds fesant partie du graphe
-        private List<NavNoeudGraph> NoeudGraphe;
+        public List<NavNoeudGraph> NoeudGraphe;
 
         //private LinkedList<NavArcGraph> LienArc;
 
         //Une liste d'arc adjacent. L'index d'un noeud est relié avec les arcs de cette liste
-        private List<LinkedList<NavArcGraph>> ArcAdjacent;
+        public List<LinkedList<NavArcGraph>> ArcAdjacent;
         //is this a directed graph?
         private bool m_bDigraph;
 

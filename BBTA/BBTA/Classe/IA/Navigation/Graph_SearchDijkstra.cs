@@ -46,15 +46,22 @@ namespace BBTA.Classe.IA.Navigation
 
 
 
-        public Graph_SearchDijkstra(Graphe graph, int source, int target = -1)
+        public Graph_SearchDijkstra(ref Graphe graph, int source, int target = -1)
         {
-            m_ShortestPathTree = new List<NavArcGraph>(graph.NumNodes());
-            m_SearchFrontier = new List<NavArcGraph>(graph.NumNodes());
-            m_CostToThisNode = new List<float>(graph.NumNodes());
+            m_Graph = graph;
+            m_ShortestPathTree = new List<NavArcGraph>(m_Graph.NumNodes());
+            m_SearchFrontier = new List<NavArcGraph>(m_Graph.NumNodes());
+            m_CostToThisNode = new List<float>(m_Graph.NumNodes());
+            for (int iBoucle = 0; iBoucle < m_Graph.NumNodes(); iBoucle++ )
+            {
+                m_ShortestPathTree.Add(null);
+                m_SearchFrontier.Add(null);
+                m_CostToThisNode.Add(0f);
+            }
             m_iSource = source;
             m_iTarget = target;
 
-            //Search();
+            Search();
         }
 
 
@@ -64,10 +71,6 @@ namespace BBTA.Classe.IA.Navigation
         //in the graph.
         public List<NavArcGraph> GetSPT() { return m_ShortestPathTree; }
 
-        //returns a LinkedList of node indexes that comprise the shortest path
-        //from the source to the target. It calculates the path by working
-        //backwards through the SPT from the target node.
-        //public LinkedList<int> GetPathToTarget();
 
         //returns the total cost to the target
         public float GetCostToTarget() { return m_CostToThisNode[m_iTarget]; }
@@ -79,76 +82,95 @@ namespace BBTA.Classe.IA.Navigation
 
 
         //-----------------------------------------------------------------------------
-//private void Search()
-//{
-//  //create an indexed priority queue that sorts smallest to largest
-//  //(front to back).Note that the maximum number of elements the iPQ
-//  //may contain is N. This is because no node can be represented on the 
-//  //queue more than once.
-//  IndexedPriorityQLow<double> pq(m_CostToThisNode, m_Graph.NumNodes());
+        private void Search()
+        {
+            //create an indexed priority queue that sorts smallest to largest
+            //(front to back).Note that the maximum number of elements the iPQ
+            //may contain is N. This is because no node can be represented on the 
+            //queue more than once.
+            IndexedPriorityQLow<float> pq = new IndexedPriorityQLow<float>(ref m_CostToThisNode, m_Graph.NumNodes());
 
-//  //put the source node on the queue
-//  pq.insert(m_iSource);
+            //put the source node on the queue
+            pq.insert(m_iSource);
 
-//  //while the queue is not empty
-//  while(!pq.empty())
-//  {
-//    //get lowest cost node from the queue. Don't forget, the return value
-//    //is a *node index*, not the node itself. This node is the node not already
-//    //on the SPT that is the closest to the source node
-//    int NextClosestNode = pq.Pop();
+            //while the queue is not empty
+            while (!pq.empty())
+            {
+                //get lowest cost node from the queue. Don't forget, the return value
+                //is a *node index*, not the node itself. This node is the node not already
+                //on the SPT that is the closest to the source node
+                int NextClosestNode = pq.Pop();
 
-//    //move this edge from the frontier to the shortest path tree
-//    m_ShortestPathTree[NextClosestNode] = m_SearchFrontier[NextClosestNode];
+                //move this edge from the frontier to the shortest path tree
+                m_ShortestPathTree[NextClosestNode] = m_SearchFrontier[NextClosestNode];
 
-//    //if the target has been found exit
-//    if (NextClosestNode == m_iTarget) return;
+                //if the target has been found exit
+                if (NextClosestNode == m_iTarget) return;
 
-//    //now to relax the edges.
-//    graph_type::ConstEdgeIterator ConstEdgeItr(m_Graph, NextClosestNode);
+                //now to relax the edges.
+                //for each edge connected to the next closest node
+                foreach (NavArcGraph arc in m_Graph.ArcAdjacent[NextClosestNode])
+                {
 
-//    //for each edge connected to the next closest node
-//    for (const Edge* pE=ConstEdgeItr.begin();
-//        !ConstEdgeItr.end();
-//        pE=ConstEdgeItr.next())
-//    {
-//      //the total cost to the node this edge points to is the cost to the
-//      //current node plus the cost of the edge connecting them.
-//      double NewCost = m_CostToThisNode[NextClosestNode] + pE->Cost();
+                    //the total cost to the node this edge points to is the cost to the
+                    //current node plus the cost of the edge connecting them.
+                    float NewCost = m_CostToThisNode[NextClosestNode] + arc.Cout_traverse;
 
-//      //if this edge has never been on the frontier make a note of the cost
-//      //to get to the node it points to, then add the edge to the frontier
-//      //and the destination node to the PQ.
-//      if (m_SearchFrontier[pE->To()] == 0)
-//      {
-//        m_CostToThisNode[pE->To()] = NewCost;
+                    //if this edge has never been on the frontier make a note of the cost
+                    //to get to the node it points to, then add the edge to the frontier
+                    //and the destination node to the PQ.
+                    if (m_SearchFrontier[arc.IndexDest] == null)
+                    {
+                        m_CostToThisNode[arc.IndexDest] = NewCost;
 
-//        pq.insert(pE->To());
+                        pq.insert(arc.IndexDest);
 
-//        m_SearchFrontier[pE->To()] = pE;
-//      }
+                        m_SearchFrontier[arc.IndexDest] = arc;
+                    }
 
-//      //else test to see if the cost to reach the destination node via the
-//      //current node is cheaper than the cheapest cost found so far. If
-//      //this path is cheaper, we assign the new cost to the destination
-//      //node, update its entry in the PQ to reflect the change and add the
-//      //edge to the frontier
-//      else if ( (NewCost < m_CostToThisNode[pE->To()]) &&
-//                (m_ShortestPathTree[pE->To()] == 0) )
-//      {
-//        m_CostToThisNode[pE->To()] = NewCost;
+                    //else test to see if the cost to reach the destination node via the
+                    //current node is cheaper than the cheapest cost found so far. If
+                    //this path is cheaper, we assign the new cost to the destination
+                    //node, update its entry in the PQ to reflect the change and add the
+                    //edge to the frontier
+                    else if ((NewCost < m_CostToThisNode[arc.IndexDest]) &&
+                              (m_ShortestPathTree[arc.IndexDest] == null))
+                    {
+                        m_CostToThisNode[arc.IndexDest] = NewCost;
 
-//        //because the cost is less than it was previously, the PQ must be
-//        //re-sorted to account for this.
-//        pq.ChangePriority(pE->To());
+                        //because the cost is less than it was previously, the PQ must be
+                        //re-sorted to account for this.
+                        pq.ChangePriority(arc.IndexDest);
 
-//        m_SearchFrontier[pE->To()] = pE;
-//      }
-//    }
-//  }
-//}
+                        m_SearchFrontier[arc.IndexDest] = arc;
+                    }
+                }
+            }
+        }
 
 
+        //returns a LinkedList of node indexes that comprise the shortest path
+        //from the source to the target. It calculates the path by working
+        //backwards through the SPT from the target node.
+        public List<int> GetPathToTarget()
+        {
+            List<int> path = new List<int>();
+
+            //just return an empty path if no target or no path found
+            if (m_iTarget < 0) return path;
+
+            int nd = m_iTarget;
+            //push_front zut
+            path.Add(nd);
+
+            while ((nd != m_iSource) && (m_ShortestPathTree[nd] != null))
+            {
+                nd = m_ShortestPathTree[nd].IndexProv;
+                path.Add(nd);
+            }
+            path.Reverse();
+            return path;
+        }
 
 
     }

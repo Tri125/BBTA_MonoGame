@@ -27,11 +27,41 @@ namespace BBTA.Classe.IA.Navigation
 
         public static bool operator ==(ArcGraph a1, ArcGraph a2)
         {
+            if ( (Object)a1 == null && (Object)a2 == null)
+            {
+                return true;
+            }
+
+            if ((Object)a1 != null && (Object)a2 == null)
+            {
+                return false;
+            }
+
+            if ((Object)a1 == null && (Object)a2 != null)
+            {
+                return false;
+            }
+           
             return (a1.IndexProv == a2.IndexProv && a1.IndexDest == a2.IndexDest && a1.Cout_traverse == a2.Cout_traverse);
         }
 
         public static bool operator !=(ArcGraph a1, ArcGraph a2)
         {
+            if ((Object)a1 == null && (Object)a2 == null)
+            {
+                return false;
+            }
+
+            if ((Object)a1 != null && (Object)a2 == null)
+            {
+                return true;
+            }
+
+            if ((Object)a1 == null && (Object)a2 != null)
+            {
+                return true;
+            }
+
             return (a1.IndexProv != a2.IndexProv || a1.IndexDest != a2.IndexDest || a1.Cout_traverse != a2.Cout_traverse);
         }
 

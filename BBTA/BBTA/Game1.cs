@@ -17,23 +17,25 @@ using BBTA.Menus;
 using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
-using BBTA.Classe.Menus;using BBTA.Classe.Option;
+using BBTA.Classe.Menus;
+using BBTA.Classe.Option;
 using EventInput;
 using BBTA.Classe.IA.Navigation;
 using BBTA.Classe.Outils;
+using BBTA.Classe.GestionSon;
 
 namespace BBTA
 {
     //États du menu
     public enum EtatJeu
     {
-        Accueil, //X       //État initial du jeu -> Options, Configuration ou Quitter
-        Options, //X       //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
-        Configuration, //X //Permet de définir les paramètres de la partie -> Jeu
-        Jeu,  //x          //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
-        Victoire,       //État qui indique au joueur qu'il a gagné -> Accueil
-        Defaite,        //État qui indique au joueur qu'il a perdu -> Accueil
-        Pause           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
+        Accueil = 0, //X       //État initial du jeu -> Options, Configuration ou Quitter
+        Options = 1, //X       //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
+        Configuration = 2, //X //Permet de définir les paramètres de la partie -> Jeu
+        Jeu = 3,  //x          //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
+        Victoire = 4,       //État qui indique au joueur qu'il a gagné -> Accueil
+        Defaite = 5,        //État qui indique au joueur qu'il a perdu -> Accueil
+        Pause = 6           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
     }
 
     public class Game1 : Microsoft.Xna.Framework.Game
@@ -41,12 +43,14 @@ namespace BBTA
         public static Random hasard = new Random();
         //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
-
+        EtatJeu EtatPrecedent;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
         private TesteGraphe Testy;
+        private GestionMusique gestionnaireMusique;
+        private event EventHandler ChangementEtat;
         private MenuAccueil acc;
         private PartieJeu partie;
         private MenuOptions option;
@@ -79,6 +83,10 @@ namespace BBTA
 
             EventInput.EventInput.Initialize(Window);
 
+            gestionnaireMusique = new GestionMusique(this);
+            this.Components.Add(gestionnaireMusique);
+            ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
+
             //Etat Accueil
             acc = new MenuAccueil(this);
 
@@ -96,6 +104,8 @@ namespace BBTA
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            ChangementEtat(this.EtatActuel, EventArgs.Empty);
+            option.InitControlAudio(gestionnaireMusique);
             base.LoadContent();
         }
 
@@ -106,6 +116,8 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            gestionnaireMusique.Update(gameTime);
+            EtatPrecedent = EtatActuel;
             if (this.IsActive)
             {
                 avant = now;
@@ -163,7 +175,7 @@ namespace BBTA
                             chargeurCarte.LectureCarte(@"Carte Jeu\lgHill.xml");
                             if (chargeurCarte.ChargementReussis)
                             {
-                                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), 1, 1);
+                                partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne, chargeurCarte.InformationCarte().NbRange), 1, 1);
                             }
                             this.Components.Add(partie);
                         }
@@ -177,6 +189,10 @@ namespace BBTA
 
                     case EtatJeu.Pause:
                         break;
+                }
+                if (EtatActuel != EtatPrecedent)
+                {
+                    ChangementEtat(this.EtatActuel, EventArgs.Empty);
                 }
                 base.Update(gameTime);
             }

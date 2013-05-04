@@ -24,6 +24,14 @@ namespace BBTA.Partie_De_Jeu
         private int nombreMembres;
         private bool notreTour;
         private Acteur joueurActif;
+
+        public int nbRoquette { get; set; }
+        private int nbGrenade { get; set; }
+        private int nbMine { get; set; }
+
+        public delegate void DelegateJoueursTousMorts(int numEquipe);
+        public event DelegateJoueursTousMorts JoueursTousMorts;
+        
        
         public int NumEquipe { get { return numEquipe; } }
         public int NbrMembre { get { return nombreMembres; } }
@@ -34,6 +42,9 @@ namespace BBTA.Partie_De_Jeu
         public Equipe()
         {
             this.membresEquipe = new List<Acteur>();
+            nbRoquette = 6;
+            nbGrenade = 5;
+            nbMine = 3;
         }
 
         public Equipe(int nombreEquipiers)
@@ -59,6 +70,12 @@ namespace BBTA.Partie_De_Jeu
         public void RajoutMembre(Acteur nouveauMembre)
         {
             membresEquipe.Add(nouveauMembre);
+            nouveauMembre.Detruit += new EventHandler(nouveauMembre_Detruit);
+        }
+
+        void nouveauMembre_Detruit(object sender, EventArgs e)
+        {
+            SupressionMembre((sender as Acteur));
         }
 
         public void Update(GameTime gameTime)
@@ -84,6 +101,11 @@ namespace BBTA.Partie_De_Jeu
                 if (membre == ancienMembre)
                 {
                     membresEquipe.Remove(ancienMembre);
+                    nombreMembres--;
+                    if (nombreMembres == 0 && JoueursTousMorts != null)
+                    {
+                        JoueursTousMorts(numEquipe);
+                    }
                 }
             }
         }

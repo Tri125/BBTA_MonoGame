@@ -20,16 +20,19 @@ using FarseerPhysics.Collision.Shapes;
 using BBTA.Classe;
 using System.Timers;
 using BBTA.Classe.Outils;
+using System.Text;
 using BBTA.Classe.IA.Robot;
 
 namespace BBTA.Partie_De_Jeu
 {
     public class PartieJeu : DrawableGameComponent
     {
-
-        private const int TEMPS_TOUR_DEFAUT = 3000;
+        private const int TEMPS_TOUR_DEFAUT = 30000;
         private readonly int tempsTour;
         private SpriteBatch spriteBatch;
+        private SpriteFont policeCompte;
+        private Color CouleurSecondes = Color.DarkGray;
+        private Texture2D secondesRestantes;
         private bool EstEnTransition = false;
         private Timer compteReboursApresTir = new Timer(2000); 
         private World mondePhysique;
@@ -41,13 +44,14 @@ namespace BBTA.Partie_De_Jeu
         Carte carte;
         int[] carteTuile;
 
-        public PartieJeu(Game jeu, int[] carteTuile, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
+        public PartieJeu(Game jeu, int[] carteTuile, Vector2 dimensionsCarte, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
+            tempsEcouler = tempsTour;
             mondePhysique = new World(new Vector2(0, 20));
-            gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, true);
+            gestionnaireEquipes = new GestionnaireActeurs(jeu, nbrEquipe1, nbrEquipe2, dimensionsCarte, true);
             gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
             gestionnaireProjectile = new GestionnaireProjectile(jeu, ref mondePhysique);
         }
@@ -78,6 +82,22 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireMenusTir.TirAvorte += new EventHandler(gestionnaireMenusTir_TirAvorte);
             gestionnaireProjectile.DrawOrder = 2;
             this.DrawOrder = 0;
+            camPartie.Verouiller += new EventHandler(camPartie_Verouiller);
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            // TODO: use this.Content to load your game content here
+            policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
+            secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
         }
 
         void gestionnaireProjectile_ProcessusTerminer(object sender, EventArgs e)
@@ -86,8 +106,8 @@ namespace BBTA.Partie_De_Jeu
             {
                 compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
                 compteReboursApresTir.Start();
+                gestionnaireEquipes.ChangementEquipe();
             }
-            gestionnaireEquipes.ChangementEquipe();
             EstEnTransition = true;
         }
 
@@ -101,50 +121,40 @@ namespace BBTA.Partie_De_Jeu
             compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
             compteReboursApresTir.Start();
             EstEnTransition = true;
-            gestionnaireEquipes.Enabled = false;
             gestionnaireEquipes.Explosion(position, rayonExplosion);
             carte.Explosion(position, rayonExplosion);
+            gestionnaireEquipes.ChangementEquipe();
         }
 
         void compteReboursApresTir_Elapsed(object sender, ElapsedEventArgs e)
         {
             compteReboursApresTir.Stop();
             camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
-            camPartie.Verouiller += new EventHandler(camPartie_Verouiller);
         }
 
         void camPartie_Verouiller(object sender, EventArgs e)
         {
             EstEnTransition = false;
-            gestionnaireEquipes.Enabled = true;
+            tempsEcouler = tempsTour;
         }
 
         void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type)
         {
             gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
-            gestionnaireEquipes.Enabled = false;
             gestionnaireEquipes.equipeActive.JoueurActif.enModeTir = false;
         }
 
         void gestionnaireEquipes_Tir(Vector2 position)
         {
+            //Testing purpose/////////////////////////////////////////////////////////////////////////////////
             SystemeTrajectoire systemeTrajectoire = new SystemeTrajectoire();
-            systemeTrajectoire.ObtenirPositions(gestionnaireEquipes.equipeActive.JoueurActif, gestionnaireEquipes.equipeActive.JoueurActif);
+            Vector2 test = new Vector2(380, 180);
+            systemeTrajectoire.ObtenirPositions(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition(), test);
+            systemeTrajectoire.TesterCourbe(carte);
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             gestionnaireMenusTir.DemarrerSequenceTir(gestionnaireEquipes.equipeActive.JoueurActif.ObtenirPosition());
-        }
-
-
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), mondePhysique, 40);
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -165,6 +175,17 @@ namespace BBTA.Partie_De_Jeu
                 else
                 {
                     camPartie.ObjetSuivi = gestionnaireEquipes.equipeActive.JoueurActif;
+
+                    if (tempsEcouler > 0)
+                    {
+                        tempsEcouler -= gameTime.ElapsedGameTime.Milliseconds;
+                    }                    
+                    else
+                    {
+                        EstEnTransition = true;
+                        gestionnaireEquipes.ChangementEquipe();
+                        camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
+                    }
                 }
             }
             carte.Update(gameTime);
@@ -172,6 +193,23 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireEquipes.matriceCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
+
+            for (int nbCorps = 0; nbCorps < mondePhysique.BodyList.Count; nbCorps++)
+            {
+                if (mondePhysique.BodyList[nbCorps].Position.Y  > Conversion.PixelAuMetre(carte.ObtenirTailleCarte().Height)+2)
+                {
+                    mondePhysique.RemoveBody(mondePhysique.BodyList[nbCorps]);
+                    mondePhysique.BodyList[nbCorps].IsDisposed = true;
+                }
+            }
+
+            if (gestionnaireEquipes.equipeActive.JoueurActif == null)
+            {
+                EstEnTransition = true;
+                gestionnaireEquipes.ChangementEquipe();
+                camPartie.SeDirigerVers(gestionnaireEquipes.equipeActive.JoueurActif);
+            }
+
             base.Update(gameTime);
         }
 
@@ -181,6 +219,21 @@ namespace BBTA.Partie_De_Jeu
             carte.Draw(spriteBatch, camPartie.Pos);
             spriteBatch.End();
             base.Draw(gameTime);
+            spriteBatch.Begin();
+
+            string temps = (Math.Ceiling((float)tempsEcouler/1000)).ToString();
+            if (tempsEcouler <= 9000)
+            {
+                CouleurSecondes = Color.Firebrick;
+                StringBuilder stringBuilder = new StringBuilder(temps);
+                stringBuilder.Insert(0, "0");
+                temps = stringBuilder.ToString();
+            }
+            spriteBatch.Draw(secondesRestantes, new Vector2(GraphicsDevice.Viewport.Width / 2 - secondesRestantes.Width/2, 0), Color.White);
+            spriteBatch.DrawString(policeCompte, temps, new Vector2(GraphicsDevice.Viewport.Width / 2 - 130, 0), CouleurSecondes);
+            CouleurSecondes = Color.DarkGray;
+            spriteBatch.End();
+            DrawOrder = 0;
         }
     }
 }
