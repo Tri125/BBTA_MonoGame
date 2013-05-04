@@ -12,8 +12,9 @@ namespace BBTA
 {
     public class CarteBoolieen
     {
-        private int[] ID_BLOC_NON_SOLIDE = { -1, 0 };
-        private  List<BlocBooleen> doneesBlocs;
+        private int[] ID_BLOC_NON_SOLIDE = { -1 };
+        private List<BlocBooleen> donneesBlocs;
+        private BlocBooleen[,] donneesTab2D;
         private readonly int largeurCarte;
         private readonly int hauteurCarte;
 
@@ -25,17 +26,18 @@ namespace BBTA
         {
             this.largeurCarte = largeurCarte;
             this.hauteurCarte = hauteurCarte;
-            this.doneesBlocs = new List<BlocBooleen>(largeurCarte * hauteurCarte);
+            this.donneesBlocs = new List<BlocBooleen>(largeurCarte * hauteurCarte);
+            this.donneesTab2D = new BlocBooleen[largeurCarte, hauteurCarte];
         }
 
         public void RajoutBloc(Bloc nouveauBloc, Vector2 position)
         {
             if (nouveauBloc == null)
             {
-                this.doneesBlocs.Add(new BlocBooleen(position));
+                this.donneesBlocs.Add(new BlocBooleen(position));
                 return;
             }
-            this.doneesBlocs.Add(new BlocBooleen (ID_BLOC_NON_SOLIDE, nouveauBloc));
+            this.donneesBlocs.Add(new BlocBooleen(ID_BLOC_NON_SOLIDE, nouveauBloc));
         }
 
 
@@ -46,10 +48,28 @@ namespace BBTA
 
         private void TransformationTableau2D()
         {
-
+            if (donneesBlocs.Count() == donneesTab2D.Length)
+            {
+                int rangee = 1;
+                int colonne = 1;
+                foreach (BlocBooleen bloc in donneesBlocs)
+                {
+                    donneesTab2D[rangee - 1, colonne - 1] = bloc;
+                    rangee++;
+                    if ((rangee % (largeurCarte + 1)) == 0)
+                    {
+                        colonne++;
+                        rangee = 1;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Erreur CarteBoolieen::TransformationTableau2D: Taille de donneesBlocs plus grande que donneesTab2D");
+            }
         }
 
-       
+
 
 
     }

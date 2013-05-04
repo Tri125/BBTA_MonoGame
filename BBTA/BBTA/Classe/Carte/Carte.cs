@@ -53,13 +53,13 @@ namespace BBTA
         /// <param name="textureBlocs">Texture des blocs</param>
         /// <param name="mondePhysique">World Farseer</param>
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
-        public Carte(int[] donneesBlocs, int largeurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
+        public Carte(int[] donneesBlocs, int largeurCarte, int hauteurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
             this.listeApparition = new List<Vector2>();
             this.textureArrierePlan = arrierePlan;
             this.largeur = largeurCarte;
             this.hauteur = donneesBlocs.Length / largeur * 40;
-            this.carteBool = new CarteBoolieen(largeurCarte, hauteur);
+            this.carteBool = new CarteBoolieen(largeurCarte, hauteurCarte);
             blocs = new Bloc[donneesBlocs.Length];
 
             for (int compteurBlocs = 0; compteurBlocs < donneesBlocs.Length; compteurBlocs++)

@@ -41,7 +41,7 @@ namespace BBTA.Classe.Interface
             police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
-            carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+            carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
             base.LoadContent();
         }
 
@@ -57,7 +57,7 @@ namespace BBTA.Classe.Interface
                     Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
                     deplacementHorizontalCarte = 0;
                     carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                      arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+                      Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Down) && numCarteEnCours > 0)
                 {
@@ -65,7 +65,7 @@ namespace BBTA.Classe.Interface
                     Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
                     deplacementHorizontalCarte = 0;
                     carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                      arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+                      Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
                 }
             }
             base.Update(gameTime);
