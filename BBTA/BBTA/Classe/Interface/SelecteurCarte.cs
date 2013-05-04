@@ -14,15 +14,15 @@ namespace BBTA.Classe.Interface
     {
         private SpriteFont police;
         private Rectangle dimmensions;
-        private Texture2D fond;
-        private Texture2D textureSelectionnee;
         private Carte carte;
         private Texture2D blocs;
         private Texture2D arriereplan;
+        private Texture2D parDessus;
         private SpriteBatch spriteBatch;
         private string[] cheminsAcces;
-        private int tempsDepuisSlection;
-        private const int TEMPS_TRANSITION = 100;
+        private string[] cheminsAffiches;
+        private MouseState sourisAvant;
+        private MouseState sourisMaintenant;
         private int numCarteEnCours = 0;
         private int deplacementHorizontalCarte = 0;
 
@@ -32,6 +32,19 @@ namespace BBTA.Classe.Interface
         {
             this.dimmensions = dimmensions;
             this.cheminsAcces = chemins;
+            cheminsAffiches = new string[cheminsAcces.Length];
+            int derniereBarreOblique = 0;
+            for (int nbChemins = 0; nbChemins < cheminsAffiches.Length; nbChemins++)
+            {
+                for (int nbCaracteres = 0; nbCaracteres < cheminsAcces[nbChemins].Length; nbCaracteres++)
+                {
+                    if (cheminsAcces[nbChemins][nbCaracteres].Equals('\\'))
+                    {
+                        derniereBarreOblique = nbCaracteres;
+                    }
+                }
+                cheminsAffiches[nbChemins] = cheminsAcces[nbChemins].Substring(derniereBarreOblique+1, cheminsAcces[nbChemins].Length-5-derniereBarreOblique);
+            }
             Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
         }
 
@@ -42,31 +55,29 @@ namespace BBTA.Classe.Interface
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
             carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+            parDessus = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\Carte");
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            tempsDepuisSlection += gameTime.ElapsedGameTime.Milliseconds;
-            if (tempsDepuisSlection >= TEMPS_TRANSITION)
+            sourisAvant = sourisMaintenant;
+            sourisMaintenant = Mouse.GetState();
+            if(sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length-1)
             {
-                tempsDepuisSlection -= TEMPS_TRANSITION;
-                if(Keyboard.GetState().IsKeyDown(Keys.Up) && numCarteEnCours < cheminsAcces.Length-1)
-                {
-                    numCarteEnCours++;
-                    Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
-                    deplacementHorizontalCarte = 0;
-                    carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                      Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
-                }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Down) && numCarteEnCours > 0)
-                {
-                    numCarteEnCours--;
-                    Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
-                    deplacementHorizontalCarte = 0;
-                    carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                      Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
-                }
+                numCarteEnCours++;
+                Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
+                deplacementHorizontalCarte = 0;
+                carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
+                    Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+            }
+            else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
+            {
+                numCarteEnCours--;
+                Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
+                deplacementHorizontalCarte = 0;
+                carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
+                    Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
             }
             base.Update(gameTime);
         }
@@ -84,6 +95,21 @@ namespace BBTA.Classe.Interface
             carte.Draw(spriteBatch, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width/ 2 - deplacementHorizontalCarte, 
                                                 IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2));
             spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+            spriteBatch.Draw(parDessus, Vector2.Zero, Color.White);
+            foreach (string item in cheminsAffiches)
+            {
+                int nbCompteur = 0;
+                while(cheminsAffiches[nbCompteur] != item)
+                {
+                    nbCompteur++;
+                }
+                Vector2 position = new Vector2(dimmensions.X + dimmensions.Width / 2 - police.MeasureString(item).X / 2,
+                            dimmensions.Height / 2 - police.MeasureString(item).Y / 2 + (nbCompteur - numCarteEnCours) * 50);
+                spriteBatch.DrawString(police, item, position, cheminsAffiches[numCarteEnCours] == item ? Color.Black : Color.White);
+            }
+            spriteBatch.End();
+
             GraphicsDevice.Viewport = ecranEntier;
             if (carte.ObtenirTailleCarte().Right + deplacementHorizontalCarte > IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2)
             {
@@ -95,8 +121,5 @@ namespace BBTA.Classe.Interface
             }
             base.Draw(gameTime);
         }
-
-
-
     }
 }
