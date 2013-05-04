@@ -39,7 +39,7 @@ namespace BBTA.Classe.Menus
             Game1.chargeurCarte.LectureCarte(chemins[0]);
             nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
             nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            carte = new SelecteurCarte(game, new Rectangle(50, 300, 700, 500), chemins);
+            carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900), chemins);
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
         }
