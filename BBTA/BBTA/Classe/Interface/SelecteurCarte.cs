@@ -15,12 +15,11 @@ namespace BBTA.Classe.Interface
         private SpriteFont police;
         private Rectangle dimmensions;
         private Carte carte;
+        private List<string> nomCartes;
         private Texture2D blocs;
         private Texture2D arriereplan;
         private Texture2D parDessus;
         private SpriteBatch spriteBatch;
-        private string[] cheminsAcces;
-        private string[] cheminsAffiches;
         private MouseState sourisAvant;
         private MouseState sourisMaintenant;
         private int numCarteEnCours = 0;
@@ -28,25 +27,11 @@ namespace BBTA.Classe.Interface
         private bool estChargee;
 
 
-        public SelecteurCarte(Game jeu, Rectangle dimmensions, string[] chemins)
+        public SelecteurCarte(Game jeu, Rectangle dimmensions)
             :base(jeu)
         {
             this.dimmensions = dimmensions;
-            this.cheminsAcces = chemins;
-            cheminsAffiches = new string[cheminsAcces.Length];
-            int derniereBarreOblique = 0;
-            for (int nbChemins = 0; nbChemins < cheminsAffiches.Length; nbChemins++)
-            {
-                for (int nbCaracteres = 0; nbCaracteres < cheminsAcces[nbChemins].Length; nbCaracteres++)
-                {
-                    if (cheminsAcces[nbChemins][nbCaracteres].Equals('\\'))
-                    {
-                        derniereBarreOblique = nbCaracteres;
-                    }
-                }
-                cheminsAffiches[nbChemins] = cheminsAcces[nbChemins].Substring(derniereBarreOblique+1, cheminsAcces[nbChemins].Length-5-derniereBarreOblique);
-            }
-            Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
+            this.nomCartes = new List<string>();
         }
 
         protected override void LoadContent()
@@ -65,21 +50,23 @@ namespace BBTA.Classe.Interface
         {
             sourisAvant = sourisMaintenant;
             sourisMaintenant = Mouse.GetState();
+            nomCartes = Game1.chargeurCarte.NomCartes;
 
-            if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < cheminsAcces.Length - 1)
+            if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < nomCartes.Count() - 1)
             {
+                Game1.chargeurCarte.CarteSuivante();
                 numCarteEnCours++;
                 estChargee = false;
             }
             else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
             {
+                Game1.chargeurCarte.CartePrecedente();
                 numCarteEnCours--;
                 estChargee = false;
             }            
 
             if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
             {
-                Game1.chargeurCarte.LectureCarte(cheminsAcces[numCarteEnCours]);
                 deplacementHorizontalCarte = 0;
                 carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
                     Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
@@ -103,16 +90,11 @@ namespace BBTA.Classe.Interface
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.Draw(parDessus, Vector2.Zero, Color.White);
-            foreach (string item in cheminsAffiches)
+            foreach (string nomCarte in nomCartes)
             {
-                int nbCompteur = 0;
-                while(cheminsAffiches[nbCompteur] != item)
-                {
-                    nbCompteur++;
-                }
-                Vector2 position = new Vector2(dimmensions.X + dimmensions.Width / 2 - police.MeasureString(item).X / 2,
-                            dimmensions.Height / 2 - police.MeasureString(item).Y / 2 + (nbCompteur - numCarteEnCours) * 50);
-                spriteBatch.DrawString(police, item, position, cheminsAffiches[numCarteEnCours] == item ? Color.Black : Color.White);
+                Vector2 position = new Vector2(dimmensions.X + dimmensions.Width / 2 - police.MeasureString(nomCarte).X / 2,
+                            dimmensions.Height / 2 - police.MeasureString(nomCarte).Y / 2 + (nomCartes.IndexOf(nomCarte) - numCarteEnCours) * 50);
+                spriteBatch.DrawString(police, nomCarte, position, nomCartes[numCarteEnCours] == nomCarte ? Color.Black : Color.White);
             }
             spriteBatch.End();
 

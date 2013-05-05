@@ -25,6 +25,7 @@ namespace XNATileMapEditor
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer;
         private bool chargementReussis;
+        private bool initialiser;
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
@@ -41,6 +42,7 @@ namespace XNATileMapEditor
 
         public void LancementChargement()
         {
+            initialiser = true;
             ChercheFichierCarte();
             TesteFichierCarte();
             //Pour charger la toute première carte
@@ -84,6 +86,11 @@ namespace XNATileMapEditor
 
         public void CarteSuivante()
         {
+            if (!initialiser)
+            {
+                Console.WriteLine("Erreur BBTA_MapFileBuilder::CarteSuivante: Non initialisé.");
+                return;
+            }
             if (((positionChemin + 1) < chemin.Count) && ((positionChemin + 1) > -1))
             {
                 positionChemin++;
@@ -103,7 +110,7 @@ namespace XNATileMapEditor
             }
             else
             {
-                Console.WriteLine("BBTA_MapFileBuilder:: CarteSuivante: Maximum Atteint");
+                Console.WriteLine("BBTA_MapFileBuilder:: CarteSuivante(): Maximum Atteint");
                 return;
             }
         }
@@ -112,6 +119,11 @@ namespace XNATileMapEditor
 
         public void CartePrecedente()
         {
+            if (!initialiser)
+            {
+                Console.WriteLine("Erreur BBTA_MapFileBuilder::CartePrecedente(): Non initialisé.");
+                return;
+            }
             if (((positionChemin - 1) < chemin.Count) && ((positionChemin - 1) >= 0))
             {
                 positionChemin--;
@@ -182,7 +194,7 @@ namespace XNATileMapEditor
 
         }
 
-        public bool LectureCarte(string FichierEntre)
+        private bool LectureCarte(string FichierEntre)
         {
 
             try

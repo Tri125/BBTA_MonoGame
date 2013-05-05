@@ -35,11 +35,10 @@ namespace BBTA.Classe.Menus
             : base(game)
         {
             prochainEtat = EtatJeu.Configuration;
-            string[] chemins = Directory.GetFiles("Carte Jeu");
-            Game1.chargeurCarte.LectureCarte(chemins[0]);
+            Game1.chargeurCarte.LancementChargement();
             nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
             nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900), chemins);
+            carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900));
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
         }
