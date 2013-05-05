@@ -103,16 +103,16 @@ namespace BBTA.Partie_De_Jeu
                               Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
                               mondePhysique, 40);
             Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
-            List<Vector2> pointsApparitions = PhaseApparition(carte.ListeApparition);
+            List<Vector2> listeApparition = carte.ListeApparition;
             foreach (Equipe equipe in equipes)
             {
-                for (int nbJoueursAjoutes = 0; nbJoueursAjoutes < equipe.NombreJoueursOriginel && pointsApparitions.Count > 0; nbJoueursAjoutes++)
+                for (int nbJoueursAjoutes = 0; nbJoueursAjoutes < equipe.NombreJoueursOriginel; nbJoueursAjoutes++)
                 {
+                    Vector2 pointApparition = PhaseApparition(ref listeApparition);
                     if (equipe.EstHumain == true)
                     {
-                        equipe.RajoutMembre(new JoueurHumain(mondePhysique, textureJoueur, pointsApparitions[0],
+                        equipe.RajoutMembre(new JoueurHumain(mondePhysique, textureJoueur, pointApparition,
                                                              3, 1, 100));
-                        pointsApparitions.RemoveRange(0, 1);
                     }
                 }
             }
@@ -306,17 +306,24 @@ namespace BBTA.Partie_De_Jeu
         }
 
 
-        private List<Vector2> PhaseApparition(List<Vector2> listeApparition)
+        private Vector2 PhaseApparition(ref List<Vector2> listeApparition)
         {
-            List<Vector2> melangee = new List<Vector2>();
-            while(listeApparition.Count > 0)
+            //Si tout les points ont déjà  été utilisé, on reprend la liste complète.
+            if (listeApparition.Count == 0)
             {
-                int numHasard = Game1.hasard.Next(listeApparition.Count);
-                Vector2 apparition = Conversion.PixelAuMetre(listeApparition[numHasard]);
-                listeApparition.Remove(listeApparition[numHasard]);
-                melangee.Add(apparition);
+                Console.WriteLine("PartieJeu::PhaseApparition: Nombre insuffisant de points d'apparitions.");
+                listeApparition = carte.ListeApparition;
+                foreach  (Vector2 point in listeApparition.ToList())
+                {
+                    //On rajoute un peu de déphasage pour qu'il n'y a pas un acteur qui apparait exactement à la même position.
+                    //Il est possible que le déphasage ammène un acteur à tomber.
+                    listeApparition[listeApparition.IndexOf(point)] += new Vector2(20,0);
+                }
             }
-            return melangee;
-        }        
+            int numHasard = Game1.hasard.Next(listeApparition.Count);
+            Vector2 apparition = listeApparition[numHasard];
+            listeApparition.RemoveAt(numHasard);
+            return apparition / 40;
+        }       
     }
 }
