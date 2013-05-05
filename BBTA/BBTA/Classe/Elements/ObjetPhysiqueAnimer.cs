@@ -61,8 +61,8 @@ namespace BBTA.Elements
             int rangeeActuelle = imageEnCours / nbColonnes;
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle * largeur, rangeeActuelle * hauteur, largeur, hauteur);
-            spriteBatch.Draw(texture, Conversion.MetreAuPixel(corpsPhysique.Position), selection, Color.White, corpsPhysique.Rotation,
-                             new Vector2(largeur / 2f, hauteur / 2f), 1, effet, 0);
+            spriteBatch.Draw(texture, new Vector2((int)Conversion.MetreAuPixel(corpsPhysique.Position.X), (int)Conversion.MetreAuPixel(corpsPhysique.Position.Y)),
+                             selection, Color.White, corpsPhysique.Rotation, new Vector2(largeur / 2, hauteur /2), 1, effet, 0);
         }
 
 
