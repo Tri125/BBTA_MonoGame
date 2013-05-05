@@ -41,7 +41,8 @@ namespace BBTA
         private List<Vector2> listeApparition;
         private Vector2 deplacementPrev = new Vector2(2, -1);
         private Vector2 deplacementTotal = Vector2.Zero;
-        private CarteBoolieen carteBool;        //Constantes----------------------------------------------------------------------------------------------
+        private CarteBoolieen carteBool;        
+        //Constantes----------------------------------------------------------------------------------------------
         private const float TAILLE_BLOC = 1f;
 
         public List<Vector2> ListeApparition { get { return listeApparition.ToList(); } }
