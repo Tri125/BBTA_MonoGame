@@ -49,7 +49,7 @@ namespace BBTA.Elements
         /// <param name="milliSecParImage"></param>
         public Acteur(World mondePhysique, Texture2D texture, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
+            : base(mondePhysique, new CircleShape(0.41f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
             corpsPhysique.CollisionCategories = Category.Cat1;
