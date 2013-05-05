@@ -129,9 +129,18 @@ namespace BBTA.Elements
         {
             if (!estAuSol)
             {
-                if (contact.Manifold.LocalPoint.Y == -0.5f && contact.Manifold.LocalPoint.X == 0)
+                if (fixtureB.Body.UserData is Bloc)
                 {
-                    estAuSol = true;
+                    if (contact.Manifold.LocalNormal.Y < 0 &&
+                       fixtureA.Body.Position.X >= fixtureB.Body.Position.X - (fixtureB.Body.UserData as Bloc).Taille &&
+                       fixtureA.Body.Position.X <= fixtureB.Body.Position.X + (fixtureB.Body.UserData as Bloc).Taille)
+                    {
+                        estAuSol = true;
+                    }
+                }
+                else 
+                {
+                    return false;
                 }
             }
             if (monTour == false && corpsPhysique.LinearVelocity.Length() != 0 && contact.Manifold.LocalPoint.Y < 0)
