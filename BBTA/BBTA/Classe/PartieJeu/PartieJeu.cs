@@ -244,6 +244,7 @@ namespace BBTA.Partie_De_Jeu
                         ChangementEquipe();
                         camPartie.SeDirigerVers(equipeActive.JoueurActif);
                     }
+
                     mondePhysique.RemoveBody(mondePhysique.BodyList[nbCorps]);
                     mondePhysique.BodyList[nbCorps].IsDisposed = true;
                 }

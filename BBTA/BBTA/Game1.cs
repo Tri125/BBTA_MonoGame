@@ -177,7 +177,7 @@ namespace BBTA
                             if (chargeurCarte.ChargementReussis)
                             {
                                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne,
-                                    chargeurCarte.InformationCarte().NbRange), 3, 3);
+                                    chargeurCarte.InformationCarte().NbRange), 6, 6);
                             }
                             this.Components.Add(partie);
                         }
