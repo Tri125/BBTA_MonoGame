@@ -140,6 +140,8 @@
     <Compile Include="Classe\IA\Navigation\NavArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NavNoeudGraph.cs" />
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
+    <Compile Include="Classe\IA\Robot\SystemeSelectionCible.cs" />
+    <Compile Include="Classe\IA\Robot\SystemeTrajectoire.cs" />
     <Compile Include="Classe\Interface\AffichageNom.cs" />
     <Compile Include="Classe\Interface\ArmeAffiche.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Classe\Menus\MenuAccueil.cs" />
     <Compile Include="Classe\Elements\Nuage.cs" />
     <Compile Include="Classe\Menus\MenuConfiguration.cs" />
+    <Compile Include="Classe\Menus\MenuFinDePartie.cs" />
     <Compile Include="Classe\Option\Option.cs" />
     <Compile Include="Classe\Option\BBTA_ConstructeurOption.cs" />
     <Compile Include="Classe\Menus\MenuArrierePlan.cs" />
@@ -226,9 +229,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classe\IA\Robot\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--
