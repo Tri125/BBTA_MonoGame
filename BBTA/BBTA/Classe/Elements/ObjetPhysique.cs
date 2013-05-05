@@ -14,7 +14,7 @@ namespace BBTA.Elements
     {
         protected Body corpsPhysique;
         protected Texture2D texture;
-        private Fixture joint;
+        protected Fixture joint;
         protected float angleRotation = 0;
         public event EventHandler Detruit;
       

@@ -26,6 +26,8 @@ namespace BBTA.Elements
         private int etapeDestruction = 0;
         private int tempsDepuisEtapePrecedente = 0;
         private const int TEMPS_ENTRE_ETAPES = 50;
+        private readonly float taille;
+        public float Taille { get {return taille;} }
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 0;
         private const float seuilResistance = 5;
@@ -44,12 +46,14 @@ namespace BBTA.Elements
         {
             this.type = type;
             this.metrePixel = metrePixel;
+            this.taille = tailleCote;
             corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
             corpsPhysique.CollisionCategories = Category.All;
             corpsPhysique.CollidesWith = Category.All;
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 10f;
             echelle = 1.01f;
+            corpsPhysique.UserData = this;
         }
 
         /// <summary>
