@@ -5,7 +5,11 @@ using System.Text;
 
 namespace BBTA.Classe.IA.Robot
 {
-    class SystemeSelectionCible
+    public class SystemeSelectionCible
     {
+        public SystemeSelectionCible()
+        {
+
+        }
     }
 }

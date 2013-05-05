@@ -54,7 +54,7 @@ namespace BBTA.Partie_De_Jeu
             this.tempsTour = tempsParTour;
             tempsEcouler = tempsTour;
             equipes.Add(new Equipe(Color.Firebrick, nbrEquipe1, true));
-            equipes.Add(new Equipe(Color.Blue, nbrEquipe2, true));
+            equipes.Add(new Equipe(Color.Blue, nbrEquipe2, false));
             foreach (Equipe equipe in equipes)
             {
                 equipe.TirDemande += new Equipe.DelegateTirDemande(equipe_TirDemande);

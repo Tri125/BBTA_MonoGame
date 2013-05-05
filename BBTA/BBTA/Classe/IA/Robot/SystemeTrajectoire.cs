@@ -46,7 +46,7 @@ namespace BBTA.Classe.IA.Robot
                     }
 
                     //Si la courbe au point de la cible l'atteint à + ou - un pourcentage... utiliser l'angle et vitesse
-                    if (positionY == PositionCible.Y)
+                    if (positionY <= positionY * 1.10f && positionY >= positionY * 0.90f)
                     {
                         vitesseIdeal = vitesse;
                         angleIdeal = angle;
