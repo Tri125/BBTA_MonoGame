@@ -88,7 +88,6 @@ namespace BBTA.Interface
                 if (Mouse.GetState().LeftButton == ButtonState.Pressed && !aireOccupee.Contains(positionSouris))
                 {
                     estOuvert = false;
-                    SortieDuPanneau(this, new EventArgs());
                 }
             }
         }
