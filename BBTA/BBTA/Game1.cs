@@ -69,8 +69,6 @@ namespace BBTA
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
             chargeurOption.Initialisation();
-            chargeurCarte.ChercheFichierCarte();
-            chargeurCarte.TesteFichierCarte();
         }
 
         /// <summary>

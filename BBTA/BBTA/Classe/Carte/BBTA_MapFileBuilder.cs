@@ -17,8 +17,10 @@ namespace XNATileMapEditor
         private readonly string EXTENSION;
         private readonly string DOSSIER_CARTE;
         private List<string> chemin;
+        private List<string> nomCartes;
         private BBTA_Map carte;
-        private BBTA_Map[] carteTampon;
+        //private BBTA_Map[] carteTampon;
+        private int positionChemin = -1;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer;
@@ -26,27 +28,33 @@ namespace XNATileMapEditor
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
-
+        public List<string> NomCartes { get { return nomCartes; } }
 
         public BBTA_MapFileBuilder(uint memoireTampon, string extensionCarte, string dossierCarte)
         {
             this.MEMOIRE_TAMPON = memoireTampon;
             this.EXTENSION = extensionCarte;
             this.DOSSIER_CARTE = dossierCarte;
-            carteTampon = new BBTA_Map[MEMOIRE_TAMPON];
+            //carteTampon = new BBTA_Map[MEMOIRE_TAMPON];
             serializer = new XmlSerializer(typeof(BBTA_Map));
         }
 
+        public void LancementChargement()
+        {
+            ChercheFichierCarte();
+            TesteFichierCarte();
+            //Pour charger la toute première carte
+            CarteSuivante();
+        }
 
-        public void ChercheFichierCarte()
+        private void ChercheFichierCarte()
         {
             chemin = new List<string>();
-
             try
             {
                 foreach (string fichier in Directory.GetFiles(DOSSIER_CARTE, EXTENSION))
                 {
-                        chemin.Add(fichier);
+                    chemin.Add(fichier);
                 }
             }
             catch (System.Exception excpt)
@@ -57,23 +65,90 @@ namespace XNATileMapEditor
         }
 
 
-        //public BBTA_Map ChargementTampon()
+        //private void ChargementTampon()
         //{
         //    if (chemin != null && chemin.Count != 0)
         //    {
-
+        //        for (int iBoucle = 0; iBoucle < MEMOIRE_TAMPON; iBoucle++)
+        //        {
+        //            if (chemin.Count > iBoucle)
+        //            {
+        //                if (LectureCarte(chemin[iBoucle]))
+        //                {
+        //                    carteTampon[iBoucle] = carte;
+        //                }
+        //            }
+        //        }
         //    }
         //}
 
-
-
-        public void TesteFichierCarte()
+        public void CarteSuivante()
         {
+            if (((positionChemin + 1) < chemin.Count) && ((positionChemin + 1) > -1))
+            {
+                positionChemin++;
+                if (LectureCarte(chemin[positionChemin]))
+                {
+                    return;
+                }
+                else
+                {
+                    nomCartes.Remove(nomCartes[positionChemin]);
+                    chemin.Remove(chemin[positionChemin]);
+                    positionChemin--;
+                    CarteSuivante();
+                    return;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("BBTA_MapFileBuilder:: CarteSuivante: Maximum Atteint");
+                return;
+            }
+        }
+
+
+
+        public void CartePrecedente()
+        {
+            if (((positionChemin - 1) < chemin.Count) && ((positionChemin - 1) >= 0))
+            {
+                positionChemin--;
+                if (LectureCarte(chemin[positionChemin]))
+                {
+                    return;
+                }
+                else
+                {
+                    nomCartes.Remove(nomCartes[positionChemin]);
+                    chemin.Remove(chemin[positionChemin]);
+                    positionChemin++;
+                    CartePrecedente();
+                    return;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("BBTA_MapFileBuilder:: CartePrecedente: Minimum Atteint");
+                return;
+            }
+        }
+
+
+        private void TesteFichierCarte()
+        {
+            nomCartes = new List<string>();
             foreach (string cheminCarte in chemin.ToList())
             {
                 if (!LectureCarte(cheminCarte))
                 {
                     chemin.Remove(cheminCarte);
+                }
+                else
+                {
+                    nomCartes.Add(carte.InformationCarte.NomCarte);
                 }
             }
         }
@@ -104,7 +179,7 @@ namespace XNATileMapEditor
                     ecriveur.Close();
                 }
             }
-            
+
         }
 
         public bool LectureCarte(string FichierEntre)
@@ -115,7 +190,7 @@ namespace XNATileMapEditor
                 lecteur = new XmlTextReader(FichierEntre);
                 carte = (BBTA_Map)serializer.Deserialize(lecteur);
                 chargementReussis = true;
-                return true;           
+                return true;
             }
 
 
