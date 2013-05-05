@@ -22,10 +22,11 @@ namespace BBTA.Partie_De_Jeu
     public class Equipe
     {
         private readonly bool estHumain;
+        private bool EstPerdante;
         public bool EstHumain { get { return estHumain; } }
         private List<Acteur> equipiers = new List<Acteur>();
         public int TailleEquipe { get { return equipiers.Count; } }
-        public Acteur JoueurActif { get; private set; }
+        public Acteur JoueurActif { get; set; }
         
         public int NombreJoueursOriginel
         {
@@ -119,7 +120,7 @@ namespace BBTA.Partie_De_Jeu
         //Lorsque c'est le début du tour, le joueurActif est activé
         public void DebutTour()
         {
-            if (JoueurActif == null)
+            if (JoueurActif == null && equipiers.Count() != 0)
             {
                 JoueurActif = equipiers[Game1.hasard.Next(equipiers.Count)];
             }
@@ -128,6 +129,20 @@ namespace BBTA.Partie_De_Jeu
                 JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
             }
             JoueurActif.monTour = true;
+        }
+
+        public bool DeterminerEquipePerdante()
+        {
+            if (equipiers.Count() == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool ObtenirEtatDefaite()
+        {
+            return EstPerdante;
         }
     }
 }

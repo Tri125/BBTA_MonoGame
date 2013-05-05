@@ -46,5 +46,10 @@ namespace BBTA.Elements
             spriteBatch.Draw(texture, uniteXna, null, Color.White, corpsPhysique.Rotation,
                 new Vector2(texture.Width / 2f, texture.Height / 2f), 1, SpriteEffects.None, 0);
         }
+
+        public Body ObtenirCorpsPhysique()
+        {
+            return corpsPhysique;
+        }
     }
 }

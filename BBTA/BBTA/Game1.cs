@@ -33,9 +33,8 @@ namespace BBTA
         Options = 1, //X       //Permet de modifier les options du jeu tels que le volume et les touches -> Accueil ou Quitter
         Configuration = 2, //X //Permet de définir les paramètres de la partie -> Jeu
         Jeu = 3,  //x          //État du menu où que la partie à lieu -> Victoire, Défaite ou Pause 
-        Victoire = 4,       //État qui indique au joueur qu'il a gagné -> Accueil
-        Defaite = 5,        //État qui indique au joueur qu'il a perdu -> Accueil
-        Pause = 6           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
+        FinDePartie = 4,
+        Pause = 5           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
     }
 
     public class Game1 : Microsoft.Xna.Framework.Game
@@ -51,10 +50,13 @@ namespace BBTA
         private OutilGraphe Testy;
         private GestionMusique gestionnaireMusique;
         private event EventHandler ChangementEtat;
+
         private MenuAccueil acc;
         private PartieJeu partie;
         private MenuOptions option;
         private MenuConfiguration config;
+        private MenuFinDePartie finPartie;
+
         static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder(3, "*.xml", "Carte Jeu");
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
@@ -65,7 +67,7 @@ namespace BBTA
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
             Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
-                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
@@ -132,7 +134,6 @@ namespace BBTA
                     this.Exit();
                 }
 
-
                 //S'occupe du transfer d'état entre les parties du menu
                 switch (EtatActuel)
                 {
@@ -176,16 +177,21 @@ namespace BBTA
                             if (chargeurCarte.ChargementReussis)
                             {
                                 partie = new PartieJeu(this, chargeurCarte.InfoTuileTab(), new Vector2(chargeurCarte.InformationCarte().NbColonne,
-                                    chargeurCarte.InformationCarte().NbRange), 1, 1);
+                                    chargeurCarte.InformationCarte().NbRange), 3, 3);
                             }
                             this.Components.Add(partie);
                         }
+                        EtatActuel = partie.ObtenirEtat();
+                        partie.RemiseAZeroEtat();
                         break;
 
-                    case EtatJeu.Victoire:
-                        break;
-
-                    case EtatJeu.Defaite:
+                    case EtatJeu.FinDePartie:
+                        if (!this.Components.Contains(finPartie))
+                        {
+                            this.Components.Clear();
+                            finPartie = new MenuFinDePartie(this, partie.ObtenirCouleurEquipePerdante());
+                            this.Components.Add(finPartie);
+                        }
                         break;
 
                     case EtatJeu.Pause:
