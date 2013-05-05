@@ -89,12 +89,10 @@ namespace BBTA.Classe.Menus
             Enregistrement(); //Teste pour enregistrer les nouveaux paramètres dans les fichiers
             prochainEtat = EtatJeu.Accueil;
         }
-
         void btnDefaut_Clic(object sender, EventArgs e)
         {
             RetourDefaut();
         }
-
         void btnAnnuler_Clic(object sender, EventArgs e)
         {
             sliderEffet.DeplacementPourcentage((float)OptionJeu.InformationSonore.EffetSonore / 100);

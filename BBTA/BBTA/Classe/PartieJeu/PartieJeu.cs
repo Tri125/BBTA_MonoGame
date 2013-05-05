@@ -22,6 +22,7 @@ using System.Timers;
 using BBTA.Classe.Outils;
 using System.Text;
 using BBTA.Classe.Elements;
+using BBTA.Classe.IA.Robot;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -40,15 +41,19 @@ namespace BBTA.Partie_De_Jeu
         private int tempsEcouler;
         private List<Equipe> equipes = new List<Equipe>();
         private Equipe equipeActive;
+        private Color equipePerdante;
         GestionnaireMenusTir gestionnaireMenusTir;
         GestionnaireProjectile gestionnaireProjectile;
         private Camera2d camPartie;
         Carte carte;
         int[] carteTuile;
 
+        private EtatJeu prochainEtat;
+
         public PartieJeu(Game jeu, int[] carteTuile, Vector2 dimensionsCarte, int nbrEquipe1, int nbrEquipe2, int tempsParTour = TEMPS_TOUR_DEFAUT)
             : base(jeu)
         {
+            prochainEtat = EtatJeu.Jeu;
             this.carteTuile = carteTuile;
             this.tempsTour = tempsParTour;
             tempsEcouler = tempsTour;
@@ -134,6 +139,7 @@ namespace BBTA.Partie_De_Jeu
             {
                 compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
                 compteReboursApresTir.Start();
+
                 ChangementEquipe();
             }
             EstEnTransition = true;
@@ -185,11 +191,20 @@ namespace BBTA.Partie_De_Jeu
         {
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
+
+            //Mise à jour des équipes
             foreach (Equipe equipe in equipes)
             {
                 equipe.Update(gameTime);
+                //Vérifier perdant
+                if (equipe.DeterminerEquipePerdante())
+                {
+                    equipePerdante = equipe.couleur;
+                    prochainEtat = EtatJeu.FinDePartie;
+                }
             }
 
+            //Transition de la caméra
             if (EstEnTransition == false)
             {
                 if (gestionnaireProjectile.ObtenirProjectileEnMouvement() != null)
@@ -217,23 +232,38 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
 
+            //Éffacement d
             for (int nbCorps = 0; nbCorps < mondePhysique.BodyList.Count; nbCorps++)
             {
                 if (mondePhysique.BodyList[nbCorps].Position.Y  > Conversion.PixelAuMetre(carte.ObtenirTailleCarte().Height)+2)
                 {
+                    //Si l'acteur est tombé dans le vide, changement d'équipe
+                    if (mondePhysique.BodyList[nbCorps] == equipeActive.JoueurActif.ObtenirCorpsPhysique())
+                    {
+                        EstEnTransition = true;
+                        ChangementEquipe();
+                        camPartie.SeDirigerVers(equipeActive.JoueurActif);
+                    }
                     mondePhysique.RemoveBody(mondePhysique.BodyList[nbCorps]);
                     mondePhysique.BodyList[nbCorps].IsDisposed = true;
                 }
             }
-
-            if (equipeActive.JoueurActif == null)
-            {
-                EstEnTransition = true;
-                ChangementEquipe();
-                camPartie.SeDirigerVers(equipeActive.JoueurActif);
-            }
-
             base.Update(gameTime);
+        }
+
+        public EtatJeu ObtenirEtat()
+        {
+            return prochainEtat;
+        }
+
+        public void RemiseAZeroEtat()
+        {
+            prochainEtat = EtatJeu.Jeu;
+        }
+
+        public Color ObtenirCouleurEquipePerdante()
+        {
+            return equipePerdante;
         }
 
         public override void Draw(GameTime gameTime)
