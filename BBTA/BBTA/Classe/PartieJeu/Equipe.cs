@@ -23,10 +23,12 @@ namespace BBTA.Partie_De_Jeu
     {
         private readonly bool estHumain;
         private bool EstPerdante;
+        private bool policeChargee = false;
         public bool EstHumain { get { return estHumain; } }
         private List<Acteur> equipiers = new List<Acteur>();
         public int TailleEquipe { get { return equipiers.Count; } }
         public Acteur JoueurActif { get; set; }
+        private SpriteFont policeAffichage;
         
         public int NombreJoueursOriginel
         {
@@ -49,6 +51,12 @@ namespace BBTA.Partie_De_Jeu
             this.couleur = couleur;
             this.equipiers.Capacity = nbJoueurs;
             Munitions = new Armement();
+        }
+
+        public void ChargerPolice(SpriteFont police)
+        {
+            this.policeAffichage = police;
+            policeChargee = true;
         }
 
 
@@ -97,6 +105,13 @@ namespace BBTA.Partie_De_Jeu
             foreach (Acteur joueur in equipiers)
             {
                 joueur.Draw(spriteBatch);
+                if (policeChargee == true && joueur.enModeTir == false)
+                {
+                    string vie = ((int)Math.Ceiling((double)joueur.Vies)).ToString();
+                    spriteBatch.DrawString(policeAffichage, vie,
+                                           new Vector2((joueur.ObtenirPosition().X - policeAffichage.MeasureString(vie).X / 2f), 
+                                                       (int)(joueur.ObtenirPosition().Y - 60)), couleur);
+                }
             }
         }
 

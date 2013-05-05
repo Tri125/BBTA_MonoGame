@@ -23,6 +23,7 @@ namespace BBTA.Elements
         public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
+        public float Vies { get { return pointDeVie; } }
         protected const float VITESSE_LATERALE = 1.6f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 4f;
         public bool estAuSol { get; private set; }
@@ -30,7 +31,6 @@ namespace BBTA.Elements
         public bool monTour = false;
         public bool enModeTir { get; set; }
         public string Nom { get; set; }
-        //private AffichageNom infosJoueurs;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
