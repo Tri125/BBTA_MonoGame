@@ -103,8 +103,11 @@ namespace BBTA.Partie_De_Jeu
                               Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
                               mondePhysique, 40);
             Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
-            List<Vector2> listeApparition = carte.ListeApparition;
-            foreach (Equipe equipe in equipes)
+            policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
+            secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
+            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
+
+            List<Vector2> listeApparition = carte.ListeApparition;            foreach (Equipe equipe in equipes)
             {
                 for (int nbJoueursAjoutes = 0; nbJoueursAjoutes < equipe.NombreJoueursOriginel; nbJoueursAjoutes++)
                 {
@@ -115,14 +118,12 @@ namespace BBTA.Partie_De_Jeu
                                                              3, 1, 100));
                     }
                 }
+                equipe.ChargerPolice(policeNbJoueurs);
             }
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
-            secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
-            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
             equipeActive = equipes[0];
             equipeActive.DebutTour();
         }

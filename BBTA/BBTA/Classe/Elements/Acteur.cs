@@ -23,6 +23,7 @@ namespace BBTA.Elements
         public event EventHandler TirDemande;
         //Variables-----------------------------------------------------------------------------------------------
         private float pointDeVie = 100;
+        public float Vies { get { return pointDeVie; } }
         protected const float VITESSE_LATERALE = 1.6f;
         protected const float FORCE_MOUVEMENT_VERTICAL = 4f;
         public bool estAuSol { get; private set; }
@@ -30,7 +31,6 @@ namespace BBTA.Elements
         public bool monTour = false;
         public bool enModeTir { get; set; }
         public string Nom { get; set; }
-        //private AffichageNom infosJoueurs;
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
 
@@ -49,7 +49,7 @@ namespace BBTA.Elements
         /// <param name="milliSecParImage"></param>
         public Acteur(World mondePhysique, Texture2D texture, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
-            : base(mondePhysique, new CircleShape(0.42f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
+            : base(mondePhysique, new CircleShape(0.41f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
             corpsPhysique.CollisionCategories = Category.Cat1;

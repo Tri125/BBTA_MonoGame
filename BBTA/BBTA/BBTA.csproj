@@ -142,7 +142,6 @@
     <Compile Include="Classe\IA\Navigation\NoeudGraph.cs" />
     <Compile Include="Classe\IA\Robot\SystemeSelectionCible.cs" />
     <Compile Include="Classe\IA\Robot\SystemeTrajectoire.cs" />
-    <Compile Include="Classe\Interface\AffichageNom.cs" />
     <Compile Include="Classe\Interface\ArmeAffiche.cs" />
     <Compile Include="Classe\Interface\Bouton.cs" />
     <Compile Include="Classe\Interface\BoutonClicEtEcris.cs" />
