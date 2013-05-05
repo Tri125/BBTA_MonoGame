@@ -130,7 +130,6 @@
     <Compile Include="Classe\Elements\Projectile.cs" />
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
-    <Compile Include="Classe\GestionnaireActeurs.cs" />
     <Compile Include="Classe\GestionnaireMenusTir.cs" />
     <Compile Include="Classe\GestionnaireProjectile.cs" />
     <Compile Include="Classe\GestionAudio\GestionMusique.cs" />
@@ -175,6 +174,7 @@
     <Content Include="Carte Jeu\arena.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="bin\x86\Debug\Carte Jeu\Champignons.xml" />
     <Content Include="Carte Jeu\escalator.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

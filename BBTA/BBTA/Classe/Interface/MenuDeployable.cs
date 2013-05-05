@@ -25,6 +25,7 @@ namespace BBTA.Interface
             }
         }
         protected Rectangle aireOccupee;
+        public event EventHandler PanneauFermer;
 
         public bool estDeploye { get; set; }
         public bool estOuvert;
@@ -69,6 +70,10 @@ namespace BBTA.Interface
                 {
                     estDeploye = false;
                     progressionDeploiement = 0;
+                    if (PanneauFermer != null)
+                    {
+                        PanneauFermer(this, new EventArgs());
+                    }
                 }
             }
         }

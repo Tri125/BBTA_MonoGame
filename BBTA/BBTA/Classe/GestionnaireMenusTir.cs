@@ -64,7 +64,7 @@ namespace BBTA.Classe
                                           texturesArmes,
                                           Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
             selecteur.ArmeSelectionnee += new SelectionArme.DelegateArmeSelectionnee(selecteur_ArmeSelectionnee);
-            selecteur.SortieDuPanneau += new EventHandler(selecteur_SortieDuPanneau);
+            selecteur.PanneauFermer += new EventHandler(selecteur_PanneauFermer);
             viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
             viseur.Verouiller += new EventHandler(viseur_Verouiller);
             base.LoadContent();
@@ -88,7 +88,7 @@ namespace BBTA.Classe
         }
 
 
-        void selecteur_SortieDuPanneau(object sender, EventArgs e)
+        void selecteur_PanneauFermer(object sender, EventArgs e)
         {
             prochainMode = ModeTir.nul;
             if (TirAvorte != null)
