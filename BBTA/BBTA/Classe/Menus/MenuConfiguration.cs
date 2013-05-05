@@ -19,6 +19,11 @@ namespace BBTA.Classe.Menus
         private EtatJeu prochainEtat;
 
         //Incrémenteur/Déccrémenteur nb soldats
+        private int nbSoldatsMin;
+        private int nbPrecedentMin;
+        private int nbSoldatsMax;
+        private int nbPrecedentMax;
+
         private int nbSoldatsJ1;
         private Bouton btnBasJ1;
         private Bouton btnHautJ1;
@@ -30,13 +35,14 @@ namespace BBTA.Classe.Menus
         private SpriteFont police;
         private SelecteurCarte carte;
 
+        public int NbSoldatsJ1 { get { return nbSoldatsJ1; } }
+        public int NbSoldatsJ2 { get { return nbSoldatsJ2; } }
+
         public MenuConfiguration(Game game)
             : base(game)
         {
             prochainEtat = EtatJeu.Configuration;
             Game1.chargeurCarte.LancementChargement();
-            nbSoldatsJ1 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
-            nbSoldatsJ2 = Game1.chargeurCarte.InformationCarte().NbJoueurMin/2;
             carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900));
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
@@ -98,14 +104,14 @@ namespace BBTA.Classe.Menus
 
         void btnBasJ1_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ1 > Game1.chargeurCarte.InformationCarte().NbJoueurMin/2)
+            if (nbSoldatsJ1 > nbSoldatsMin)
             {
                 nbSoldatsJ1--;
             }
         }
         void btnHautJ1_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ1 < Game1.chargeurCarte.InformationCarte().NbJoueurMax/2)
+            if (nbSoldatsJ1 < nbSoldatsMax)
             {
                 nbSoldatsJ1++;
             }
@@ -113,14 +119,14 @@ namespace BBTA.Classe.Menus
 
         void btnBasJ2_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ2 > Game1.chargeurCarte.InformationCarte().NbJoueurMin/2)
+            if (nbSoldatsJ2 > nbSoldatsMin)
             {
                 nbSoldatsJ2--;
             }
         }
         void btnHautJ2_Clic(object sender, EventArgs e)
         {
-            if (nbSoldatsJ2 < Game1.chargeurCarte.InformationCarte().NbJoueurMax/2)
+            if (nbSoldatsJ2 < nbSoldatsMax)
             {
                 nbSoldatsJ2++;
             }
@@ -128,6 +134,18 @@ namespace BBTA.Classe.Menus
 
         public override void Update(GameTime gameTime)
         {
+            nbSoldatsMin = Game1.chargeurCarte.InformationCarte().NbJoueurMin / 2;
+            nbSoldatsMax = Game1.chargeurCarte.InformationCarte().NbJoueurMax / 2;
+            if (nbSoldatsMax != nbPrecedentMax)
+            {
+                nbPrecedentMax = nbSoldatsMax;
+            }
+            if (nbSoldatsMin != nbPrecedentMin)
+            {
+                nbPrecedentMin = nbSoldatsMin;
+                nbSoldatsJ1 = nbSoldatsMin;
+                nbSoldatsJ2 = nbSoldatsMin;
+            }
             base.Update(gameTime);
             btnConfirmer.Update(null);
             btnRetour.Update(null);
@@ -157,11 +175,11 @@ namespace BBTA.Classe.Menus
 
             btnBasJ1.Draw(spriteBatch);
             btnHautJ1.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbSoldatsJ1.ToString(), new Vector2(1010, 459), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            spriteBatch.DrawString(police, (nbSoldatsJ1).ToString(), new Vector2(1010, 459), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 
             btnBasJ2.Draw(spriteBatch);
             btnHautJ2.Draw(spriteBatch);
-            spriteBatch.DrawString(police, nbSoldatsJ2.ToString(), new Vector2(1010, 535), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+            spriteBatch.DrawString(police, (nbSoldatsJ2).ToString(), new Vector2(1010, 535), Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 
             spriteBatch.End();
         }
