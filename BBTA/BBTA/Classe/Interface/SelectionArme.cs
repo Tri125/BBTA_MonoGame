@@ -41,6 +41,7 @@ namespace BBTA.Interface
         private List<IndicateurArmeRestante> Armes = new List<IndicateurArmeRestante>();
         public delegate void DelegateArmeSelectionnee(Armes armeSelectionnee);
         public event DelegateArmeSelectionnee ArmeSelectionnee;
+        public event EventHandler SortieDuPanneau;
 
         public SelectionArme(Texture2D texturePanneau, Texture2D texturesArmes, SpriteFont police, int delaiDeploiement = 500)
             :base(texturePanneau, new Rectangle(0,0,528,309), delaiDeploiement)

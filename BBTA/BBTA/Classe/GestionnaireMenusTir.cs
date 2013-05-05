@@ -31,7 +31,7 @@ namespace BBTA.Classe
 
         //Variables pour les transitions------------------------------------------
         private ModeTir modeEncours = ModeTir.nul;
-        private ModeTir prochainMode;
+        private ModeTir prochainMode = ModeTir.nul;
 
         //Variables pour l'affichage de l'arme à l'écran--------------------------
         private Texture2D texturesArmes;
@@ -90,8 +90,7 @@ namespace BBTA.Classe
 
         void selecteur_PanneauFermer(object sender, EventArgs e)
         {
-            prochainMode = ModeTir.nul;
-            if (TirAvorte != null)
+            if (TirAvorte != null && prochainMode == ModeTir.nul)
             {
                 TirAvorte(this, new EventArgs());
             }
