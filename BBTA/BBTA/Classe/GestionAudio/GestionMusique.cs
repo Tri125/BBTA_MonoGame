@@ -13,7 +13,6 @@ namespace BBTA.Classe.GestionSon
 {
     public class GestionMusique : DrawableGameComponent
     {
-        //teste
         private AudioEngine moteur;
         private SoundBank banqueSon;
         private WaveBank banqueVague;
