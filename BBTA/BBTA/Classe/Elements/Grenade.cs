@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using System.Timers;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     public class Grenade:Projectile
     {
