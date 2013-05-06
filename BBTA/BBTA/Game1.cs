@@ -22,7 +22,7 @@ using BBTA.Classe.Option;
 using EventInput;
 using BBTA.Classe.IA.Navigation;
 using BBTA.Classe.Outils;
-using BBTA.Classe.GestionSon;
+using BBTA.Classe.GestionAudio;
 
 namespace BBTA
 {
@@ -50,6 +50,7 @@ namespace BBTA
         private OutilGraphe Testy;
         private GestionMusique gestionnaireMusique;
         private event EventHandler ChangementEtat;
+        private GestionSon gestionnaireSon;
 
         private MenuAccueil acc;
         private PartieJeu partie;
@@ -90,6 +91,9 @@ namespace BBTA
             this.Components.Add(gestionnaireMusique);
             ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
 
+            gestionnaireSon = new GestionSon(this);
+            this.Components.Add(gestionnaireSon);
+
             //Etat Accueil
             acc = new MenuAccueil(this);
 
@@ -108,7 +112,7 @@ namespace BBTA
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ChangementEtat(this.EtatActuel, EventArgs.Empty);
-            option.InitControlAudio(gestionnaireMusique);
+            option.InitControlAudio(gestionnaireMusique , gestionnaireSon);
             base.LoadContent();
         }
 
