@@ -280,7 +280,7 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.Draw(gameTime);
             gestionnaireMenusTir.Draw(gameTime);
             base.Draw(gameTime);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix());
 
             string temps = (Math.Ceiling((float)tempsEcouler/1000)).ToString();
             if (tempsEcouler <= 9000)
@@ -290,8 +290,8 @@ namespace BBTA.Partie_De_Jeu
                 stringBuilder.Insert(0, "0");
                 temps = stringBuilder.ToString();
             }
-            spriteBatch.Draw(secondesRestantes, new Vector2(GraphicsDevice.Viewport.Width / 2 - secondesRestantes.Width/2, 0), Color.White);
-            spriteBatch.DrawString(policeCompte, temps, new Vector2(GraphicsDevice.Viewport.Width / 2 - 130, 0), CouleurSecondes);
+            spriteBatch.Draw(secondesRestantes, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - secondesRestantes.Width / 2, 0), Color.White);
+            spriteBatch.DrawString(policeCompte, temps, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - 130, 0), CouleurSecondes);
             spriteBatch.DrawString(policeNbJoueurs, equipes[0].TailleEquipe.ToString(), new Vector2(150, -5), Color.Firebrick);
             spriteBatch.DrawString(policeNbJoueurs, equipes[1].TailleEquipe.ToString(), new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width - 150, -5), Color.Blue);
             CouleurSecondes = Color.DarkGray;

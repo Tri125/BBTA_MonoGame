@@ -12,20 +12,28 @@ namespace BBTA.Elements
 {
     public abstract class ObjetPhysiqueAnimer : ObjetPhysique
     {
-        protected int largeur;
-        protected int hauteur;
+        //Variables reliées à l'affichage de la bonne image dans la SpriteSheet---------------------------------------
+        protected int largeur; //Largeur d'une image individuelle
+        protected int hauteur; //Hauteur d'une image individuelle
+        protected int nbColonnes; //Nombres d'images sur l'axe horizontal
+        protected int nbRangees; //Nombre d'images sur l'axe vertical
+        protected int imageEnCours; //Image présentement affichée dans la spritesheet
+        protected readonly int nbImagesSequence; //Nombre d'images contenues dans la séquence à afficher en boucle.
+        public SpriteEffects effet { get; set; }
 
-        protected int nbColonnes;
-        protected int nbRangees;
-
-        protected int imageEnCours;
-        protected readonly int nbImagesSequence;
-
+        //Variables servant au délai entre l'affichage de chaque image------------------------------------------------
         protected int milliSecParImage;
         protected int tempsdepuisDerniereImage;
 
-        public SpriteEffects effet { get; set; }
-
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="mondePhysique">Monde physique Farseer dans lequel l'objet évoluera</param>
+        /// <param name="forme">La forme géométrique</param>
+        /// <param name="texture">La spritesheet de l'objet</param>
+        /// <param name="nbColonnes">Le nombre d'images sur l'axe horizontal</param>
+        /// <param name="nbRangees">Le nombre d'images sur l'axe vertical</param>
+        /// <param name="milliSecParImage">Délai entre chaque image (en millisecondes)</param>
         public ObjetPhysiqueAnimer(World mondePhysique, Shape forme, Texture2D texture, int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(texture, mondePhysique, forme)
         {
@@ -38,6 +46,12 @@ namespace BBTA.Elements
             effet = SpriteEffects.None;
         }
 
+        /// <summary>
+        /// Permet d'animer l'objet en modifiant l'image de la spritesheet qui est affichée.
+        /// </summary>
+        /// <param name="gameTime">Temps du jeu</param>
+        /// <param name="posDebut">Index de l'image initiale de la séquence (1 étant le premier index)</param>
+        /// <param name="posFin">Index de l'image finale de la séquence</param>
         protected void Animer(GameTime gameTime, int posDebut, int posFin)
         {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;
