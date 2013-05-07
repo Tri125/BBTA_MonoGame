@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Interface;
 using BBTA.Classe.Interface;
+using BBTA.Classe.GestionAudio;
 
 namespace BBTA.Classe.Menus
 {
@@ -36,12 +37,14 @@ namespace BBTA.Classe.Menus
 
         private BBTA.Classe.Option.Option OptionJeu;
 
-        public void InitControlAudio(GestionSon.GestionMusique gestionnaire)
+        public void InitControlAudio(GestionMusique gestionnaireMusique, GestionSon gestionnaireSon)
         {
             if (initierAudio == false)
             {
-                ChangementVolume += gestionnaire.ChangementVolume;
+                ChangementVolume += gestionnaireMusique.ChangementVolume;
+                ChangementVolume += gestionnaireSon.ChangementVolume;
                 ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
+
                 initierAudio = true;
             }
         }

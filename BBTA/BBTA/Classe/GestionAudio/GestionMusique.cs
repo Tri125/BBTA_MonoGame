@@ -9,11 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace BBTA.Classe.GestionSon
+namespace BBTA.Classe.GestionAudio
 {
     public class GestionMusique : DrawableGameComponent
     {
-        //teste
         private AudioEngine moteur;
         private SoundBank banqueSon;
         private WaveBank banqueVague;
