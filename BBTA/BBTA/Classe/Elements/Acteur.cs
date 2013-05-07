@@ -18,21 +18,26 @@ namespace BBTA.Elements
 {
     public abstract class Acteur : ObjetPhysiqueAnimer
     {
-        //Évênements----------------------------------------------------------------------------------------------
-
-        public event EventHandler TirDemande;
-        //Variables-----------------------------------------------------------------------------------------------
+        //Variables reliées au nombre de points de vie restant----------------------------------------------------
         private float pointDeVie = 100;
-        public float Vies { get { return pointDeVie; } }
-        protected const float VITESSE_LATERALE = 1.6f;
-        protected const float FORCE_MOUVEMENT_VERTICAL = 4f;
-        public bool estAuSol { get; private set; }
+
+        //Variables permettant de déterminer l'état dans lequel il est et l'exécution ou non de certaines actions-
         private bool veutSeDeplacer = false;
         public bool monTour = false;
-        public bool enModeTir { get; set; }
-        public string Nom { get; set; }
+
         //Constantes----------------------------------------------------------------------------------------------
         private const float DENSITE = 1;
+        protected const float VITESSE_LATERALE = 1.6f;
+        protected const float FORCE_MOUVEMENT_VERTICAL = 4f;
+
+        //Propriétés----------------------------------------------------------------------------------------------
+        public bool enModeTir { get; set; }
+        public string Nom { get; set; }
+        public bool estAuSol { get; private set; }
+        public float Vies { get { return pointDeVie; } }
+
+        //Évênements----------------------------------------------------------------------------------------------
+        public event EventHandler TirDemande;
 
 
         /// <summary>
@@ -64,25 +69,10 @@ namespace BBTA.Elements
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
         }
 
-        /*Même fonction Explostil de la classe bloc à la différence près que les acteurs perdent
-         * des points de vie au lieu de vérifier le dépassement du seuil de résistance*/
-        public void RecevoirDegat(Vector2 lieuExplosion, int rayonExplosion)
-        {
-            Vector2 direction = Vector2.Subtract(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
-            if (direction.Length() < rayonExplosion)
-            {
-                direction.Normalize();
-                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
-                corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion);
-                pointDeVie -= distanceExplosion*4;
-                monTour = false;
-                if (pointDeVie < 0)
-                {
-                    corpsPhysique.Dispose();
-                }
-            }
-        }
-
+        /// <summary>
+        /// Met à jour l'acteur dépendemment du fait que c'est son tour ou 
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             if (monTour == true)
@@ -154,6 +144,24 @@ namespace BBTA.Elements
         {
             TirDemande(this, new EventArgs());
             enModeTir = true;
+        }
+
+        
+        public void RecevoirDegat(Vector2 lieuExplosion, int rayonExplosion)
+        {
+            Vector2 direction = Vector2.Subtract(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
+            if (direction.Length() < rayonExplosion)
+            {
+                direction.Normalize();
+                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
+                corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion);
+                pointDeVie -= distanceExplosion * 4;
+                monTour = false;
+                if (pointDeVie < 0)
+                {
+                    corpsPhysique.Dispose();
+                }
+            }
         }
 
     }

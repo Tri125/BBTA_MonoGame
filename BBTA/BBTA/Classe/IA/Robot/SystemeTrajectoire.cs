@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using BBTA.Elements;
 using FarseerPhysics.Dynamics;
+using BBTA.Carte;
 
 namespace BBTA.Classe.IA.Robot
 {
@@ -27,7 +28,7 @@ namespace BBTA.Classe.IA.Robot
             PositionCible = cible;
         }
 
-        public void DeterminerAngleVitesse(Carte carte)
+        public void DeterminerAngleVitesse(CarteJeu carte)
         {
             //Test vitesse
             for (float vitesse = 1; vitesse <= 30; vitesse++)
@@ -55,7 +56,7 @@ namespace BBTA.Classe.IA.Robot
             }
         }
 
-        public bool InterceptionTrajectoire(Carte carte)
+        public bool InterceptionTrajectoire(CarteJeu carte)
         {
             return false;
         }

@@ -11,7 +11,7 @@ using IndependentResolutionRendering;
 using BBTA.Interfaces;
 using BBTA.Classe.Outils;
 
-namespace BBTA
+namespace BBTA.Carte
 {
 
     public enum TypeBloc
@@ -31,7 +31,7 @@ namespace BBTA
     /// Gère la destruction des blocs s'il y a lieu.
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Carte
+    public class CarteJeu
     {
         //Variables-----------------------------------------------------------------------------------------------
         private Texture2D textureArrierePlan;
@@ -55,7 +55,7 @@ namespace BBTA
         /// <param name="textureBlocs">Texture des blocs</param>
         /// <param name="mondePhysique">World Farseer</param>
         /// <param name="MetrePixel">Valeur en pixel d'un metre</param>
-        public Carte(int[] donneesBlocs, int largeurCarte, int hauteurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
+        public CarteJeu(int[] donneesBlocs, int largeurCarte, int hauteurCarte, Texture2D arrierePlan, Texture2D textureBlocs, World mondePhysique, float metrePixel)
         {
             this.listeApparition = new List<Vector2>();
             this.textureArrierePlan = arrierePlan;

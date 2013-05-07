@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
-using XNATileMapEditor;
+using EditeurCarteXNA;
 using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
@@ -23,6 +23,7 @@ using BBTA.Classe.Outils;
 using System.Text;
 using BBTA.Classe.Elements;
 using BBTA.Classe.IA.Robot;
+using BBTA.Carte;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -45,7 +46,7 @@ namespace BBTA.Partie_De_Jeu
         GestionnaireMenusTir gestionnaireMenusTir;
         GestionnaireProjectile gestionnaireProjectile;
         private Camera2d camPartie;
-        Carte carte;
+        CarteJeu carte;
         int[] carteTuile;
 
         private EtatJeu prochainEtat;
@@ -99,7 +100,7 @@ namespace BBTA.Partie_De_Jeu
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange,
+            carte = new CarteJeu(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange,
                               Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
                               mondePhysique, 40);
             Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
@@ -280,7 +281,7 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.Draw(gameTime);
             gestionnaireMenusTir.Draw(gameTime);
             base.Draw(gameTime);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix());
 
             string temps = (Math.Ceiling((float)tempsEcouler/1000)).ToString();
             if (tempsEcouler <= 9000)
@@ -290,8 +291,8 @@ namespace BBTA.Partie_De_Jeu
                 stringBuilder.Insert(0, "0");
                 temps = stringBuilder.ToString();
             }
-            spriteBatch.Draw(secondesRestantes, new Vector2(GraphicsDevice.Viewport.Width / 2 - secondesRestantes.Width/2, 0), Color.White);
-            spriteBatch.DrawString(policeCompte, temps, new Vector2(GraphicsDevice.Viewport.Width / 2 - 130, 0), CouleurSecondes);
+            spriteBatch.Draw(secondesRestantes, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - secondesRestantes.Width / 2, 0), Color.White);
+            spriteBatch.DrawString(policeCompte, temps, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - 130, 0), CouleurSecondes);
             spriteBatch.DrawString(policeNbJoueurs, equipes[0].TailleEquipe.ToString(), new Vector2(150, -5), Color.Firebrick);
             spriteBatch.DrawString(policeNbJoueurs, equipes[1].TailleEquipe.ToString(), new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width - 150, -5), Color.Blue);
             CouleurSecondes = Color.DarkGray;
