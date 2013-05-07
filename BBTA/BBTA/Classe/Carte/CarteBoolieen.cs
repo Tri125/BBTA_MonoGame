@@ -10,8 +10,11 @@ using BBTA.Elements;
 
 namespace BBTA.Carte
 {
+    //La classe est une représentation de la carte de jeu en remplançant les blocs par un BlocBooleen.
+    //Pour déterminer rapidement si à un emplacement le bloc est solide ou non.
     public class CarteBoolieen
     {
+        //Tableau des identifiants non solide des blocs.
         private int[] ID_BLOC_NON_SOLIDE = { -1 };
         private List<BlocBooleen> donneesBlocs;
         private BlocBooleen[,] donneesTab2D;
@@ -20,6 +23,11 @@ namespace BBTA.Carte
 
         public BlocBooleen[,] Tableau2DCarte{ get { return donneesTab2D;}}
 
+        /// <summary>
+        /// Constructeur de base de CarteBoolieen.
+        /// La classe transforme l'identifiant d'objet Bloc d'après une liste de filtration.
+        /// Pour représenté la carte de jeu en bloc solide ou non solide.
+        /// </summary>
         public CarteBoolieen()
         {
         }
