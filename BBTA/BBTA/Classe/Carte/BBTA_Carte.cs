@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace XNATileMapEditor
+namespace EditeurCarteXNA
 {
     [Serializable]
-    public class BBTA_Map
+    public class BBTA_Carte
     {
 
         private List<TuileEditeur> listeTuile = new List<TuileEditeur>();
@@ -19,19 +19,19 @@ namespace XNATileMapEditor
 
         public List<TuileEditeur> ListTuile { get { return listeTuile; } }
 
-        public BBTA_Map()
+        public BBTA_Carte()
         {
 
         }
 
-        public BBTA_Map(InfoCarte infoCarte, List<TuileEditeur> listeTuile)
+        public BBTA_Carte(InfoCarte infoCarte, List<TuileEditeur> listeTuile)
         {
             this.InformationCarte = infoCarte;
             this.listeTuile = listeTuile;
         }
 
 
-        public BBTA_Map(string nomCarte, int nbColonne, int nbRange, int nbJoueurMin, int nbJoueurMax, List<TuileEditeur> listeTuile)
+        public BBTA_Carte(string nomCarte, int nbColonne, int nbRange, int nbJoueurMin, int nbJoueurMax, List<TuileEditeur> listeTuile)
         {
             this.listeTuile = listeTuile;
             this.InformationCarte = new InfoCarte();

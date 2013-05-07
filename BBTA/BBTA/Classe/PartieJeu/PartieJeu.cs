@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
-using XNATileMapEditor;
+using EditeurCarteXNA;
 using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;

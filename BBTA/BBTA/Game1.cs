@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
-using XNATileMapEditor;
+using EditeurCarteXNA;
 using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
@@ -58,7 +58,7 @@ namespace BBTA
         private MenuConfiguration config;
         private MenuFinDePartie finPartie;
 
-        static public BBTA_MapFileBuilder chargeurCarte = new BBTA_MapFileBuilder(3, "*.xml", "Carte Jeu");
+        static public BBTA_ConstructeurCarte chargeurCarte = new BBTA_ConstructeurCarte(3, "*.xml", "Carte Jeu");
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
         {

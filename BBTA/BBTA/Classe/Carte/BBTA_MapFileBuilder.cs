@@ -8,9 +8,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace XNATileMapEditor
+namespace EditeurCarteXNA
 {
-    public class BBTA_MapFileBuilder
+    public class BBTA_ConstructeurCarte
     {
         #region Attribut
         private readonly uint MEMOIRE_TAMPON;
@@ -18,8 +18,8 @@ namespace XNATileMapEditor
         private readonly string DOSSIER_CARTE;
         private List<string> chemin;
         private List<string> nomCartes;
-        private BBTA_Map carte;
-        //private BBTA_Map[] carteTampon;
+        private BBTA_Carte carte;
+        //private BBTA_Carte[] carteTampon;
         private int positionChemin = -1;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
@@ -31,13 +31,13 @@ namespace XNATileMapEditor
         public bool ChargementReussis { get { return chargementReussis; } }
         public List<string> NomCartes { get { return nomCartes; } }
 
-        public BBTA_MapFileBuilder(uint memoireTampon, string extensionCarte, string dossierCarte)
+        public BBTA_ConstructeurCarte(uint memoireTampon, string extensionCarte, string dossierCarte)
         {
             this.MEMOIRE_TAMPON = memoireTampon;
             this.EXTENSION = extensionCarte;
             this.DOSSIER_CARTE = dossierCarte;
-            //carteTampon = new BBTA_Map[MEMOIRE_TAMPON];
-            serializer = new XmlSerializer(typeof(BBTA_Map));
+            //carteTampon = new BBTA_Carte[MEMOIRE_TAMPON];
+            serializer = new XmlSerializer(typeof(BBTA_Carte));
         }
 
         public void LancementChargement()
@@ -88,7 +88,7 @@ namespace XNATileMapEditor
         {
             if (!initialiser)
             {
-                Console.WriteLine("Erreur BBTA_MapFileBuilder::CarteSuivante: Non initialisé.");
+                Console.WriteLine("Erreur BBTA_ConstructeurCarte::CarteSuivante: Non initialisé.");
                 return;
             }
             if (((positionChemin + 1) < chemin.Count) && ((positionChemin + 1) > -1))
@@ -110,7 +110,7 @@ namespace XNATileMapEditor
             }
             else
             {
-                Console.WriteLine("BBTA_MapFileBuilder:: CarteSuivante(): Maximum Atteint");
+                Console.WriteLine("BBTA_ConstructeurCarte:: CarteSuivante(): Maximum Atteint");
                 return;
             }
         }
@@ -121,7 +121,7 @@ namespace XNATileMapEditor
         {
             if (!initialiser)
             {
-                Console.WriteLine("Erreur BBTA_MapFileBuilder::CartePrecedente(): Non initialisé.");
+                Console.WriteLine("Erreur BBTA_ConstructeurCarte::CartePrecedente(): Non initialisé.");
                 return;
             }
             if (((positionChemin - 1) < chemin.Count) && ((positionChemin - 1) >= 0))
@@ -143,7 +143,7 @@ namespace XNATileMapEditor
             }
             else
             {
-                Console.WriteLine("BBTA_MapFileBuilder:: CartePrecedente: Minimum Atteint");
+                Console.WriteLine("BBTA_ConstructeurCarte:: CartePrecedente: Minimum Atteint");
                 return;
             }
         }
@@ -165,7 +165,7 @@ namespace XNATileMapEditor
             }
         }
 
-        public void EcritureCarte(string FichierSortie, BBTA_Map carte)
+        public void EcritureCarte(string FichierSortie, BBTA_Carte carte)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace XNATileMapEditor
             try
             {
                 lecteur = new XmlTextReader(FichierEntre);
-                carte = (BBTA_Map)serializer.Deserialize(lecteur);
+                carte = (BBTA_Carte)serializer.Deserialize(lecteur);
                 chargementReussis = true;
                 return true;
             }
@@ -226,7 +226,7 @@ namespace XNATileMapEditor
 
         }
 
-        public XNATileMapEditor.BBTA_Map.InfoCarte InformationCarte()
+        public EditeurCarteXNA.BBTA_Carte.InfoCarte InformationCarte()
         {
             if (chargementReussis == true)
             {
