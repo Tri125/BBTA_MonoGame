@@ -93,6 +93,7 @@ namespace BBTA
 
             gestionnaireSon = new GestionSon(this);
             this.Components.Add(gestionnaireSon);
+            Services.AddService(typeof (GestionSon), gestionnaireSon);
 
             //Etat Accueil
             acc = new MenuAccueil(this);

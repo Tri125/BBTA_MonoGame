@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using BBTA.Interface;
 using BBTA.Elements;
 
 namespace BBTA.Classe.GestionAudio
@@ -63,16 +64,16 @@ namespace BBTA.Classe.GestionAudio
 
         public void SonLancement(object sender, EventArgs eventArgs)
         {
-            Projectile arme = sender as Projectile;
-            if (arme != null)
+            if (sender is Armes)
             {
-                if ((arme as Roquette) != null)
+                Armes arme = (Armes)sender;
+                if (arme == Armes.Roquette)
                 {
                     Cue nouveauCue = banqueSon.GetCue("fire_rpg");
                     nouveauCue.Play();
                 }
                 else
-                    if ((arme as Grenade) != null)
+                    if (arme == Armes.Grenade)
                     {
                         Cue nouveauCue = banqueSon.GetCue("drop_gun");
                         nouveauCue.Play();

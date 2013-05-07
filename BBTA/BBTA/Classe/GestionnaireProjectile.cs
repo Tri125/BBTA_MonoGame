@@ -11,11 +11,16 @@ using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
 using BBTA.Classe.Elements;
+using BBTA.Classe.GestionAudio;
 
 namespace BBTA.Classe
 {
     public class GestionnaireProjectile:DrawableGameComponent, IUtiliseMatriceCamera
     {
+        private GestionSon gestionnaireSon;
+        private event EventHandler SonLancementArme;
+        private event EventHandler SonDestructionArme;
+
         public Matrix MatriceDeCamera { get; set; }
         private bool enAction = false;
         public Vector2 Position { get; private set; }
@@ -36,6 +41,9 @@ namespace BBTA.Classe
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             texturesProjectiles = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\projectiles");
+            gestionnaireSon = Game.Services.GetService(typeof(GestionSon)) as GestionSon;
+            SonLancementArme += gestionnaireSon.SonLancement;
+            SonDestructionArme += gestionnaireSon.SonExplosion;
             base.LoadContent();
         }
 
@@ -60,6 +68,7 @@ namespace BBTA.Classe
             projectiles[projectiles.Count - 1].Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
             projectiles[projectiles.Count - 1].Detruit +=new EventHandler(GestionnaireProjectile_Detruit);
             enAction = true;
+            SonLancementArme(type, EventArgs.Empty);
         }
 
         void GestionnaireProjectile_Detruit(object sender, EventArgs e)
@@ -83,6 +92,7 @@ namespace BBTA.Classe
         void projectile_Explosion(Projectile projectileExplosant, Vector2 position, int rayonExplosion)
         {
             enAction = false;
+            SonDestructionArme(null, new EventArgs());
             Explosion(position, rayonExplosion);
         }
 
