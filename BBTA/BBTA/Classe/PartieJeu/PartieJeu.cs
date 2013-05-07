@@ -26,27 +26,42 @@ using BBTA.Classe.IA.Robot;
 
 namespace BBTA.Partie_De_Jeu
 {
+    public enum EtatPartie
+    {
+        JoueurModeDeplacement = 0,
+        JoueurModeTir = 1,
+        JeuxProjectileEnDeplacement = 2,
+        JeuxProjectileExplosé = 3,
+        JeuxApplicationDegat = 4,
+        JeuxChangementTour = 5
+    }
+
     public class PartieJeu : DrawableGameComponent
     {
+        private World mondePhysique;
+        Carte carte;
+        int[] carteTuile;
+
         private const int TEMPS_TOUR_DEFAUT = 30000;
         private readonly int tempsTour;
-        private SpriteBatch spriteBatch;
-        private SpriteFont policeCompte;
-        private SpriteFont policeNbJoueurs;
+        private int tempsEcouler;
         private Color CouleurSecondes = Color.DarkGray;
         private Texture2D secondesRestantes;
+        private Timer compteReboursApresTir = new Timer(2000);
+
+        private SpriteBatch spriteBatch;
+        private Camera2d camPartie;
+        private SpriteFont policeCompte;
+        private SpriteFont policeNbJoueurs;
+        
         private bool EstEnTransition = false;
-        private Timer compteReboursApresTir = new Timer(2000); 
-        private World mondePhysique;
-        private int tempsEcouler;
+
         private List<Equipe> equipes = new List<Equipe>();
         private Equipe equipeActive;
         private Color equipePerdante;
+
         GestionnaireMenusTir gestionnaireMenusTir;
         GestionnaireProjectile gestionnaireProjectile;
-        private Camera2d camPartie;
-        Carte carte;
-        int[] carteTuile;
 
         private EtatJeu prochainEtat;
 
@@ -79,10 +94,10 @@ namespace BBTA.Partie_De_Jeu
         public override void Initialize()
         {
             // TODO: Add your initialization logic here
+            base.Initialize();
             camPartie = new Camera2d(Conversion.MetreAuPixel(Game1.chargeurCarte.InformationCarte().NbRange));
             camPartie.pos = new Vector2(Game1.chargeurCarte.InformationCarte().NbColonne / 2,
-                            Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;
-            base.Initialize();            
+                            Game1.chargeurCarte.InformationCarte().NbRange / 2) * 40;           
             gestionnaireMenusTir.ProcessusDeTirTerminer += new GestionnaireMenusTir.DelegateProcessusDeTirTerminer(gestionnaireMenusTir_ProcessusDeTirTerminer);
             Game.Components.Add(gestionnaireMenusTir);
             Game.Components.Add(gestionnaireProjectile);
@@ -107,7 +122,9 @@ namespace BBTA.Partie_De_Jeu
             secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
             policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
 
-            List<Vector2> listeApparition = carte.ListeApparition;            foreach (Equipe equipe in equipes)
+            List<Vector2> listeApparition = carte.ListeApparition;
+            
+            foreach (Equipe equipe in equipes)
             {
                 for (int nbJoueursAjoutes = 0; nbJoueursAjoutes < equipe.NombreJoueursOriginel; nbJoueursAjoutes++)
                 {
@@ -233,7 +250,7 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
             gestionnaireMenusTir.MatriceDeCamera = camPartie.get_transformation(GraphicsDevice);
 
-            //Éffacement d
+            //Éffacement d'un joueur
             for (int nbCorps = 0; nbCorps < mondePhysique.BodyList.Count; nbCorps++)
             {
                 if (mondePhysique.BodyList[nbCorps].Position.Y  > Conversion.PixelAuMetre(carte.ObtenirTailleCarte().Height)+2)
@@ -270,7 +287,8 @@ namespace BBTA.Partie_De_Jeu
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp,
+                null, null, null, Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
             carte.Draw(spriteBatch, camPartie.Pos);
             foreach (Equipe equipe in equipes)
             {
@@ -280,7 +298,8 @@ namespace BBTA.Partie_De_Jeu
             gestionnaireProjectile.Draw(gameTime);
             gestionnaireMenusTir.Draw(gameTime);
             base.Draw(gameTime);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp,
+                null, null, null, Resolution.getTransformationMatrix());
 
             string temps = (Math.Ceiling((float)tempsEcouler/1000)).ToString();
             if (tempsEcouler <= 9000)

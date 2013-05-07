@@ -25,16 +25,25 @@ namespace BBTA.Classe.Menus
 
         protected override void LoadContent()
         {
+            base.LoadContent();
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\LettrageFinDePartie");
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
             spriteBatch.End();
         }
+
+
 
 
         //Color.Firebrick
