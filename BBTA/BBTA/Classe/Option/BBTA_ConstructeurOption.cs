@@ -35,17 +35,17 @@ namespace BBTA.Classe.Option
         #endregion
 
         #region Option Usine
-        private Option optionBase;
+        private Option optionUsine;
         private const string nomDefaut = "defautConfig.xml";
         private const string nomUtilisateur = "utilisateurConfig.xml";
 
-        private const int volMusiqueBase = 100;
-        private const int volEffetSonoreBase = 100;
-        private const Keys toucheGaucheBase = Keys.A;
-        private const Keys toucheDroitBase = Keys.D;
-        private const Keys toucheSautBase = Keys.Space;
-        private const Keys toucheTirBase = Keys.Space;
-        private const Keys touchePauseBase = Keys.P;
+        private const int VOLUME_MUSIQUE_USINE = 100;
+        private const int VOLUME_EFFET_SONORE_USINE = 100;
+        private const Keys TOUCHE_GAUCHE_USINE = Keys.A;
+        private const Keys TOUCHE_DROIT_USINE = Keys.D;
+        private const Keys TOUCHE_SAUT_USINE = Keys.Space;
+        private const Keys TOUCHE_TIR_USINE = Keys.Space;
+        private const Keys TOUCHE_PAUSE_USINE = Keys.P;
         #endregion
 
         public bool ChargementReussis { get { return chargementReussis; } }
@@ -60,26 +60,26 @@ namespace BBTA.Classe.Option
             optionUtilisateur = new Option();
             optionDefaut = new Option();
             optionActive = new Option();
-            optionBase = new Option();
+            optionUsine = new Option();
             serializer = new XmlSerializer(typeof(Option));
-            //On charge l'objet Option de base qui contient les paramètres d'usine du jeu.
-            OptionBase();
+            //On charge l'objet Option d'usine qui contient les paramètres d'usine du jeu.
+            OptionUsine();
         }
 
         /// <summary>
         /// Charge les paramètres d'usine dans un objet Option.
         /// Les paramètres d'usine sont utilisés lors de la réparation et de la création de fichiers XML des paramètres de jeu.
         /// </summary>
-        private void OptionBase()
+        private void OptionUsine()
         {
-            this.optionBase.InformationSonore.Musique = volMusiqueBase;
-            this.optionBase.InformationSonore.EffetSonore = volEffetSonoreBase;
+            this.optionUsine.InformationSonore.Musique = VOLUME_MUSIQUE_USINE;
+            this.optionUsine.InformationSonore.EffetSonore = VOLUME_EFFET_SONORE_USINE;
 
-            this.optionBase.InformationTouche.Gauche = toucheGaucheBase;
-            this.optionBase.InformationTouche.Droite = toucheDroitBase;
-            this.optionBase.InformationTouche.Saut = toucheSautBase;
-            this.optionBase.InformationTouche.Tir = toucheTirBase;
-            this.optionBase.InformationTouche.Pause = touchePauseBase;
+            this.optionUsine.InformationTouche.Gauche = TOUCHE_GAUCHE_USINE;
+            this.optionUsine.InformationTouche.Droite = TOUCHE_DROIT_USINE;
+            this.optionUsine.InformationTouche.Saut = TOUCHE_SAUT_USINE;
+            this.optionUsine.InformationTouche.Tir = TOUCHE_TIR_USINE;
+            this.optionUsine.InformationTouche.Pause = TOUCHE_PAUSE_USINE;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace BBTA.Classe.Option
             if (mauvaisUtilisateur || mauvaisDefaut)
             {
                 Console.WriteLine("Incapable de réparer");
-                RetourBase();
+                RetourUsine();
 
             }
             else
@@ -190,7 +190,7 @@ namespace BBTA.Classe.Option
             if (mauvaisDefaut)
             {
                 optionDefaut = new Option();
-                EcritureOption(nomDefaut, optionBase);
+                EcritureOption(nomDefaut, optionUsine);
                 mauvaisDefaut = false;
                 presentDefaut = false;
                 ChercheFichierConfig();
@@ -295,7 +295,7 @@ namespace BBTA.Classe.Option
             else
             {
                 //Les paramètres par défaut sont défectueux, on utilise les paramètres d'usine.
-                RetourBase();
+                RetourUsine();
             }
         }
 
@@ -311,16 +311,16 @@ namespace BBTA.Classe.Option
             else
             {
                 //Les paramètres de l'utilisateur sont défectueux, on utilise les paramètres d'usine.
-                RetourBase();
+                RetourUsine();
             }
         }
 
         /// <summary>
         /// Change les options utilisés vers les paramètres de d'usine.
         /// </summary>
-        private void RetourBase()
+        private void RetourUsine()
         {
-            optionActive = optionBase;
+            optionActive = optionUsine;
         }
 
     }
