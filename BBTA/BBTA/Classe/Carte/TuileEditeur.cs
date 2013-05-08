@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EditeurCarteXNA
 {
-    //La classe TuileEditeur est utilisé pour l'éditeur de niveau dans le but de créer un fichier carte.
-    //Chaque tuile a un  int qui identifie le type de la tuile et un Rectangle pour cliquer dessus et l'afficher dans l'éditeur.
+    /// <summary>
+    ///La classe TuileEditeur est utilisé pour l'éditeur de niveau dans le but de créer un fichier carte.
+    ///Chaque tuile a un  int qui identifie le type de la tuile et un Rectangle pour cliquer dessus et l'afficher dans l'éditeur.
+    /// </summary>
     public class TuileEditeur
     {
         private Rectangle bloc;

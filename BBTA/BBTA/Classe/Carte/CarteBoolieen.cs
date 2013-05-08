@@ -10,8 +10,10 @@ using BBTA.Elements;
 
 namespace BBTA.Carte
 {
-    //La classe est une représentation de la carte de jeu en remplançant les blocs par un BlocBooleen.
-    //Pour déterminer rapidement si à un emplacement le bloc est solide ou non.
+    /// <summary>
+    ///La classe est une représentation de la carte de jeu en remplançant les blocs par un BlocBooleen.
+    ///Pour déterminer rapidement si à un emplacement le bloc est solide ou non.
+    /// </summary>
     public class CarteBoolieen
     {
         //Tableau des identifiants non solide des blocs.

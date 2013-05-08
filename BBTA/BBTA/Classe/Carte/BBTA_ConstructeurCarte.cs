@@ -10,9 +10,11 @@ using System.Xml.Serialization;
 
 namespace EditeurCarteXNA
 {
-    //La classe BBTA_ConstructeurCarte est responsable de la lecture et de l'écriture des fichiers cartes dans le format XML,
-    //elle utilise la sérialization pour ce faire. La classe teste les fichiers et détecte ceux invalides, elle permet de faire
-    //une recherche de fichiers et de déterminer leur validité pour ensuite les chargés successivement.
+    /// <summary>
+    ///La classe BBTA_ConstructeurCarte est responsable de la lecture et de l'écriture des fichiers cartes dans le format XML,
+    ///elle utilise la sérialization pour ce faire. La classe teste les fichiers et détecte ceux invalides, elle permet de faire
+    ///une recherche de fichiers et de déterminer leur validité pour ensuite les chargés successivement.
+    /// </summary>
     public class BBTA_ConstructeurCarte
     {
         #region Attribut

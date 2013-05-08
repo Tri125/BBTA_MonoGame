@@ -10,7 +10,9 @@ using BBTA.Elements;
 
 namespace BBTA.Carte
 {
-    //La classe BlocBooleen construit un bool avec une position et un identifiant de type bool représentant si, oui ou non, le bloc est solide.
+    /// <summary>
+    ///La classe BlocBooleen construit un bool avec une position et un identifiant de type bool représentant si, oui ou non, le bloc est solide.
+    /// </summary>
     public class BlocBooleen
     {
         private Vector2 position;

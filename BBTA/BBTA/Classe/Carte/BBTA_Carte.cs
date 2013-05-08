@@ -8,6 +8,9 @@ using System.Xml.Serialization;
 
 namespace EditeurCarteXNA
 {
+    /// <summary>
+    /// La classe contient les informations de base pour les cartes de jeux et elle est utilisé dans l'éditeur de niveau.
+    /// </summary>
     [Serializable]
     public class BBTA_Carte
     {
