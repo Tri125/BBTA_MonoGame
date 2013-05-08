@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using BBTA.Classe.Outils;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public class Roquette : Projectile
     {

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using BBTA.Elements;
+using BBTA.Classe.Elements;
 
 namespace BBTA.Outils
 {

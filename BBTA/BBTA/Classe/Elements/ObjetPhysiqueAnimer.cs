@@ -8,7 +8,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision.Shapes;
 using BBTA.Classe.Outils;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public abstract class ObjetPhysiqueAnimer : ObjetPhysique
     {

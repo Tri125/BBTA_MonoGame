@@ -9,7 +9,7 @@ using FarseerPhysics.Collision.Shapes;
 using BBTA.Partie_De_Jeu;
 using BBTA.Classe.Outils;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public abstract class Projectile : ObjetPhysique
     {

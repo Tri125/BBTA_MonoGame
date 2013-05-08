@@ -71,7 +71,7 @@ namespace BBTA
                 {
                     //Position en mètres
                     Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
-                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
+                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
                     blocs[compteurBlocs].AnimationDestructionTerminee += new EventHandler(Carte_AnimationDestructionTerminee);
                     //Rajout de BlocBooleen dans CarteBooleen
                     carteBool.RajoutBloc(blocs[compteurBlocs], positionBloc);

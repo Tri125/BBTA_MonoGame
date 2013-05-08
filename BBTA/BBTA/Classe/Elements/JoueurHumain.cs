@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using BBTA.Classe.Option;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public class JoueurHumain : Acteur
     {

@@ -28,7 +28,7 @@ namespace BBTA
 
         public BlocBooleen(int[] idNonSolide, Bloc blocJeu)
         {
-            this.position = blocJeu.Position;
+            this.position = blocJeu.ObtenirPosition();
             this.estSolide = DeterminerSoliditer(idNonSolide, blocJeu.Type);
         }
 

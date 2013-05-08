@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using BBTA.Classe.Elements;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using BBTA.Classe.Outils;
 namespace BBTA.Elements
 {
     /// <summary>
@@ -15,23 +19,27 @@ namespace BBTA.Elements
     /// Détermine, en vertu des informations provenent d'une explosion, si le bloc existe toujours
     /// -----------------------------------------------------------------------------------------------
     /// </summary>
-    public class Bloc : Sprite
+    public class Bloc : ObjetPhysique
     {
-        //Variables-----------------------------------------------------------------------------------------------
-        public Body corpsPhysique { get; set; }
-        private float metrePixel;
-        private TypeBloc type;
-        public TypeBloc Type { get { return type; } }
+        //Variables dont la velur ne peut être changée en cours de route ----------------------------------------
+        private readonly TypeBloc type; //S'il y a du gazon ou non; s'il a les coins ronds, etc.
+        private readonly float taille; //D'un côté, en mètre.
+
+        //Variables reliées au processus de destruction et à son affichage---------------------------------------
         private bool enDestruction = false;
         private int etapeDestruction = 0;
         private int tempsDepuisEtapePrecedente = 0;
-        private const int TEMPS_ENTRE_ETAPES = 50;
-        private readonly float taille;
-        public float Taille { get {return taille;} }
-        //Constantes----------------------------------------------------------------------------------------------
-        private const float DENSITE = 0;
-        private const float seuilResistance = 5;
 
+        //Constantes---------------------------------------------------------------------------------------------
+        private const float DENSITE = 0; //Le bloc étant statique, il n'a pas besoin de masse.
+        private const float ECHELLE = 1.01f;
+        private const int TEMPS_ENTRE_ETAPES = 50;
+
+        //Propriétés---------------------------------------------------------------------------------------------
+        public TypeBloc Type { get { return type; } }
+        public float Taille { get { return taille; } }
+
+        //Événements
         public event EventHandler AnimationDestructionTerminee;
 
         /// <summary>
@@ -41,19 +49,42 @@ namespace BBTA.Elements
         /// <param name="position">Position du bloc à l'écran (Coordonnées)</param>
         /// <param name="texture">Texture du bloc</param>
         /// <param name="tailleCote">Taille d'un côté du bloc (en mètre pour Farseer)</param>
-        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, float metrePixel, TypeBloc type)
-            : base(texture, position * metrePixel)
+        public Bloc(World mondePhysique, Vector2 position, Texture2D texture, float tailleCote, TypeBloc type)
+            : base(texture, mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(tailleCote/2f, tailleCote/2f), DENSITE))
         {
             this.type = type;
-            this.metrePixel = metrePixel;
             this.taille = tailleCote;
-            corpsPhysique = BodyFactory.CreateRectangle(mondePhysique, tailleCote, tailleCote, DENSITE, position);
-            corpsPhysique.CollisionCategories = Category.All;
+            corpsPhysique.Position = position;
+            corpsPhysique.CollisionCategories = Category.All; //Un bloc entre en collision avec tous les objets du jeu
             corpsPhysique.CollidesWith = Category.All;
             corpsPhysique.IsStatic = true;
             corpsPhysique.Friction = 10f;
-            echelle = 1.01f;
-            corpsPhysique.UserData = this;
+            corpsPhysique.UserData = this; //Le corps physique contient un définition du bloc.  De cette manières, à partir du monde physique, on peut accèder à la largeur du bloc.
+        }
+
+        /// <summary>
+        /// Met à jour le bloc.  Anime correctement le bloc s'il est en voie d'être détruit.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public override void Update(GameTime gameTime)
+        {
+            //S'il est en voie d'être détruit
+            if (enDestruction)
+            {
+                tempsDepuisEtapePrecedente += gameTime.ElapsedGameTime.Milliseconds;
+                //Si le délai entre l'affichage de chacune des images est dépassé,
+                if (tempsDepuisEtapePrecedente > TEMPS_ENTRE_ETAPES) 
+                {
+                    tempsDepuisEtapePrecedente -= TEMPS_ENTRE_ETAPES;
+                    //La destruction est plus prononcée
+                    etapeDestruction++;
+                }
+                //Si la destruction est complète, un événement est déclanché pour annoncer la destruction
+                if (etapeDestruction == 5 && AnimationDestructionTerminee != null)
+                {
+                    AnimationDestructionTerminee(this, new EventArgs());
+                }
+            }
         }
 
         /// <summary>
@@ -65,40 +96,23 @@ namespace BBTA.Elements
         /// <returns>Si le bloc doit être détruit</returns>
         public void Explose(Vector2 lieu, int rayonExplosion)
         {
-            /*Les dégâts causés par une explosion à une certaine distance du centre de l'explosion
-             * sont déterminés par le biais d'une équation linéaire(ax+b).  Au centre de l'explosion, 
-             * les dégâts causés sont maximals alors qu'au bout du rayon d'effet, ils sont nuls*/
-            if (Vector2.Distance(lieu, Position) < rayonExplosion)
+            //Si le bloc se situe dans le rayon d'explosion, il est automatiquement détruit.
+            if (Vector2.Distance(lieu, ObtenirPosition()) < rayonExplosion)
             {
                 corpsPhysique.Dispose();
                 enDestruction = true;
             }
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            if (enDestruction)
-            {
-                tempsDepuisEtapePrecedente += gameTime.ElapsedGameTime.Milliseconds;
-                if (tempsDepuisEtapePrecedente > TEMPS_ENTRE_ETAPES)
-                {
-                    tempsDepuisEtapePrecedente -= TEMPS_ENTRE_ETAPES;
-                    etapeDestruction++;
-                }
-                if (etapeDestruction == 5 && AnimationDestructionTerminee != null)
-                {
-                    AnimationDestructionTerminee(this, new EventArgs());
-                }
-            }
-        }
-
+        /// <summary>
+        /// Dessine le bloc correctement en fonction de sa destruction ou non, et des blocs environnants.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle selection = new Rectangle((int)type * 40, etapeDestruction*40, 40, 40);
+            Rectangle selection = new Rectangle(Conversion.MetreAuPixel((int)type), Conversion.MetreAuPixel(etapeDestruction), 40, 40);
             Vector2 pointCentral = new Vector2(20, 20);
-            spriteBatch.Draw(texture, corpsPhysique.Position * metrePixel, selection,
-                             Color.White, angleRotation, pointCentral, echelle,
-                             SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, ObtenirPosition(), selection, Color.White, angleRotation, pointCentral, ECHELLE, SpriteEffects.None, 0);
         }
     }
 }

@@ -14,8 +14,12 @@ using FarseerPhysics.Common;
 using BBTA.Classe.Outils;
 using BBTA.Classe.Interface;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
+    /// <summary>
+    /// Un acteur est en effet un joueur dans BBTA.  
+    /// Cette classe sert de base aux classes gérants les joueurs humains et artificiels. 
+    /// </summary>
     public abstract class Acteur : ObjetPhysiqueAnimer
     {
         //Variables reliées au nombre de points de vie restant----------------------------------------------------
@@ -42,23 +46,21 @@ namespace BBTA.Elements
 
         /// <summary>
         /// Constructeur de base pour la classe acteur
-        /// *****Modifications possibles si nécessaires*****
         /// L'objet acteur est pris en charge comme étant un rectangle définit par les dimensions de sa texture d'un seul frame
         /// </summary>
-        /// <param name="mondePhysique"></param>
-        /// <param name="pointDeVie"></param>
-        /// <param name="texture"></param>
-        /// <param name="position"></param>
-        /// <param name="nbColonnes"></param>
-        /// <param name="nbRangees"></param>
-        /// <param name="milliSecParImage"></param>
+        /// <param name="mondePhysique">Monde physique Farseer dans lequel l'acteur évoluera</param>
+        /// <param name="texture">Texture de l'objet qui sera affichée à l'écran </param>
+        /// <param name="position">Position initiale du joueur</param>
+        /// <param name="nbColonnes">Nombre d'images sur l'axe horizontal dans la spritesheet</param>
+        /// <param name="nbRangees">Nombre d'images sur l'axe vertical dans la spritesheet</param>
+        /// <param name="milliSecParImage">Délai entre l'affichage de chaque image</param>
         public Acteur(World mondePhysique, Texture2D texture, Vector2 position, 
                       int nbColonnes, int nbRangees, int milliSecParImage = 50)
             : base(mondePhysique, new CircleShape(0.41f, DENSITE), texture, nbColonnes, nbRangees, milliSecParImage)
         {
             estAuSol = true;
             corpsPhysique.CollisionCategories = Category.Cat1;
-            corpsPhysique.CollidesWith = Category.All & ~Category.Cat1;
+            corpsPhysique.CollidesWith = Category.All & ~Category.Cat1; //Il n'y a pas de collisions entre les joueurs.
             corpsPhysique.Position = position;
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.FixedRotation = true;
@@ -70,9 +72,9 @@ namespace BBTA.Elements
         }
 
         /// <summary>
-        /// Met à jour l'acteur dépendemment du fait que c'est son tour ou 
+        /// Met à jour l'acteur dépendemment du fait que c'est son tour ou non.  Le rend immobile s'il ne désire plus se déplacer
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">Temps du jeu</param>
         public override void Update(GameTime gameTime)
         {
             if (monTour == true)
@@ -95,6 +97,9 @@ namespace BBTA.Elements
             
         }
 
+        /// <summary>
+        /// Permet de déplacer le joueur vers la droite à l'aide du moteur Farseer.  Ajuste l'affichage en conséquence.
+        /// </summary>
         protected void BougerADroite()
         {
             corpsPhysique.LinearVelocity = new Vector2(VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
@@ -102,6 +107,9 @@ namespace BBTA.Elements
             effet = SpriteEffects.FlipHorizontally;
         }
 
+        /// <summary>
+        /// Permet de déplacer le joueur vers la gauche à l'aide du moteur Farseer.  Ajuste l'affichage en conséquence.
+        /// </summary>
         protected void BougerAGauche()
         {          
             corpsPhysique.LinearVelocity = new Vector2(-VITESSE_LATERALE, corpsPhysique.LinearVelocity.Y);
@@ -109,18 +117,29 @@ namespace BBTA.Elements
             effet = SpriteEffects.None;          
         }
 
+        /// <summary>
+        /// Permet à l'acteur de sauter à l'aide du moteur Farseer. Change la variable "estAuSol" pour indiquer qu'il est dans les airs.
+        /// </summary>
         protected void Sauter()
         {
             estAuSol = false;
             corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
         }
 
+        /// <summary>
+        /// Lorsque l'objet entre en collision avec un autre objet dans le monde physique de Farseer
+        /// </summary>
+        /// <param name="fixtureA">Joint Farseer de l'acteur</param>
+        /// <param name="fixtureB">Joint Farseer de l'objet en collision avec l'acteur</param>
+        /// <param name="contact">Informations sur la collison</param>
+        /// <returns></returns>
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
-            if (!estAuSol)
+            if (!estAuSol) //S'il est dans les airs
             {
-                if (fixtureB.Body.UserData is Bloc)
+                if (fixtureB.Body.UserData is Bloc) //Si l'objet avec lequel l'acteur est en collision est un Bloc
                 {
+                    //Alors on s'assure que le bloc est sous le joueur
                     if (contact.Manifold.LocalNormal.Y < 0 &&
                        fixtureA.Body.Position.X >= fixtureB.Body.Position.X - (fixtureB.Body.UserData as Bloc).Taille &&
                        fixtureA.Body.Position.X <= fixtureB.Body.Position.X + (fixtureB.Body.UserData as Bloc).Taille)
@@ -128,11 +147,8 @@ namespace BBTA.Elements
                         estAuSol = true;
                     }
                 }
-                else 
-                {
-                    return false;
-                }
             }
+            //S'il est propulsé par une explosion, il cesse de bouger lorsqu'il touche au sol.
             if (monTour == false && corpsPhysique.LinearVelocity.Length() != 0 && contact.Manifold.LocalPoint.Y < 0)
             {
                 corpsPhysique.LinearVelocity = Vector2.Zero;
@@ -140,26 +156,35 @@ namespace BBTA.Elements
             return true;
         }
 
+        /// <summary>
+        /// Déclanche un événement annonçant un tir et en immobilisant le joueur jusqu'à ce que sa phase de tir soit terminée
+        /// </summary>
         protected void Tirer()
         {
             TirDemande(this, new EventArgs());
             enModeTir = true;
         }
 
-        
+        /// <summary>
+        /// Permet d'affecter des dégats et un impulsion à l'acteur s'il est suffisemment près de la source d'explosion.
+        /// </summary>
+        /// <param name="lieuExplosion">Coordonnées de l'explosion (en pixel)</param>
+        /// <param name="rayonExplosion">Rayon de l'explosion (en mètres)</param>
         public void RecevoirDegat(Vector2 lieuExplosion, int rayonExplosion)
         {
-            Vector2 direction = Vector2.Subtract(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
+            Vector2 direction = Vector2.Subtract(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion); //Détermine la distance entre l'explosion et l'acteur et son orientation
+            //Si l'acteur est suffisemment proche
             if (direction.Length() < rayonExplosion)
             {
                 direction.Normalize();
-                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
-                corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion);
-                pointDeVie -= distanceExplosion * 4;
+                //Détermine le ration entre le rayon maximal et la distance de l'acteur
+                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion); 
+                corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion); //Un impulsion est appliquée
+                pointDeVie -= distanceExplosion * 4; //Des points de vie sont perdus.
                 monTour = false;
                 if (pointDeVie < 0)
                 {
-                    corpsPhysique.Dispose();
+                    corpsPhysique.Dispose(); //Le corps physique est supprimé du monde physique, ce qui aura pour conséquence de tuer le joueur.
                 }
             }
         }

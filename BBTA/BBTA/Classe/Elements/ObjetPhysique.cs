@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
 using BBTA.Classe.Outils;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public abstract class ObjetPhysique
     {

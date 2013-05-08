@@ -11,11 +11,17 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using System.Timers;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
+    /// <summary>
+    /// Une grande dans BBTA est un dispositif explosif qui explose après un certain délai.
+    /// </summary>
     public class Grenade:Projectile
     {
+        //Constantes----------------------------------------------------------------------------------
         public const int RAYON_EXPLOSION = 4;
+
+        //Variables reliées au processus d'explosion de la grenade------------------------------------
         private Timer compteReboursExplosion = new Timer(4000);
         private bool estAusol = false;
 

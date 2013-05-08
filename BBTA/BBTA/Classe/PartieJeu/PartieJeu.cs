@@ -10,19 +10,19 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
 using EditeurCarteXNA;
-using BBTA.Elements;
+using BBTA.Classe.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
 using BBTA.Interface;
 using IndependentResolutionRendering;
 using FarseerPhysics.Collision.Shapes;
-using BBTA.Classe;
 using System.Timers;
 using BBTA.Classe.Outils;
 using System.Text;
 using BBTA.Classe.Elements;
 using BBTA.Classe.IA.Robot;
+using BBTA.Classe;
 
 namespace BBTA.Partie_De_Jeu
 {

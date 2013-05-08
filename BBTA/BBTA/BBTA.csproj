@@ -177,7 +177,9 @@
     <Content Include="Carte Jeu\arena.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="bin\x86\Debug\Carte Jeu\Champignons.xml" />
+    <Content Include="Carte Jeu\Champignons.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Carte Jeu\escalator.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

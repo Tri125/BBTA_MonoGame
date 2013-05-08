@@ -12,7 +12,7 @@ using System.Timers;
 using BBTA.Classe.Outils;
 using FarseerPhysics.Collision;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     public class Mine:Projectile
     {
