@@ -2,8 +2,16 @@
  * Date : 21 août 2007
  * http://www.gamedev.net/topic/457783-xna-getting-text-from-keyboard/
  * 
- *  Ne fonctionne pas en 64bit
+ * It picks up key up/down messages, and it's event based. It's also buffered, so you won't lose presses regardless of poll frequency.
+ * The CharEntered event does full textual translation. It understands keyboard layouts, it's aware of modifiers like shift, etc. 
+ * If you type a capital letter, you get a capital letter.
+ * The whole thing is IME enabled. In other words, East Asian languages will function properly.
+ * Usage is about as simple as it gets. Call EventInput.Initialize from your Game class initialize, and pass this.Window. 
+ * Hook the events from there and you're done. There's nothing to create or keep track of, since it's a single static class.
  * 
+ * 
+ * 
+ *  Ne fonctionne pas en 64bit
 */
 
 
