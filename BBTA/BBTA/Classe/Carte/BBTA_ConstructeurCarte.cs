@@ -33,7 +33,7 @@ namespace EditeurCarteXNA
         private int positionChemin = -1;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
-        private XmlSerializer serializer;
+        private XmlSerializer serializer = null;
         private bool chargementReussis;
         private bool initialiser;
         #endregion
