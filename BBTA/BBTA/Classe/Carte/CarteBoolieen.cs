@@ -23,14 +23,6 @@ namespace BBTA.Carte
 
         public BlocBooleen[,] Tableau2DCarte{ get { return donneesTab2D;}}
 
-        /// <summary>
-        /// Constructeur de base de CarteBoolieen.
-        /// La classe transforme l'identifiant d'objet Bloc d'après une liste de filtration.
-        /// Pour représenté la carte de jeu en bloc solide ou non solide.
-        /// </summary>
-        public CarteBoolieen()
-        {
-        }
 
 
         /// <summary>
