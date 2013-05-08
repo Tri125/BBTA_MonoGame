@@ -27,11 +27,11 @@ namespace BBTA.Interface
         {
             base.Update(gameTime);
             KeyboardState clavier = Keyboard.GetState();
-            if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Gauche))
+            if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Droite))
             {
                 angleRotation += MathHelper.ToRadians(3);
             }
-            else if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Droite))
+            else if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Gauche))
             {
                 angleRotation -= MathHelper.ToRadians(3);
             }
