@@ -68,7 +68,7 @@ namespace BBTA
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
             Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
-                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, true);
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
@@ -197,6 +197,8 @@ namespace BBTA
                             finPartie = new MenuFinDePartie(this, partie.ObtenirCouleurEquipePerdante());
                             this.Components.Add(finPartie);
                         }
+                        EtatActuel = finPartie.ObtenirEtat();
+                        finPartie.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.Pause:

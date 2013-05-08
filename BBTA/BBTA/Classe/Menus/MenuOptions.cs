@@ -18,22 +18,23 @@ namespace BBTA.Classe.Menus
 
         private Texture2D lettrage;
 
-        //Boutons menu
+        //Boutons menu--------------------------------------------------------------------------------
         private Bouton btnValider;
         private Bouton btnDefaut;
         private Bouton btnAnnuler;
 
-        //Bouton ClickNType
+        //Bouton de selection des touches------------------------------------------------------------
         private Bouton btnGauche;
         private Bouton btnDroite;
         private Bouton btnSaut;
         private Bouton btnTir;
         private Bouton btnPause;
 
-        private EtatJeu prochainEtat;
-
+        //Boutons de sélection du volume-------------------------------------------------------------
         private Slider sliderEffet;
         private Slider sliderMusique;
+
+        private EtatJeu prochainEtat;
 
         private BBTA.Classe.Option.Option OptionJeu;
 
