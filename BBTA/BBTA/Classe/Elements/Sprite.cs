@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BBTA.Elements
 {
+    /// <summary>
+    /// Un sprite est une texture pouvant être déplacée et affichée à l'écran 
+    /// </summary>
     public class Sprite
     {
         public Vector2 Position { get; protected set; }
