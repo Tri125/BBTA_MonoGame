@@ -6,11 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using BBTA.Classe.Outils;
-namespace BBTA.Elements
+using BBTA.Carte;
+
+namespace BBTA.Classe.Elements
 {
     /// <summary>
     /// Les objets issus de la classe Bloc agissent comme blocs au sein de la carte.
@@ -112,7 +113,7 @@ namespace BBTA.Elements
         {
             Rectangle selection = new Rectangle(Conversion.MetreAuPixel((int)type), Conversion.MetreAuPixel(etapeDestruction), 40, 40);
             Vector2 pointCentral = new Vector2(20, 20);
-            spriteBatch.Draw(texture, ObtenirPosition(), selection, Color.White, angleRotation, pointCentral, ECHELLE, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, ObtenirPosition(), selection, Color.White, corpsPhysique.Rotation, pointCentral, ECHELLE, SpriteEffects.None, 0);
         }
     }
 }

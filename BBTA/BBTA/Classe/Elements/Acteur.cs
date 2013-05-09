@@ -135,14 +135,14 @@ namespace BBTA.Classe.Elements
         /// <returns></returns>
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
-            if (!estAuSol) //S'il est dans les airs
+            if (!estAuSol) //S'il est dans les airs de manière volontaire
             {
                 if (fixtureB.Body.UserData is Bloc) //Si l'objet avec lequel l'acteur est en collision est un Bloc
                 {
                     //Alors on s'assure que le bloc est sous le joueur
                     if (contact.Manifold.LocalNormal.Y < 0 &&
-                       fixtureA.Body.Position.X >= fixtureB.Body.Position.X - (fixtureB.Body.UserData as Bloc).Taille &&
-                       fixtureA.Body.Position.X <= fixtureB.Body.Position.X + (fixtureB.Body.UserData as Bloc).Taille)
+                       fixtureA.Body.Position.X >= fixtureB.Body.Position.X - (fixtureB.Body.UserData as Bloc).Taille/2 &&
+                       fixtureA.Body.Position.X <= fixtureB.Body.Position.X + (fixtureB.Body.UserData as Bloc).Taille/2)
                     {
                         estAuSol = true;
                     }

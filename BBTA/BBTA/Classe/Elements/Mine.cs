@@ -14,15 +14,34 @@ using FarseerPhysics.Collision;
 
 namespace BBTA.Classe.Elements
 {
+    /// <summary>
+    /// Les mines dans BBTA sont des projectiles qui explosent lorsqu'un joueur est trop près de celle-ci et en aucun autre temps.
+    /// </summary>
     public class Mine:Projectile
     {
-        public const int RAYON_EXPLOSION = 4;
-        private int tempsDepuisLumierePrecedente = 0;
-        private const int DELAI_LUMIERE = 200;
-        private World mondePhysique;
-        private Timer compteRebours = new Timer(200);
-        public event EventHandler VitesseNulle;
+        //Variables issues du moteur physique Farseer-----------------------------------------------------------------------------
+        private World mondePhysique; //Servira à détecter les joueurs trop près
 
+        //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
+        private Timer compteRebours = new Timer(200);
+        private int tempsDepuisLumierePrecedente = 0;
+
+        //Cosntantes--------------------------------------------------------------------------------------------------------------
+        public const int RAYON_EXPLOSION = 4;
+        private const int DELAI_LUMIERE = 200; //Délai pour l'intermitance du petit indicateur lumineux de la mine
+
+        //Événements--------------------------------------------------------------------------------------------------------------
+        public event EventHandler FixationAuSol;
+
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="mondePhysique"></param>
+        /// <param name="positionSpriteSheet"></param>
+        /// <param name="positionDepart"></param>
+        /// <param name="direction"></param>
+        /// <param name="vitesse"></param>
+        /// <param name="texture"></param>
         public Mine(ref World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
             : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(7), 5), positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION)
 
@@ -55,7 +74,7 @@ namespace BBTA.Classe.Elements
             }
             if (corpsPhysique.LinearVelocity != Vector2.Zero)
             {
-                angleRotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
+                corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
             }
 
             if (corpsPhysique.IgnoreGravity)
@@ -79,10 +98,10 @@ namespace BBTA.Classe.Elements
 
             }
 
-            if (corpsPhysique.LinearVelocity.Length() == 0 && VitesseNulle != null && compteRebours.Enabled == false)
+            if (corpsPhysique.LinearVelocity.Length() == 0 && FixationAuSol != null && compteRebours.Enabled == false)
             {
-                VitesseNulle(this, new EventArgs());
-                VitesseNulle = null;
+                FixationAuSol(this, new EventArgs());
+                FixationAuSol = null;
             }
 
             base.Update(gameTime);
@@ -92,7 +111,7 @@ namespace BBTA.Classe.Elements
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,
-                             Color.White, angleRotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
+                             Color.White, corpsPhysique.Rotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
@@ -101,19 +120,19 @@ namespace BBTA.Classe.Elements
             corpsPhysique.LinearVelocity = Vector2.Zero;
             if (contact.Manifold.LocalPoint.Y < 0)
             {
-                angleRotation = MathHelper.PiOver2 * 3;
+                corpsPhysique.Rotation = MathHelper.PiOver2 * 3;
             }
             else if (contact.Manifold.LocalPoint.Y > 0)
             {
-                angleRotation = MathHelper.PiOver2;
+                corpsPhysique.Rotation = MathHelper.PiOver2;
             }
             else if (contact.Manifold.LocalPoint.X > 0)
             {
-                angleRotation = 0;
+                corpsPhysique.Rotation = 0;
             }
             else
             {
-                angleRotation = MathHelper.Pi;
+                corpsPhysique.Rotation = MathHelper.Pi;
             }
             return true;
         }

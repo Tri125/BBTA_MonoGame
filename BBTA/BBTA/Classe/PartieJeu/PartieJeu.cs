@@ -22,6 +22,7 @@ using BBTA.Classe.Outils;
 using System.Text;
 using BBTA.Classe.Elements;
 using BBTA.Classe.IA.Robot;
+using BBTA.Carte;
 using BBTA.Classe;
 
 namespace BBTA.Partie_De_Jeu
@@ -45,7 +46,7 @@ namespace BBTA.Partie_De_Jeu
         GestionnaireMenusTir gestionnaireMenusTir;
         GestionnaireProjectile gestionnaireProjectile;
         private Camera2d camPartie;
-        Carte carte;
+        CarteJeu carte;
         int[] carteTuile;
 
         private EtatJeu prochainEtat;
@@ -99,7 +100,7 @@ namespace BBTA.Partie_De_Jeu
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            carte = new Carte(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange,
+            carte = new CarteJeu(carteTuile, Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange,
                               Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
                               mondePhysique, 40);
             Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");

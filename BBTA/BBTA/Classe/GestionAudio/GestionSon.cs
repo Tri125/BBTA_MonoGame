@@ -18,7 +18,6 @@ namespace BBTA.Classe.GestionAudio
         private AudioEngine moteur;
         private SoundBank banqueSon;
         private WaveBank banqueVague;
-        private Cue cue;
 
 
         public GestionSon(Game jeu)

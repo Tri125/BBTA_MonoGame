@@ -33,7 +33,6 @@ namespace BBTA.Classe.Elements
         {
             base.Update(gameTime);
             corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
-            angleRotation = corpsPhysique.Rotation;
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)

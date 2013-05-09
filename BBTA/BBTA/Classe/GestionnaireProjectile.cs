@@ -60,7 +60,7 @@ namespace BBTA.Classe
                     break;
                 case Armes.Mine:
                     projectiles.Add(new Mine(ref mondePhysique, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(direction * 40), direction, vitesse, texturesProjectiles));
-                    (projectiles[projectiles.Count - 1] as Mine).VitesseNulle += new EventHandler(GestionnaireProjectile_VitesseNulle);
+                    (projectiles[projectiles.Count - 1] as Mine).FixationAuSol += new EventHandler(GestionnaireProjectile_VitesseNulle);
                     break;
                 default:
                     break;

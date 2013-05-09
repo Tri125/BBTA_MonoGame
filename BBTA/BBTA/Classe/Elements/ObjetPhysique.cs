@@ -18,7 +18,6 @@ namespace BBTA.Classe.Elements
 
         //Variables d'affichage------------------------------------------------------------
         protected Texture2D texture;
-        protected float angleRotation = 0;
 
         //Événements-----------------------------------------------------------------------
         public event EventHandler Detruit;

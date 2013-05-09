@@ -114,13 +114,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classe\Carte\BBTA_Carte.cs" />
-    <Compile Include="Classe\Carte\BBTA_MapFileBuilder.cs" />
+    <Compile Include="Classe\Carte\BBTA_ConstructeurCarte.cs" />
     <Compile Include="Classe\Carte\BlocBooleen.cs" />
     <Compile Include="Classe\Carte\CarteBoolieen.cs" />
+    <Compile Include="Classe\Carte\CarteJeu.cs" />
     <Compile Include="Classe\Elements\Acteur.cs" />
     <Compile Include="Classe\Elements\Armement.cs" />
     <Compile Include="Classe\Elements\Bloc.cs" />
-    <Compile Include="Classe\Carte\Carte.cs" />
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
     <Compile Include="Classe\Elements\Grenade.cs" />
     <Compile Include="Classe\Elements\JoueurHumain.cs" />
