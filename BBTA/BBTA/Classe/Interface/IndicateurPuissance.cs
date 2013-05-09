@@ -24,7 +24,7 @@ namespace BBTA.Classe.Interface
         private bool tirEstCommence;
         private int forceDepart;
 
-        //Événements-----------------------------------------
+        //Événements et délégués----------------------------
         public delegate void delegueForceFinaleDeterminee(int forceFinale);
         public event delegueForceFinaleDeterminee ForceFinaleDeterminee;
 
@@ -39,7 +39,7 @@ namespace BBTA.Classe.Interface
             : base(texture, new Rectangle(0, 0, texture.Width, HAUTEUR_PANNEAU), 200)
         {
             tirEstCommence = false;
-            forceDepart = 1;
+            forceDepart = 1; //La vitesse minimale est de 1.
             tempsEcouleDepuisDernierPalier = 0;
             positionIndicateur = new Vector2(0, POSITION_INITIALE_INDICATEUR);
         }
