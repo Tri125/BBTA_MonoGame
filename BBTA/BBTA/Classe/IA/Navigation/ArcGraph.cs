@@ -5,6 +5,15 @@ using System.Text;
 
 namespace BBTA.Classe.IA.Navigation
 {
+
+    //-----------------------------------------------------------------------------
+    //
+    //  Author: Mat Buckland (www.ai-junkie.com)
+    //
+    //-----------------------------------------------------------------------------
+    //Adapté de C++ en C# par Tristan Savaria
+    //tristan@twisted-ip.com
+
     public class ArcGraph
     {
         public int IndexDest {get; set;}
