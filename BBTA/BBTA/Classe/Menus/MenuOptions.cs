@@ -62,7 +62,7 @@ namespace BBTA.Menus
 
         protected override void LoadContent()
         {
-            police = Game.Content.Load<SpriteFont>(@"ComicSan");
+            police = Game.Content.Load<SpriteFont>(@"Police\ComicSan");
 
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),

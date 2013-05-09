@@ -87,7 +87,7 @@ namespace BBTA.Menus
             btnHautJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(1100, 570), null);
             btnHautJ2.Clic += new EventHandler(btnHautJ2_Clic);
 
-            police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
+            police = Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur");
 
             base.LoadContent();
         }

@@ -38,7 +38,7 @@ namespace BBTA.Interface
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
+            police = Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur");
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
             carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);

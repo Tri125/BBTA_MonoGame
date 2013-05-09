@@ -61,7 +61,7 @@ namespace BBTA.Partie_De_Jeu
             texturesArmes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\armesPanneau");
             selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), 
                                           texturesArmes,
-                                          Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
+                                          Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur"), 200);
             selecteur.ArmeSelectionnee += new SelectionArme.DelegateArmeSelectionnee(selecteur_ArmeSelectionnee);
             selecteur.PanneauFermer += new EventHandler(selecteur_PanneauFermer);
             viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
