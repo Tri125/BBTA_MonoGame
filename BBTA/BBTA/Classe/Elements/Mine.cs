@@ -23,7 +23,7 @@ namespace BBTA.Classe.Elements
         private World mondePhysique; //Servira à détecter les joueurs trop près
 
         //Position du bloc au-dessous de la mine----------------------------------------------------------------------------------
-        private Bloc blocAuDessous;
+        private Vector2 blocAuDessous;
 
         //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
         private Timer compteRebours = new Timer(200);
@@ -94,8 +94,16 @@ namespace BBTA.Classe.Elements
             {
                 //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
+                bool blocAuDessousEstDetecter = false;
                 mondePhysique.QueryAABB(Fixture =>
                                         {
+                                            //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                                            if (Fixture.Body.Position == blocAuDessous)
+                                            {
+                                                blocAuDessousEstDetecter = true;
+                                                return false;
+                                            }
+
                                             //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
                                             //Note : les projectiles sont aussi pris en compte.
                                             if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
@@ -107,10 +115,10 @@ namespace BBTA.Classe.Elements
                                             {
                                                 return true;
                                             }
+
                                         },
                                         ref detectionAutourMine);
-                //S'il n'y a plus de blocs au dessous, la mine disparaît.
-                if (blocAuDessous == null)
+                if (blocAuDessousEstDetecter == false)
                 {
                     explose = true;
                 }
@@ -129,7 +137,7 @@ namespace BBTA.Classe.Elements
             corpsPhysique.IgnoreGravity = true;
             corpsPhysique.LinearVelocity = Vector2.Zero;
 
-            blocAuDessous = fixtureB.Body.UserData as Bloc;
+            blocAuDessous = fixtureB.Body.Position;
 
             if (FixationAuSol != null)
             {
