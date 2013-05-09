@@ -6,6 +6,20 @@ using System.IO;
 
 namespace BBTA.Classe.IA.Navigation
 {
+
+    //------------------------------------------------------------------------
+    //
+    //  Name:   SparseGraph.h
+    //
+    //  Desc:   Graph class using the adjacency list representation.
+    //
+    //  Author: Mat Buckland (fup@ai-junkie.com)
+    //
+    //------------------------------------------------------------------------
+    //Adapté de C++ en C# par Tristan Savaria
+    // tristan@twisted-ip.com
+
+
     public class Graphe
     {
         //Liste des noeuds fesant partie du graphe

@@ -46,7 +46,8 @@ namespace IndependentResolutionRendering
 
         public static class MouseHelper
         {
-            /// <summary>Translates the actual mouse position obtained from Mouse.GetState() into the virtual mouse position after a scaling matrix is applied to the viewport
+            /// <summary>
+            /// Translates the actual mouse position obtained from Mouse.GetState() into the virtual mouse position after a scaling matrix is applied to the viewport.
             /// </summary>
             public static Point CurrentMousePosition
             {
@@ -63,6 +64,11 @@ namespace IndependentResolutionRendering
                 }
             }
 
+            /// <summary>
+            /// Transforme la position réelle de la souris obtenue de Mouse.GetState() dans la position de la sourit après que l'application de la matrice
+            /// de mise à échelle et d'une matrice de caméra.
+            /// </summary>
+            /// <param name="MatriceCam">Matrice de la caméra du jeu.</param>
             public static Point PositionSourisCamera(Matrix MatriceCam)
             {
                 MouseState mouse = Mouse.GetState();
