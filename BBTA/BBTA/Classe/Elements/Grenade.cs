@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BBTA.Elements;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using BBTA.Classe.Outils;

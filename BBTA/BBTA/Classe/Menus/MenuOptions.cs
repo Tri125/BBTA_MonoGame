@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Interface;
 using BBTA.Classe.Interface;
 using BBTA.Classe.GestionAudio;
 

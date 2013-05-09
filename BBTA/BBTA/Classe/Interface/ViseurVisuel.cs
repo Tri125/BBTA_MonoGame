@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using BBTA.Elements;
+using BBTA.Classe.Elements;
 using BBTA.Classe.Option;
 
-namespace BBTA.Interface
+namespace BBTA.Classe.Interface
 {
     public class ViseurVisuel:MenuDeployable
     {

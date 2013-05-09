@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace BBTA.Interface
+namespace BBTA.Classe.Interface
 {
     public class IndicateurPuissance:MenuDeployable
     {

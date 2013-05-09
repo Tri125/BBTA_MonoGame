@@ -2,51 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BBTA.Interface;
 
 namespace BBTA.Classe.Elements
 {
+    public enum Armes
+    {
+        Roquette = 0,
+        Grenade,
+        Mine
+    }
+
     /// <summary>
     /// Armement détenu par une équipe.  Retient en mémoire le nombre de munitions restantes pour chaque arme.
     /// </summary>
     public class Armement
     {
         //Nombre de munitions dans chaque arme
-        private int nbGrenades;
-        private int nbMines;
-        private int nbRoquettes;
+        private int[] armes = new int[Enum.GetNames(typeof(Armes)).Length];
 
         //Indexer pour pouvoir avoir accès facilement au nombre de munitions de l'arme désirée
         public int this[Armes arme]
         {
             get
             {
-                switch (arme)
-                {
-                    case Armes.Grenade:
-                        return nbGrenades;
-                    case Armes.Mine:
-                        return nbMines;
-                    case Armes.Roquette:
-                        return nbRoquettes;
-                    default:
-                        return 0;
-                }                
+                return armes[(int)arme];           
             }
             set
             {
-                switch (arme)
-                {
-                    case Armes.Grenade:
-                        nbGrenades = value;
-                        break;
-                    case Armes.Mine:
-                        nbMines = value;
-                        break;
-                    case Armes.Roquette:
-                        nbRoquettes = value;
-                        break;
-                }  
+                armes[(int)arme] = value;
             }
         }
 
@@ -58,9 +41,9 @@ namespace BBTA.Classe.Elements
         /// <param name="nbRoquettes">Nombre de roquettes au départ</param>
         public Armement(int nbGrenades = 8, int nbMines = 5, int nbRoquettes = 20)
         {
-            this.nbGrenades = nbGrenades;
-            this.nbMines = nbMines;
-            this.nbRoquettes = nbRoquettes;
+            this.armes[(int)Armes.Grenade] = nbGrenades;
+            this.armes[(int)Armes.Mine] = nbMines;
+            this.armes[(int)Armes.Roquette] = nbRoquettes;
         }
 
         /// <summary>
@@ -69,13 +52,13 @@ namespace BBTA.Classe.Elements
         /// <returns>(Oui) -> Il y a suffisemment de grenades pour tirer. (Non) -> le stock de grenades est épuisé.</returns>
         public bool GrenadeUtilisee()
         {
-            if (nbGrenades == 0)
+            if (armes[(int)Armes.Grenade] == 0)
             {
                 return false;
             }
             else
             {
-                nbGrenades--;
+                armes[(int)Armes.Grenade]--;
                 return true;
             }
         }
@@ -86,13 +69,13 @@ namespace BBTA.Classe.Elements
         /// <returns>(Oui) -> Il y a suffisemment de mines pour tirer. (Non) -> le stock de mines est épuisé.</returns>
         public bool MineUtilisee()
         {
-            if (nbMines == 0)
+            if (armes[(int)Armes.Mine] == 0)
             {
                 return false;
             }
             else
             {
-                nbMines--;
+                armes[(int)Armes.Mine]--;
                 return true;
             }
         }
@@ -103,13 +86,13 @@ namespace BBTA.Classe.Elements
         /// <returns>(Oui) -> Il y a suffisemment de roquettes pour tirer. (Non) -> le stock de roquettes est épuisé.</returns>
         public bool RoquetteUtilisee()
         {
-            if (nbRoquettes == 0)
+            if (armes[(int)Armes.Roquette] == 0)
             {
                 return false;
             }
             else
             {
-                nbRoquettes--;
+                armes[(int)Armes.Roquette]--;
                 return true;
             }
         }
@@ -120,7 +103,7 @@ namespace BBTA.Classe.Elements
         /// <returns>Nombre de munitions restantes</returns>
         public int nbGrenadesRestantes()
         {
-            return nbGrenades;
+            return armes[(int)Armes.Grenade];
         }
 
         /// <summary>
@@ -129,7 +112,7 @@ namespace BBTA.Classe.Elements
         /// <returns>Nombre de munitions restantes</returns>
         public int nbMinesRestantes()
         {
-            return nbMines;
+            return armes[(int)Armes.Mine];
         }
 
         /// <summary>
@@ -138,7 +121,7 @@ namespace BBTA.Classe.Elements
         /// <returns>Nombre de munitions restantes</returns>
         public int nbRoquettesRestantes()
         {
-            return nbRoquettes;
+            return armes[(int)Armes.Roquette];
         }
     }
 }

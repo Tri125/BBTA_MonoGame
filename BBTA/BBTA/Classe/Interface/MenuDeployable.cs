@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace BBTA.Interface
+namespace BBTA.Classe.Interface
 {
     public abstract class MenuDeployable
     {

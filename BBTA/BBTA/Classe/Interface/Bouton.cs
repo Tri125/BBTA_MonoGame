@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using IndependentResolutionRendering;
 
-namespace BBTA.Interface
+namespace BBTA.Classe.Interface
 {
     /// <summary>
     /// Bouton standard avec textures personnalisées sur lequel on peut cliquer. 

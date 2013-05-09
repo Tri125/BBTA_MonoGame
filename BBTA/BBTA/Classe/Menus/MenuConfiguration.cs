@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using BBTA.Interface;
+using BBTA.Classe.Interface;
 using Microsoft.Xna.Framework;
 using IndependentResolutionRendering;
 using System.IO;
-using BBTA.Classe.Interface;
 
 namespace BBTA.Classe.Menus
 {

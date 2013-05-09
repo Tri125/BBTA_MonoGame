@@ -7,10 +7,9 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using IndependentResolutionRendering;
-using BBTA.Elements;
+using BBTA.Classe.Elements;
 using BBTA.Interfaces;
 using BBTA.Classe.Outils;
-using BBTA.Classe.Elements;
 
 namespace BBTA.Carte
 {

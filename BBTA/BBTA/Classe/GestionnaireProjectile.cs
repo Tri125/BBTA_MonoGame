@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BBTA.Interfaces;
-using BBTA.Interface;
-using BBTA.Elements;
+using BBTA.Classe.Interface;
+using BBTA.Classe.Elements;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
-using BBTA.Classe.Elements;
 using BBTA.Classe.GestionAudio;
 
 namespace BBTA.Classe

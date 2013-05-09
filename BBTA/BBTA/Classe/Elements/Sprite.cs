@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BBTA.Elements
+namespace BBTA.Classe.Elements
 {
     /// <summary>
     /// Un sprite est une texture pouvant être déplacée et affichée à l'écran 
