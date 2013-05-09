@@ -43,7 +43,7 @@ namespace BBTA.Classe
         private Vector2 position;
 
         //Événements--------------------------------------------------------------
-        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions);
+        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 vitesse, Armes type, Armement munitions);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
 
@@ -104,7 +104,7 @@ namespace BBTA.Classe
         void indicateur_ForceFinaleDeterminee(int forceFinale)
         {
             prochainMode = ModeTir.nul;
-            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle(), forceFinale, type, selecteur.Munitions);
+            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle() * forceFinale, type, selecteur.Munitions);
             forceFinale = 0;
         }
 

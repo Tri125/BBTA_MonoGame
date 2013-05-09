@@ -30,16 +30,14 @@ namespace BBTA.Classe.Elements
         /// </summary>
         /// <param name="mondePhysique">Monde physique Farseer dans lequel évoluera la grenade</param>
         /// <param name="positionSpriteSheet">Position et taille de l'image de la grenade dans la spritesheet</param>
-        /// <param name="positionDepart">Position initiale de la grenade lorsqu'elle est lancée</param>
-        /// <param name="direction">Direction de la grenade</param>
-        /// <param name="vitesse">Vitesse de la grenade</param>
         /// <param name="texture">Texture qui sera affichée à l'écran</param>
-        public Grenade(World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
-            : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(9), 5), positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION)
+        /// <param name="positionDepart">Position initiale de la grenade lorsqu'elle est lancée</param>
+        /// <param name="vitesse">Vitesse de la grenade</param>
+        public Grenade(World mondePhysique, Texture2D texture, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 vitesse)
+            : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(9), 5), texture, positionSpriteSheet, positionDepart, vitesse, RAYON_EXPLOSION)
         {
-            corpsPhysique.ApplyLinearImpulse(direction * vitesse);
             corpsPhysique.Restitution = 0.5f; //Coefficient de rebond
-            corpsPhysique.Rotation = Conversion.ValeurAngle(direction);  // L'angle de la grande jusqu'à ce qu'elle touche un objet
+            corpsPhysique.Rotation = Conversion.ValeurAngle(vitesse);  // L'angle de la grande jusqu'à ce qu'elle touche un objet
             if (corpsPhysique.Rotation > MathHelper.PiOver2 && corpsPhysique.Rotation < MathHelper.PiOver2 * 3)
             {
                 retourner = SpriteEffects.FlipVertically;

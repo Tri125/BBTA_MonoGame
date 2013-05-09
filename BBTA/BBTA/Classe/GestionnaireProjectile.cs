@@ -47,20 +47,22 @@ namespace BBTA.Classe
             base.LoadContent();
         }
 
-        public void CreerProjectile(ref World mondePhysique, Vector2 position, Vector2 direction, float vitesse, Armes type)
+        public void CreerProjectile(ref World mondePhysique, Vector2 position, Vector2 vitesse, Armes type)
         {
+            Vector2 distanceDepart = vitesse;
+            distanceDepart.Normalize();
+            distanceDepart *= 60;
             switch (type)
             {
                 case Armes.Roquette:
-                    projectiles.Add(new Roquette(mondePhysique, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(direction * 60),
-                                              direction, vitesse, texturesProjectiles));
+                    projectiles.Add(new Roquette(mondePhysique, texturesProjectiles, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
                     break;
                 case Armes.Grenade:
-                    projectiles.Add(new Grenade(mondePhysique, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(direction*40), direction, vitesse, texturesProjectiles));
+                    projectiles.Add(new Grenade(mondePhysique, texturesProjectiles, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
                     break;
                 case Armes.Mine:
-                    projectiles.Add(new Mine(ref mondePhysique, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(direction * 40), direction, vitesse, texturesProjectiles));
-                    (projectiles[projectiles.Count - 1] as Mine).FixationAuSol += new EventHandler(GestionnaireProjectile_VitesseNulle);
+                    projectiles.Add(new Mine(ref mondePhysique, texturesProjectiles, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
+                    (projectiles[projectiles.Count - 1] as Mine).FixationAuSol += new EventHandler(GestionnaireProjectile_FixationAuSol);
                     break;
                 default:
                     break;
@@ -80,7 +82,7 @@ namespace BBTA.Classe
             }
         }
 
-        void GestionnaireProjectile_VitesseNulle(object sender, EventArgs e)
+        void GestionnaireProjectile_FixationAuSol(object sender, EventArgs e)
         {
             enAction = false;
             if (ProcessusTerminer != null)

@@ -177,10 +177,10 @@ namespace BBTA.Partie_De_Jeu
             tempsEcouler = tempsTour;
         }
 
-        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions)
+        void gestionnaireMenusTir_ProcessusDeTirTerminer(Vector2 position, Vector2 vitesse, Armes type, Armement munitions)
         {
             equipeActive.Munitions = munitions;
-            gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, direction, vitesse, type);
+            gestionnaireProjectile.CreerProjectile(ref mondePhysique, position, vitesse, type);
             equipeActive.JoueurActif.enModeTir = false;
         }
 

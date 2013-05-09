@@ -22,7 +22,7 @@ namespace BBTA.Classe.Elements
         public delegate void DelegateExplosion(Projectile proejctileExplosant, Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
 
-        public Projectile(World mondePhysique, Shape forme, Rectangle positionSpriteSheet, Vector2 positionDepart, Texture2D texture, int rayonExplosion)
+        public Projectile(World mondePhysique, Shape forme, Texture2D texture, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 vitesse, int rayonExplosion)
             : base(texture, mondePhysique, forme)
         {
             this.mondePhysique = mondePhysique;
@@ -31,6 +31,7 @@ namespace BBTA.Classe.Elements
             corpsPhysique.IsBullet = true;
             corpsPhysique.Position = positionDepart;
             corpsPhysique.BodyType = BodyType.Dynamic;
+            corpsPhysique.LinearVelocity = vitesse;
         }
 
         public override void Update(GameTime gameTime)

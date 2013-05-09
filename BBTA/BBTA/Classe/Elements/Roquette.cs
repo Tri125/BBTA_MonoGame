@@ -17,12 +17,10 @@ namespace BBTA.Classe.Elements
     {
         private const int RAYON_EXPLOSION_MAX = 5;
 
-        public Roquette(World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
+        public Roquette(World mondePhysique, Texture2D texture, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 vitesse)
             : base(mondePhysique, new PolygonShape(PolygonTools.CreateRectangle(Conversion.PixelAuMetre(positionSpriteSheet.Width), Conversion.PixelAuMetre(positionSpriteSheet.Height)), 1), 
-                   positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION_MAX)
+                   texture, positionSpriteSheet, positionDepart, vitesse, RAYON_EXPLOSION_MAX)
         {
-            direction.Normalize();
-            corpsPhysique.LinearVelocity = direction * vitesse;
             corpsPhysique.FixedRotation = true;
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
             corpsPhysique.CollidesWith = Category.All;

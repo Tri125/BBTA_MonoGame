@@ -36,33 +36,37 @@ namespace BBTA.Classe.Elements
         /// <summary>
         /// Constructeur
         /// </summary>
-        /// <param name="mondePhysique"></param>
-        /// <param name="positionSpriteSheet"></param>
-        /// <param name="positionDepart"></param>
-        /// <param name="direction"></param>
-        /// <param name="vitesse"></param>
-        /// <param name="texture"></param>
-        public Mine(ref World mondePhysique, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 direction, float vitesse, Texture2D texture)
-            : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(7), 5), positionSpriteSheet, positionDepart, texture, RAYON_EXPLOSION)
+        /// <param name="mondePhysique">Monde physique Farseer dans lequel évoluera la mine</param>
+        /// <param name="positionSpriteSheet">Position de la texture de la mine dans la spritesheet</param>
+        /// <param name="positionDepart">Position initiale de la mine lors de son lancement</param>
+        /// <param name="direction">Direction du lancer</param>
+        /// <param name="vitesse">Vitesse initiale</param>
+        /// <param name="texture">Texture de la mine qui sera affichée à l'écran</param>
+        public Mine(ref World mondePhysique, Texture2D texture, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 vitesse)
+            : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(7), 5), texture, positionSpriteSheet, positionDepart, vitesse, RAYON_EXPLOSION)
 
         {
             this.mondePhysique = mondePhysique;
-            corpsPhysique.ApplyLinearImpulse(direction * vitesse);
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
             compteRebours.Elapsed += new ElapsedEventHandler(compteRebours_Elapsed);
         }
 
-        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            explose = true;
-        }
-
+        /// <summary>
+        /// Met à jour la mine.
+        /// Anime le témoin lumineux.
+        /// Détecte les objets à proximité et explose si c'est un joueur.
+        /// Détecte s'il reste toujours un bloc derrière elle.
+        /// Lorsqu'elle se colle, la mine s'oriente correctement;
+        /// </summary>
+        /// <param name="gameTime">Temps du jeu</param>
         public override void Update(GameTime gameTime)
         {
+            //L'image de la mine est modifiée si le délai de temps est expiré.
             tempsDepuisLumierePrecedente += gameTime.ElapsedGameTime.Milliseconds;
             if (tempsDepuisLumierePrecedente > DELAI_LUMIERE)
             {
                 tempsDepuisLumierePrecedente -= DELAI_LUMIERE;
+                //Le rectangle de sélection de l'image de la spritesheet est décalé en fonction de l'état actuel du témoin lumineux.
                 if (positionSpriteSheet.X == 3)
                 {
                     positionSpriteSheet.Offset(texture.Width/2, 0);
@@ -72,52 +76,55 @@ namespace BBTA.Classe.Elements
                     positionSpriteSheet.Offset(-texture.Width / 2, 0);
                 }
             }
+
+            //Si la mine est en mouvement dans les airs, son orientation suit celle de sa vitesse.
             if (corpsPhysique.LinearVelocity != Vector2.Zero)
             {
                 corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
             }
 
+            /* Si la mine n'obéit plus aux lois de la gravité, cela signifie qu'elle est fixée au sol. 
+             * Ainsi, à partir de ce moment, on peut détecter les objets aux alentours pour savoir si elle doit exploser.
+             * De même, la détection du bloc derrière elle est effectuée
+             */
             if (corpsPhysique.IgnoreGravity)
             {
+                //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
                 bool objetRencontrer = false;
                 mondePhysique.QueryAABB(Fixture =>
                                         {
+                                            //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
+                                            //Note : les projectiles sont aussi pris en compte.
                                             if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
                                             {
                                                 compteRebours.Start();
                                                 return false;
                                             }
-                                            else
-                                            {
-                                                objetRencontrer = true;
-                                                return true;
-                                            }
+                                            
+                                            if(
                                         },
                                         ref detectionAutourMine);
-
-            }
-
-            if (corpsPhysique.LinearVelocity.Length() == 0 && FixationAuSol != null && compteRebours.Enabled == false)
-            {
-                FixationAuSol(this, new EventArgs());
-                FixationAuSol = null;
             }
 
             base.Update(gameTime);
         }
 
-
-        public override void Draw(SpriteBatch spriteBatch)
+        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
         {
-            spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,
-                             Color.White, corpsPhysique.Rotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
+            explose = true;
         }
 
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
             corpsPhysique.IgnoreGravity = true;
             corpsPhysique.LinearVelocity = Vector2.Zero;
+
+            if (FixationAuSol != null)
+            {
+                FixationAuSol(this, new EventArgs());
+            }
+
             if (contact.Manifold.LocalPoint.Y < 0)
             {
                 corpsPhysique.Rotation = MathHelper.PiOver2 * 3;
@@ -135,6 +142,12 @@ namespace BBTA.Classe.Elements
                 corpsPhysique.Rotation = MathHelper.Pi;
             }
             return true;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,
+                             Color.White, corpsPhysique.Rotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
         }
     }
 }
