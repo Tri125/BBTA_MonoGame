@@ -94,7 +94,7 @@ namespace BBTA.Classe.Elements
             {
                 //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
-                bool blocAuDessousEstDetecter = false;
+                bool blocAuDessousEstDetecter = false; //Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
                 mondePhysique.QueryAABB(Fixture =>
                                         {
                                             //S'il n'y a plus de blocs au dessous, la mine disparaît.
@@ -113,11 +113,12 @@ namespace BBTA.Classe.Elements
                                             }
                                             else
                                             {
-                                                return true;
+                                                return true; //On continue de chercher
                                             }
 
                                         },
                                         ref detectionAutourMine);
+                //Explosion de la mine s'il n'y a plus de bloc en-dessous.
                 if (blocAuDessousEstDetecter == false)
                 {
                     explose = true;
@@ -127,23 +128,24 @@ namespace BBTA.Classe.Elements
             base.Update(gameTime);
         }
 
-        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            explose = true;
-        }
-
+        /// <summary>
+        /// Lorsque la mine entre en collison, elle ne subit plus la gravité.
+        /// De plus, elle s'oriente de manière à apparaître collée au mur.
+        /// </summary>
+        /// <param name="fixtureA"></param>
+        /// <param name="fixtureB"></param>
+        /// <param name="contact"></param>
+        /// <returns></returns>
         bool corpsPhysique_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
         {
+            //Elle est désormais immobile.
             corpsPhysique.IgnoreGravity = true;
-            corpsPhysique.LinearVelocity = Vector2.Zero;
+            corpsPhysique.LinearVelocity = Vector2.Zero; 
 
+            //On retient en mémoire la position du bloc en-dessous pour vérifier dans le Update s'il est toujours là.
             blocAuDessous = fixtureB.Body.Position;
 
-            if (FixationAuSol != null)
-            {
-                FixationAuSol(this, new EventArgs());
-            }
-
+            //La mine s'oriente en fonction de l'angle de la surface qu'elle frappe et du côté qu'elle le fait.
             if (contact.Manifold.LocalPoint.Y < 0)
             {
                 corpsPhysique.Rotation = MathHelper.PiOver2 * 3;
@@ -160,9 +162,30 @@ namespace BBTA.Classe.Elements
             {
                 corpsPhysique.Rotation = MathHelper.Pi;
             }
+
+            //Un événement est déclanché pour indiquer que la mine est désormais positionnée et qu'elle n'est plus en vol.
+            if (FixationAuSol != null)
+            {
+                FixationAuSol(this, new EventArgs());
+            }
+
             return true;
         }
 
+        /// <summary>
+        /// Expiration du compte à rebours.  Le processus d'explosion démarre
+        /// </summary>
+        /// <param name="sender">Mine</param>
+        /// <param name="e"></param>
+        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            explose = true;
+        }
+
+        /// <summary>
+        /// Dessine la mine correctement à l'écran
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,

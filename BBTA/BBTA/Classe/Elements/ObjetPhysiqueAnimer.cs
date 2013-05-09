@@ -55,10 +55,12 @@ namespace BBTA.Classe.Elements
         protected void Animer(GameTime gameTime, int posDebut, int posFin)
         {
             tempsdepuisDerniereImage += gameTime.ElapsedGameTime.Milliseconds;
+            //Si le délai pour l'affichage est expiré, on change l'image affichée.
             if (tempsdepuisDerniereImage > milliSecParImage)
             {
                 tempsdepuisDerniereImage -= milliSecParImage;
                 imageEnCours++;
+                //Si c'est la dernière image de la séquence, on se repositionne à la première
                 if (imageEnCours == posFin)
                 {
                     imageEnCours = posDebut;
@@ -72,13 +74,13 @@ namespace BBTA.Classe.Elements
         /// <param name="spriteBatch">Objet dessinant le sprite</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
+            //À partir des informations sur l'image actuelles et sur la taille de la spritesheet, on se positionne pour afficher la bonne portion de la spritesheet.
             int rangeeActuelle = imageEnCours / nbColonnes;
             int colonneActuelle = imageEnCours % nbColonnes;
             Rectangle selection = new Rectangle(colonneActuelle * largeur, rangeeActuelle * hauteur, largeur, hauteur);
+            //Omn dessine le tout.
             spriteBatch.Draw(texture, new Vector2((int)Conversion.MetreAuPixel(corpsPhysique.Position.X), (int)Conversion.MetreAuPixel(corpsPhysique.Position.Y)),
                              selection, Color.White, corpsPhysique.Rotation, new Vector2(largeur / 2, hauteur /2), 1, effet, 0);
         }
-
-
     }
 }

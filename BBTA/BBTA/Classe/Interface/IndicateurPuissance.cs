@@ -39,7 +39,7 @@ namespace BBTA.Interface
             : base(texture, new Rectangle(0, 0, texture.Width, HAUTEUR_PANNEAU), 200)
         {
             tirEstCommence = false;
-            forceDepart = 0;
+            forceDepart = 1;
             tempsEcouleDepuisDernierPalier = 0;
             positionIndicateur = new Vector2(0, POSITION_INITIALE_INDICATEUR);
         }
@@ -87,7 +87,7 @@ namespace BBTA.Interface
                     }
                     tirEstCommence = false;
                     estOuvert = false;
-                    forceDepart = 0;
+                    forceDepart = 1;
                     tempsEcouleDepuisDernierPalier = 0;
                 }
             }

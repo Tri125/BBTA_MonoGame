@@ -11,14 +11,23 @@ using BBTA.Classe.Outils;
 
 namespace BBTA.Classe.Elements
 {
+    /// <summary>
+    /// La classe projectile sert de base à tous les projectiles du jeu.
+    /// Il s'agit en fait d'un objet physique avec une vitesse initiale et qui peut déclancher un événement lorsqu'il explose.
+    /// La composante "IsBullet" de son corps physique est activée pour améliorer la détection des collisions.
+    /// </summary>
     public abstract class Projectile : ObjetPhysique
     {
+        //Informations quant à l'explosion du projectile------------------------------------------------------------------------
         private readonly int rayonExplosion;
+        protected bool explose = false; //Indique si le processus d'explosion est enclanché.
+
         protected SpriteEffects retourner = SpriteEffects.None;
-        protected bool explose = false;
         private World mondePhysique;
         protected bool EstEnMain = true;
         protected Rectangle positionSpriteSheet;
+
+        //Événements et éléments reliés------------------------------------------------------------------------------------------
         public delegate void DelegateExplosion(Projectile proejctileExplosant, Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
 
