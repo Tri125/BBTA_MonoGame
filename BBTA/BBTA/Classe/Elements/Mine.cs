@@ -22,6 +22,9 @@ namespace BBTA.Classe.Elements
         //Variables issues du moteur physique Farseer-----------------------------------------------------------------------------
         private World mondePhysique; //Servira à détecter les joueurs trop près
 
+        //Position du bloc au-dessous de la mine----------------------------------------------------------------------------------
+        private Bloc blocAuDessous;
+
         //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
         private Timer compteRebours = new Timer(200);
         private int tempsDepuisLumierePrecedente = 0;
@@ -91,7 +94,6 @@ namespace BBTA.Classe.Elements
             {
                 //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
-                bool objetRencontrer = false;
                 mondePhysique.QueryAABB(Fixture =>
                                         {
                                             //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
@@ -101,10 +103,17 @@ namespace BBTA.Classe.Elements
                                                 compteRebours.Start();
                                                 return false;
                                             }
-                                            
-                                            if(
+                                            else
+                                            {
+                                                return true;
+                                            }
                                         },
                                         ref detectionAutourMine);
+                //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                if (blocAuDessous == null)
+                {
+                    explose = true;
+                }
             }
 
             base.Update(gameTime);
@@ -119,6 +128,8 @@ namespace BBTA.Classe.Elements
         {
             corpsPhysique.IgnoreGravity = true;
             corpsPhysique.LinearVelocity = Vector2.Zero;
+
+            blocAuDessous = fixtureB.Body.UserData as Bloc;
 
             if (FixationAuSol != null)
             {
