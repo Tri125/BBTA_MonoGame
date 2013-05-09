@@ -38,7 +38,7 @@ namespace BBTA.Interface
 
             angleRotation %= MathHelper.TwoPi;
 
-            if (clavier.IsKeyDown(Keys.Space))
+            if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Tir))
             {
                 if (Verouiller != null)
                 {

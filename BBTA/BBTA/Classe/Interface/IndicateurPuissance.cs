@@ -57,7 +57,7 @@ namespace BBTA.Interface
 
             //Le processus de sélection de la puissane ne démarre que si le joueur appuie sur "Espace".  Il doit maintenir cette touche jusqu'à
             //temps qu'il ait obtenu la force désirée.  S'il la relâche, le composant se ferme.
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && tirEstCommence == false)
+            if (Keyboard.GetState().IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Tir) && tirEstCommence == false)
             {
                 tirEstCommence = true;
             }
@@ -79,7 +79,7 @@ namespace BBTA.Interface
 
                 /*Lorsque l'utilisateur cesse d'appuyer sur la touche "Espace", un événement est généré.
                  * Le composant est fermé automatiquement et les variables qui doivent être remises à leur valeur initiale le sont.*/
-                if (Keyboard.GetState().IsKeyUp(Keys.Space))
+                if (Keyboard.GetState().IsKeyUp(Game1.chargeurOption.OptionActive.InformationTouche.Tir))
                 {
                     if (ForceFinaleDeterminee != null)
                     {
