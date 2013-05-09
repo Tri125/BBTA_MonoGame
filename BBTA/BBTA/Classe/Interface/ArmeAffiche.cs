@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     /// <summary>
     /// Représente l'arme que le joueur tient dans ses bras lors du tir (ex: un bazooka dans le cas d'une roquette)

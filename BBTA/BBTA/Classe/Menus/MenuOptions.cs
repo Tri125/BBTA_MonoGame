@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Interface;
-using BBTA.Classe.GestionAudio;
+using BBTA.Interface;
+using BBTA.GestionAudio;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuOptions : MenuArrierePlan
     {
@@ -39,7 +39,7 @@ namespace BBTA.Classe.Menus
 
         private EtatJeu prochainEtat;
 
-        private BBTA.Classe.Option.Option OptionJeu;
+        private Option.Option OptionJeu;
 
         public void InitControlAudio(GestionMusique gestionnaireMusique, GestionSon gestionnaireSon)
         {
@@ -62,7 +62,7 @@ namespace BBTA.Classe.Menus
 
         protected override void LoadContent()
         {
-            police = Game.Content.Load<SpriteFont>(@"ComicSan");
+            police = Game.Content.Load<SpriteFont>(@"Police\ComicSan");
 
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\lettrageOption");
             sliderEffet = new Slider(Game.Content.Load<Texture2D>(@"Ressources\Menus\Options\ArrierePlanSlider"), new Vector2(900, 225),

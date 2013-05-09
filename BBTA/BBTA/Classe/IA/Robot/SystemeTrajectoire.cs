@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 using FarseerPhysics.Dynamics;
 using BBTA.Carte;
 
-namespace BBTA.Classe.IA.Robot
+namespace BBTA.IA
 {
     public class SystemeTrajectoire
     {

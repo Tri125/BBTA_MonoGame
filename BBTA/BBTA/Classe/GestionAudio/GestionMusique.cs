@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace BBTA.Classe.GestionAudio
+namespace BBTA.GestionAudio
 {
     /// <summary>
     /// GestionMusique est une composante qui charge les ressources audio et le lancement de la musique de fond et son changement.

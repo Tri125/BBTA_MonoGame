@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuArrierePlan : DrawableGameComponent
     {

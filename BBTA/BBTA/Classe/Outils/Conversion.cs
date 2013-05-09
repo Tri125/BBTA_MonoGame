@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace BBTA.Classe.Outils
+namespace BBTA.Outils
 {
     static class Conversion
     {

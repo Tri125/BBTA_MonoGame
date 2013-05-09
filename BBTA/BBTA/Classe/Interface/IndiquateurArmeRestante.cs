@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     /// <summary>
     /// Il s'agit d'un bouton qui dispose de l'image d'une arme spécifique et qui affiche le nombre de munitions qu'il reste de cette arme.

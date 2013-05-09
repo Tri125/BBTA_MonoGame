@@ -8,10 +8,10 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 using BBTA.Carte;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Les objets issus de la classe Bloc agissent comme blocs au sein de la carte.

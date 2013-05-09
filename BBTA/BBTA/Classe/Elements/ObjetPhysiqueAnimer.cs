@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision.Shapes;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     public abstract class ObjetPhysiqueAnimer : ObjetPhysique
     {

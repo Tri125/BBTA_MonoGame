@@ -10,19 +10,17 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
 using EditeurCarteXNA;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 using IndependentResolutionRendering;
 using FarseerPhysics.Collision.Shapes;
 using System.Timers;
-using BBTA.Classe.Outils;
 using System.Text;
-using BBTA.Classe.IA.Robot;
+using BBTA.IA;
 using BBTA.Carte;
-using BBTA.Classe;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -103,9 +101,9 @@ namespace BBTA.Partie_De_Jeu
                               Game.Content.Load<Texture2D>(@"Ressources\HoraireNico"), Game.Content.Load<Texture2D>(@"Ressources\blocs"), 
                               mondePhysique, 40);
             Texture2D textureJoueur = Game.Content.Load<Texture2D>(@"Ressources\Acteur\wormsp");
-            policeCompte = Game.Content.Load<SpriteFont>(@"CompteRebours");
+            policeCompte = Game.Content.Load<SpriteFont>(@"Police\CompteRebours");
             secondesRestantes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\SecondesRestantes");
-            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"PoliceNbJoueursVie");
+            policeNbJoueurs = Game.Content.Load<SpriteFont>(@"Police\PoliceNbJoueursVie");
 
             List<Vector2> listeApparition = carte.ListeApparition;            foreach (Equipe equipe in equipes)
             {

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     /// <summary>
     /// MenuDeployable est une classe qui permet d'afficher un menu doté d'une animation à son lancement et à sa fermeture.

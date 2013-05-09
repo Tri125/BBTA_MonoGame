@@ -8,10 +8,10 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using BBTA.Classe.Interface;
-using BBTA.Classe.Elements;
+using BBTA.Interface;
+using BBTA.Elements;
 
-namespace BBTA.Classe.GestionAudio
+namespace BBTA.GestionAudio
 {
     /// <summary>
     /// GestionSon est une composante qui charge les ressources audio et le lancement d'effet sonore selon des événements.

@@ -131,8 +131,6 @@
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\GestionAudio\GestionSon.cs" />
-    <Compile Include="Classe\GestionnaireMenusTir.cs" />
-    <Compile Include="Classe\GestionnaireProjectile.cs" />
     <Compile Include="Classe\GestionAudio\GestionMusique.cs" />
     <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\Graphe.cs" />
@@ -166,6 +164,8 @@
     <Compile Include="Classe\Outils\EventInput.cs" />
     <Compile Include="Classe\Outils\OutilGraphe.cs" />
     <Compile Include="Classe\PartieJeu\Equipe.cs" />
+    <Compile Include="Classe\PartieJeu\GestionnaireMenusTir.cs" />
+    <Compile Include="Classe\PartieJeu\GestionnaireProjectile.cs" />
     <Compile Include="Classe\PartieJeu\PartieJeu.cs" />
     <Compile Include="Classe\Resolution\Resolution.cs" />
     <Compile Include="Interfaces\IUtiliseMatriceCamera.cs" />

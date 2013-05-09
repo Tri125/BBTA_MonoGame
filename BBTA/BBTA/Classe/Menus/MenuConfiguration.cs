@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 using Microsoft.Xna.Framework;
 using IndependentResolutionRendering;
 using System.IO;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuConfiguration : MenuArrierePlan
     {
@@ -87,7 +87,7 @@ namespace BBTA.Classe.Menus
             btnHautJ2 = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\btnHaut"), new Vector2(1100, 570), null);
             btnHautJ2.Clic += new EventHandler(btnHautJ2_Clic);
 
-            police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
+            police = Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur");
 
             base.LoadContent();
         }

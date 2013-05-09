@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework.Input;
 
-namespace BBTA.Classe.Option
+namespace BBTA.Option
 {
     /// <summary>
     /// La classe contient les informations pour les configurations du jeu de l'utilisateur.

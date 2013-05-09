@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BBTA.Classe.IA.Navigation
+namespace BBTA.IA
 {
 
     //-----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace BBTA.Classe.IA.Navigation
 
         public NoeudGraph()
         {
-            this.NumIndex = (int)Navigation.MessageNoeud.index_invalide;
+            this.NumIndex = (int)MessageNoeud.index_invalide;
         }
 
         public NoeudGraph(int index)

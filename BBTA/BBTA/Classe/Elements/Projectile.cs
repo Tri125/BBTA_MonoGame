@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision.Shapes;
 using BBTA.Partie_De_Jeu;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// La classe projectile sert de base à tous les projectiles du jeu.
