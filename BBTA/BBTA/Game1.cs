@@ -39,7 +39,6 @@ namespace BBTA
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public static Random hasard = new Random();
         //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
         EtatJeu EtatPrecedent;
@@ -47,8 +46,9 @@ namespace BBTA
         SpriteBatch spriteBatch;
         MouseState avant;
         MouseState now;
-        private OutilGraphe Testy;
+        private OutilGraphe TesteGraphe;
         private GestionMusique gestionnaireMusique;
+        //Évènement utilisé pour communiquer un changement d'état du jeu gestionnaire de musique.
         private event EventHandler ChangementEtat;
         private GestionSon gestionnaireSon;
 
@@ -58,13 +58,19 @@ namespace BBTA
         private MenuConfiguration config;
         private MenuFinDePartie finPartie;
 
+        //On construit plusieurs objet static public pour que des classes externes puissent avoir accèss aux outils.
+        //Game1.cs est construit immédiatement après Program.cs, alors nous sommes assuré que les classes externes n'auront jamais
+        //un null en essayant de prendre les objets.
+        public static Random hasard = new Random();
         static public BBTA_ConstructeurCarte chargeurCarte = new BBTA_ConstructeurCarte(3, "*.xml", "Carte Jeu");
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Window.Title = "Bang Bang Total Annihilation";
+            //Initialisation de la résolution indépendante de l'affichage.
             Resolution.Init(ref graphics);
+            //Résolution virtuelle interne.
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
             Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
@@ -72,6 +78,7 @@ namespace BBTA
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
             Content.RootDirectory = "Content";
+            //Chargement des cartes successivement.
             chargeurOption.Initialisation();
         }
 
@@ -84,7 +91,6 @@ namespace BBTA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             EventInput.EventInput.Initialize(Window);
 
             gestionnaireMusique = new GestionMusique(this);
@@ -93,6 +99,8 @@ namespace BBTA
 
             gestionnaireSon = new GestionSon(this);
             this.Components.Add(gestionnaireSon);
+            //On enregistre gestionnaireSon en tant que Services. Cela permet aux classes externes de consommer gestionnaireSon
+            //sans avoir de référence ou de paramètre.
             Services.AddService(typeof (GestionSon), gestionnaireSon);
 
             //Etat Accueil
@@ -104,7 +112,7 @@ namespace BBTA
             //Etat configuration
             config = new MenuConfiguration(this);
 
-            Testy = new OutilGraphe(this);
+            TesteGraphe = new OutilGraphe(this);
 
             base.Initialize();
         }
@@ -113,6 +121,8 @@ namespace BBTA
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ChangementEtat(this.EtatActuel, EventArgs.Empty);
+            //Pour le menu des options de configuration, on donne en paramètre le gestionnaire de son et celui de la musique
+            //pour lié les événements correspondant au contrôle du volume.
             option.InitControlAudio(gestionnaireMusique , gestionnaireSon);
             base.LoadContent();
         }
@@ -125,7 +135,10 @@ namespace BBTA
         protected override void Update(GameTime gameTime)
         {
             gestionnaireMusique.Update(gameTime);
+            gestionnaireSon.Update(gameTime);
+
             EtatPrecedent = EtatActuel;
+            //Ne roule plus la boucle principale Update si la fenêtre perd le focus.
             if (this.IsActive)
             {
                 avant = now;
@@ -204,6 +217,8 @@ namespace BBTA
                     case EtatJeu.Pause:
                         break;
                 }
+                //On détecte un changement d'état.
+                //On signale le gestionnaire de musique par un événement pour jouer une musique approprié.
                 if (EtatActuel != EtatPrecedent)
                 {
                     ChangementEtat(this.EtatActuel, EventArgs.Empty);

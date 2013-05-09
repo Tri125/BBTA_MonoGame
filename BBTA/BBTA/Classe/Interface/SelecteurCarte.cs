@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using IndependentResolutionRendering;
 using BBTA.Classe.Outils;
+using BBTA.Carte;
 
 namespace BBTA.Classe.Interface
 {
@@ -14,7 +15,7 @@ namespace BBTA.Classe.Interface
     {
         private SpriteFont police;
         private Rectangle dimmensions;
-        private Carte carte;
+        private CarteJeu carte;
         private List<string> nomCartes;
         private Texture2D blocs;
         private Texture2D arriereplan;
@@ -40,7 +41,7 @@ namespace BBTA.Classe.Interface
             police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
-            carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+            carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
             estChargee = true;
             parDessus = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\Carte");
             base.LoadContent();
@@ -68,7 +69,7 @@ namespace BBTA.Classe.Interface
             if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
             {
                 deplacementHorizontalCarte = 0;
-                carte = new Carte(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
+                carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
                     Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
                 estChargee = true;
             }
