@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Nuage est un sprite qui traverse l'écran d'un bout à l'autre et qui, une fois cela fait, est replacé à l'extrémité gauche pour recommencer à nouveau

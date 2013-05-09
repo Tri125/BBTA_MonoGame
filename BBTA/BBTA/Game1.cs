@@ -10,19 +10,17 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
 using EditeurCarteXNA;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
-using BBTA.Classe.Menus;
-using BBTA.Classe.Option;
+using BBTA.Option;
 using EventInput;
-using BBTA.Classe.IA.Navigation;
-using BBTA.Classe.Outils;
-using BBTA.Classe.GestionAudio;
+using BBTA.IA;
+using BBTA.GestionAudio;
 
 namespace BBTA
 {

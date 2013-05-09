@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Interface;
-using BBTA.Classe.GestionAudio;
+using BBTA.Interface;
+using BBTA.GestionAudio;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuOptions : MenuArrierePlan
     {
@@ -39,7 +39,7 @@ namespace BBTA.Classe.Menus
 
         private EtatJeu prochainEtat;
 
-        private BBTA.Classe.Option.Option OptionJeu;
+        private Option.Option OptionJeu;
 
         public void InitControlAudio(GestionMusique gestionnaireMusique, GestionSon gestionnaireSon)
         {

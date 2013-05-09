@@ -9,9 +9,9 @@ using FarseerPhysics.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Une roquette est un projectile qui explose au moment où il entre en collision avec un objet.

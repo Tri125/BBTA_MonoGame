@@ -6,7 +6,7 @@ using FarseerPhysics.Factories;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 
 namespace BBTA.Carte
 {

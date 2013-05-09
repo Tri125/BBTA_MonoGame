@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace BBTA.Classe.IA.Navigation
+namespace BBTA.IA
 {
 
     //------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace BBTA.Classe.IA.Navigation
 
             for (int n = 0; n < NoeudGraphe.Count; ++n)
             {
-                if (NoeudGraphe[n].NumIndex != (int)Navigation.MessageNoeud.index_invalide)
+                if (NoeudGraphe[n].NumIndex != (int)MessageNoeud.index_invalide)
                     ++count;
             }
 
@@ -115,7 +115,7 @@ namespace BBTA.Classe.IA.Navigation
         //--------------------------------------------------------------------------
         public bool isNodePresent(int nd)
         {
-            if ((nd >= (int)NoeudGraphe.Count() || (NoeudGraphe[nd].NumIndex == (int)Navigation.MessageNoeud.index_invalide)))
+            if ((nd >= (int)NoeudGraphe.Count() || (NoeudGraphe[nd].NumIndex == (int)MessageNoeud.index_invalide)))
             {
                 return false;
             }
@@ -154,7 +154,7 @@ namespace BBTA.Classe.IA.Navigation
         public NavNoeudGraph GetNode(int idx)
         {
 
-            if (idx < NoeudGraphe.Count() && idx >= 0 && NoeudGraphe[idx].NumIndex == (int)Navigation.MessageNoeud.index_invalide)
+            if (idx < NoeudGraphe.Count() && idx >= 0 && NoeudGraphe[idx].NumIndex == (int)MessageNoeud.index_invalide)
             {
                 return NoeudGraphe[idx];
             }
@@ -171,9 +171,9 @@ namespace BBTA.Classe.IA.Navigation
         //non const version
         public NavArcGraph GetEdge(int from, int to)
         {
-            if (from < NoeudGraphe.Count() && from >= 0 && NoeudGraphe[from].NumIndex != (int)Navigation.MessageNoeud.index_invalide)
+            if (from < NoeudGraphe.Count() && from >= 0 && NoeudGraphe[from].NumIndex != (int)MessageNoeud.index_invalide)
             {
-                if (to < NoeudGraphe.Count() && to >= 0 && NoeudGraphe[to].NumIndex != (int)Navigation.MessageNoeud.index_invalide)
+                if (to < NoeudGraphe.Count() && to >= 0 && NoeudGraphe[to].NumIndex != (int)MessageNoeud.index_invalide)
                 {
                     foreach (NavArcGraph arc in ArcAdjacent[from])
                     {
@@ -202,8 +202,8 @@ namespace BBTA.Classe.IA.Navigation
             if (arc.IndexProv < m_iNextNodeIndex && arc.IndexDest < m_iNextNodeIndex)
             {
                 //make sure both nodes are active before adding the edge
-                if ((NoeudGraphe[arc.IndexDest].NumIndex != (int)Navigation.MessageNoeud.index_invalide)
-                    && (NoeudGraphe[arc.IndexProv].NumIndex != (int)Navigation.MessageNoeud.index_invalide))
+                if ((NoeudGraphe[arc.IndexDest].NumIndex != (int)MessageNoeud.index_invalide)
+                    && (NoeudGraphe[arc.IndexProv].NumIndex != (int)MessageNoeud.index_invalide))
                 {
 
                     //add the edge, first making sure it is unique
@@ -275,7 +275,7 @@ namespace BBTA.Classe.IA.Navigation
             {
                 //make sure the client is not trying to add a node with the same ID as
                 //a currently active node
-                if (NoeudGraphe[node.NumIndex].NumIndex == (int)Navigation.MessageNoeud.index_invalide)
+                if (NoeudGraphe[node.NumIndex].NumIndex == (int)MessageNoeud.index_invalide)
                 {
                     NoeudGraphe[node.NumIndex] = node;
                 }
@@ -307,8 +307,8 @@ namespace BBTA.Classe.IA.Navigation
             {
                 foreach (NavArcGraph arc in listeArc.ToList())
                 {
-                    if (NoeudGraphe[arc.IndexDest].NumIndex == (int)Navigation.MessageNoeud.index_invalide ||
-                        NoeudGraphe[arc.IndexProv].NumIndex == (int)Navigation.MessageNoeud.index_invalide)
+                    if (NoeudGraphe[arc.IndexDest].NumIndex == (int)MessageNoeud.index_invalide ||
+                        NoeudGraphe[arc.IndexProv].NumIndex == (int)MessageNoeud.index_invalide)
                     {
                         listeArc.Remove(arc);
                     }
@@ -328,7 +328,7 @@ namespace BBTA.Classe.IA.Navigation
             if (node < NoeudGraphe.Count())
             {
                 //set this node's index to invalid_node_index
-                NoeudGraphe[node].NumIndex = (int)Navigation.MessageNoeud.index_invalide;
+                NoeudGraphe[node].NumIndex = (int)MessageNoeud.index_invalide;
                 //if the graph is not directed remove all edges leading to this node and then
                 //clear the edges leading from the node
                 if (!m_bDigraph)

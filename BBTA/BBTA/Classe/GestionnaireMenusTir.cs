@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BBTA.Interfaces;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Outils;
-using BBTA.Classe.Elements;
+using BBTA.Outils;
+using BBTA.Elements;
 
-namespace BBTA.Classe
+namespace BBTA.Partie_De_Jeu
 {
     enum ModeTir
     {

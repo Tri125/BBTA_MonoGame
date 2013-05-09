@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BBTA.Classe.IA.Navigation;
+using BBTA.IA;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace BBTA.Classe.Outils
+namespace BBTA.Outils
 {
     public class OutilGraphe : DrawableGameComponent
     {

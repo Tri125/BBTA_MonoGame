@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 
 
 
-namespace BBTA.Classe.Option
+namespace BBTA.Option
 {
     /// <summary>
     /// La classe BBTA_ConstructeurOption gère la génération des fichiers XML pour enregistrer les paramètres de jeu de l'utilisateur, pour charger

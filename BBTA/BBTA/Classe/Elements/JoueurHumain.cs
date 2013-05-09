@@ -7,9 +7,9 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using BBTA.Classe.Option;
+using BBTA.Option;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Un joueur humain est un acteur contrôlé par un joueur humain.  En somme, c'est le personnage que contrôleront les joueurs de BBTA.
@@ -20,7 +20,7 @@ namespace BBTA.Classe.Elements
     public class JoueurHumain : Acteur
     {
         //Touches personnalisées de l'utilisateur------------------------------------------------------------------------------
-        private BBTA.Classe.Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionActive.InformationTouche;
+        private Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionActive.InformationTouche;
 
         /// <summary>
         /// Constructeur

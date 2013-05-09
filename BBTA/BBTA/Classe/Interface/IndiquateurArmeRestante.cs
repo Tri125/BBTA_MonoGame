@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     public class IndicateurArmeRestante:Bouton
     {

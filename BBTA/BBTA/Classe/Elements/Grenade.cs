@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Dynamics;
 using System.Timers;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Une grande dans BBTA est un dispositif explosif qui explose après un certain délai.

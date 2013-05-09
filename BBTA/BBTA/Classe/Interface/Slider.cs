@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using IndependentResolutionRendering;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     enum EtatSlider
     {

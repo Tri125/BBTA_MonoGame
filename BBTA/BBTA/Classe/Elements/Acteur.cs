@@ -10,10 +10,10 @@ using FarseerPhysics.Factories;
 using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
-using BBTA.Classe.Outils;
-using BBTA.Classe.Interface;
+using BBTA.Outils;
+using BBTA.Interface;
 
-namespace BBTA.Classe.Elements
+namespace BBTA.Elements
 {
     /// <summary>
     /// Un acteur est en effet un joueur dans BBTA.  

@@ -10,11 +10,11 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FarseerPhysics.Dynamics;
 using EditeurCarteXNA;
-using BBTA.Classe.Elements;
+using BBTA.Elements;
 using FarseerPhysics.Factories;
 using BBTA.Outils;
 using BBTA.Menus;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 
 namespace BBTA.Partie_De_Jeu
 {

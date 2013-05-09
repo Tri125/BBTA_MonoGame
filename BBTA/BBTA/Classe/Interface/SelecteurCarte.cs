@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using IndependentResolutionRendering;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 using BBTA.Carte;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     public class SelecteurCarte:DrawableGameComponent
     {

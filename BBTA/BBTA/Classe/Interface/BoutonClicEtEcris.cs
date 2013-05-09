@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using EventInput;
 
-namespace BBTA.Classe.Interface
+namespace BBTA.Interface
 {
     public class BoutonClicEtEcris : Bouton
     {

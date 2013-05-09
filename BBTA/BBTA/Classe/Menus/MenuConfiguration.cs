@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using BBTA.Classe.Interface;
+using BBTA.Interface;
 using Microsoft.Xna.Framework;
 using IndependentResolutionRendering;
 using System.IO;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuConfiguration : MenuArrierePlan
     {

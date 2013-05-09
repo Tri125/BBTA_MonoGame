@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using BBTA.Interfaces;
-using BBTA.Classe.Interface;
-using BBTA.Classe.Elements;
+using BBTA.Interface;
+using BBTA.Elements;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Outils;
-using BBTA.Classe.GestionAudio;
+using BBTA.Outils;
+using BBTA.GestionAudio;
 
-namespace BBTA.Classe
+namespace BBTA.Partie_De_Jeu
 {
     public class GestionnaireProjectile:DrawableGameComponent, IUtiliseMatriceCamera
     {
