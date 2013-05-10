@@ -49,7 +49,7 @@ namespace BBTA.Elements
             this.mondePhysique = mondePhysique;
             this.rayonExplosion = rayonExplosion;
             this.positionSpriteSheet = positionSpriteSheet;
-            corpsPhysique.IsBullet = true; //Amméliore la détection des collisions avec les objets à grande vitesse comme celui-ci
+            corpsPhysique.IsBullet = true; //Améliore la détection des collisions avec les objets à grande vitesse comme celui-ci
             corpsPhysique.Position = positionDepart;
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.LinearVelocity = vitesse;

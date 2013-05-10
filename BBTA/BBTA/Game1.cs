@@ -202,6 +202,7 @@ namespace BBTA
                             this.Components.Add(partie);
                             this.Components.Add(pause);
                         }
+                        partie.Enabled = true;
                         EtatActuel = partie.ObtenirEtat();
                         partie.RemiseAZeroEtat();
                         break;
@@ -213,7 +214,6 @@ namespace BBTA
                             finPartie = new MenuFinDePartie(this, partie.ObtenirCouleurEquipePerdante());
                             this.Components.Add(finPartie);
                         }
-                        partie.Enabled = true;
                         EtatActuel = finPartie.ObtenirEtat();
                         finPartie.RemiseAZeroEtat();
                         break;
