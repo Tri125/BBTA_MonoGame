@@ -18,7 +18,7 @@ namespace EditeurCarteXNA
         private List<TuileEditeur> listeTuile = new List<TuileEditeur>();
         //Redéfini le nom de la balise XML. Par défault elle aurait porté le nom de l'attribut situé en dessous.
         [XmlElement("EnTete")]
-        //Pour sérializer correctement, chaque attribut doivent être publique.
+        //Pour sérializer correctement, chaques attributs doivent être publique.
         public InfoCarte InformationCarte { get; set; }
 
         public List<TuileEditeur> ListTuile { get { return listeTuile; } }

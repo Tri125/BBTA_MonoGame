@@ -45,6 +45,7 @@ namespace BBTA.Partie_De_Jeu
         private Camera2d camPartie;
         CarteJeu carte;
         int[] carteTuile;
+        private Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionActive.InformationTouche;
 
         private EtatJeu prochainEtat;
 
@@ -188,6 +189,8 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            KeyboardState clavier = Keyboard.GetState(); //État actuel du clavier
+
             // TODO: Add your update logic here
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
@@ -201,6 +204,11 @@ namespace BBTA.Partie_De_Jeu
                     equipePerdante = equipe.couleur;
                     prochainEtat = EtatJeu.FinDePartie;
                 }
+            }
+
+            if (clavier.IsKeyDown(optionClavier.Pause))
+            {
+                prochainEtat = EtatJeu.Pause;
             }
 
             //Transition de la caméra
