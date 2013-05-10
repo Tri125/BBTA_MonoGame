@@ -7,11 +7,10 @@ using BBTA.Interfaces;
 using BBTA.Interface;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Outils;
-using BBTA.Classe.Interface;
-using BBTA.Classe.Elements;
+using BBTA.Outils;
+using BBTA.Elements;
 
-namespace BBTA.Classe
+namespace BBTA.Partie_De_Jeu
 {
     enum ModeTir
     {
@@ -43,7 +42,7 @@ namespace BBTA.Classe
         private Vector2 position;
 
         //Événements--------------------------------------------------------------
-        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 direction, float vitesse, Armes type, Armement munitions);
+        public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 vitesse, Armes type, Armement munitions);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
 
@@ -62,7 +61,7 @@ namespace BBTA.Classe
             texturesArmes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\armesPanneau");
             selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), 
                                           texturesArmes,
-                                          Game.Content.Load<SpriteFont>(@"PoliceIndicateur"), 200);
+                                          Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur"), 200);
             selecteur.ArmeSelectionnee += new SelectionArme.DelegateArmeSelectionnee(selecteur_ArmeSelectionnee);
             selecteur.PanneauFermer += new EventHandler(selecteur_PanneauFermer);
             viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
@@ -104,7 +103,7 @@ namespace BBTA.Classe
         void indicateur_ForceFinaleDeterminee(int forceFinale)
         {
             prochainMode = ModeTir.nul;
-            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle(), forceFinale, type, selecteur.Munitions);
+            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle() * forceFinale, type, selecteur.Munitions);
             forceFinale = 0;
         }
 

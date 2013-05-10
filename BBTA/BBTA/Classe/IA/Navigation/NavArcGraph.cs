@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BBTA.Classe.IA.Navigation
+namespace BBTA.IA
 {
     public class NavArcGraph : ArcGraph
     {
+        //-----------------------------------------------------------------------------
+        //
+        //  Author: Mat Buckland (www.ai-junkie.com)
+        //
+        //-----------------------------------------------------------------------------
+        //Adapté de C++ en C# par Tristan Savaria
+        //tristan@twisted-ip.com
+
 
         public enum drapeau
         {

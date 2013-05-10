@@ -17,12 +17,10 @@ using BBTA.Menus;
 using BBTA.Interface;
 using BBTA.Partie_De_Jeu;
 using IndependentResolutionRendering;
-using BBTA.Classe.Menus;
-using BBTA.Classe.Option;
+using BBTA.Option;
 using EventInput;
-using BBTA.Classe.IA.Navigation;
-using BBTA.Classe.Outils;
-using BBTA.Classe.GestionAudio;
+using BBTA.IA;
+using BBTA.GestionAudio;
 
 namespace BBTA
 {

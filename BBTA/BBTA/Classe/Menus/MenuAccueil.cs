@@ -7,7 +7,6 @@ using BBTA.Interface;
 using BBTA.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
-using BBTA.Classe.Menus;
 
 namespace BBTA.Menus
 {

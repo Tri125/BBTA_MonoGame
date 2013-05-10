@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BBTA.Classe.IA.Navigation
+namespace BBTA.IA
 {
+
+    //-----------------------------------------------------------------------------
+    //
+    //  Author: Mat Buckland (www.ai-junkie.com)
+    //
+    //-----------------------------------------------------------------------------
+    //Adapté de C++ en C# par Tristan Savaria
+    //tristan@twisted-ip.com
+
+
     public class IndexedPriorityQLow<KeyType> where KeyType : IComparable
     {
         //----------------------- IndexedPriorityQLow ---------------------------

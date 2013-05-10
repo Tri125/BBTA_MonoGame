@@ -6,7 +6,7 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 
 namespace BBTA.Elements
 {
@@ -18,7 +18,6 @@ namespace BBTA.Elements
 
         //Variables d'affichage------------------------------------------------------------
         protected Texture2D texture;
-        protected float angleRotation = 0;
 
         //Événements-----------------------------------------------------------------------
         public event EventHandler Detruit;

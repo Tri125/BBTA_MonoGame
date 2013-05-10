@@ -7,7 +7,7 @@ using BBTA.Elements;
 using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuArrierePlan : DrawableGameComponent
     {

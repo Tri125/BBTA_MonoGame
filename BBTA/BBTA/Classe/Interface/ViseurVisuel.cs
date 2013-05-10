@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using BBTA.Elements;
-using BBTA.Classe.Option;
+using BBTA.Option;
 
 namespace BBTA.Interface
 {
@@ -38,7 +38,7 @@ namespace BBTA.Interface
 
             angleRotation %= MathHelper.TwoPi;
 
-            if (clavier.IsKeyDown(Keys.Space))
+            if (clavier.IsKeyDown(Game1.chargeurOption.OptionActive.InformationTouche.Tir))
             {
                 if (Verouiller != null)
                 {

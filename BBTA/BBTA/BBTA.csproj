@@ -117,10 +117,10 @@
     <Compile Include="Classe\Carte\BBTA_ConstructeurCarte.cs" />
     <Compile Include="Classe\Carte\BlocBooleen.cs" />
     <Compile Include="Classe\Carte\CarteBoolieen.cs" />
+    <Compile Include="Classe\Carte\CarteJeu.cs" />
     <Compile Include="Classe\Elements\Acteur.cs" />
     <Compile Include="Classe\Elements\Armement.cs" />
     <Compile Include="Classe\Elements\Bloc.cs" />
-    <Compile Include="Classe\Carte\CarteJeu.cs" />
     <Compile Include="Classe\Carte\TuileEditeur.cs" />
     <Compile Include="Classe\Elements\Grenade.cs" />
     <Compile Include="Classe\Elements\JoueurHumain.cs" />
@@ -131,8 +131,6 @@
     <Compile Include="Classe\Elements\Roquette.cs" />
     <Compile Include="Classe\Elements\Sprite.cs" />
     <Compile Include="Classe\GestionAudio\GestionSon.cs" />
-    <Compile Include="Classe\GestionnaireMenusTir.cs" />
-    <Compile Include="Classe\GestionnaireProjectile.cs" />
     <Compile Include="Classe\GestionAudio\GestionMusique.cs" />
     <Compile Include="Classe\IA\Navigation\ArcGraph.cs" />
     <Compile Include="Classe\IA\Navigation\Graphe.cs" />
@@ -166,6 +164,8 @@
     <Compile Include="Classe\Outils\EventInput.cs" />
     <Compile Include="Classe\Outils\OutilGraphe.cs" />
     <Compile Include="Classe\PartieJeu\Equipe.cs" />
+    <Compile Include="Classe\PartieJeu\GestionnaireMenusTir.cs" />
+    <Compile Include="Classe\PartieJeu\GestionnaireProjectile.cs" />
     <Compile Include="Classe\PartieJeu\PartieJeu.cs" />
     <Compile Include="Classe\Resolution\Resolution.cs" />
     <Compile Include="Interfaces\IUtiliseMatriceCamera.cs" />
@@ -175,6 +175,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Carte Jeu\arena.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Carte Jeu\Champignons.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Carte Jeu\escalator.xml">

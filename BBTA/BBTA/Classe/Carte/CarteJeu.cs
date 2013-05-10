@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FarseerPhysics.Factories;
-using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using BBTA.Elements;
+using FarseerPhysics.Factories;
+using FarseerPhysics.Dynamics;
 using IndependentResolutionRendering;
+using BBTA.Elements;
 using BBTA.Interfaces;
-using BBTA.Classe.Outils;
+using BBTA.Outils;
 
 namespace BBTA.Carte
 {
-
     public enum TypeBloc
     {
         Apparition = -1,
@@ -71,7 +70,7 @@ namespace BBTA.Carte
                 {
                     //Position en mètres
                     Vector2 positionBloc = new Vector2((compteurBlocs % largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f) + 5, (compteurBlocs / largeurCarte * TAILLE_BLOC) + (TAILLE_BLOC * 0.5f));
-                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, metrePixel, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
+                    blocs[compteurBlocs] = new Bloc(mondePhysique, positionBloc, textureBlocs, TAILLE_BLOC, TypeDeBlocAGenerer(donneesBlocs, largeur, compteurBlocs));
                     blocs[compteurBlocs].AnimationDestructionTerminee += new EventHandler(Carte_AnimationDestructionTerminee);
                     //Rajout de BlocBooleen dans CarteBooleen
                     carteBool.RajoutBloc(blocs[compteurBlocs], positionBloc);

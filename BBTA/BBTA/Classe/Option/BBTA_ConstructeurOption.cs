@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Input;
 
 
 
-namespace BBTA.Classe.Option
+namespace BBTA.Option
 {
     /// <summary>
     /// La classe BBTA_ConstructeurOption gère la génération des fichiers XML pour enregistrer les paramètres de jeu de l'utilisateur, pour charger
@@ -171,7 +171,7 @@ namespace BBTA.Classe.Option
             if (mauvaisUtilisateur || mauvaisDefaut)
             {
                 Console.WriteLine("Incapable de réparer");
-                RetourUsine();
+                RetourUsine(ref optionActive);
 
             }
             else
@@ -295,7 +295,7 @@ namespace BBTA.Classe.Option
             else
             {
                 //Les paramètres par défaut sont défectueux, on utilise les paramètres d'usine.
-                RetourUsine();
+                RetourUsine(ref optionDefaut);
             }
         }
 
@@ -311,16 +311,16 @@ namespace BBTA.Classe.Option
             else
             {
                 //Les paramètres de l'utilisateur sont défectueux, on utilise les paramètres d'usine.
-                RetourUsine();
+                RetourUsine(ref optionActive);
             }
         }
 
         /// <summary>
         /// Change les options utilisés vers les paramètres de d'usine.
         /// </summary>
-        private void RetourUsine()
+        private void RetourUsine(ref Option option)
         {
-            optionActive = optionUsine;
+            option = optionUsine;
         }
 
     }

@@ -38,7 +38,7 @@ namespace BBTA.Carte
         /// <param name="blocJeu">Bloc à partir du quel on extrait l'identifiant et la position.</param>
         public BlocBooleen(int[] idNonSolide, Bloc blocJeu)
         {
-            this.position = blocJeu.Position;
+            this.position = blocJeu.ObtenirPosition();
             this.estSolide = DeterminerSoliditer(idNonSolide, blocJeu.Type);
         }
 

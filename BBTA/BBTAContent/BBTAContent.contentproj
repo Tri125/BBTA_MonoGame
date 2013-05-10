@@ -209,7 +209,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PoliceIndicateur.spritefont">
+    <Compile Include="Police\PoliceIndicateur.spritefont">
       <Name>PoliceIndicateur</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
@@ -301,7 +301,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompteRebours.spritefont">
+    <Compile Include="Police\CompteRebours.spritefont">
       <Name>CompteRebours</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
@@ -330,7 +330,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PoliceNbJoueursVie.spritefont">
+    <Compile Include="Police\PoliceNbJoueursVie.spritefont">
       <Name>PoliceNbJoueursVie</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
@@ -344,6 +344,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Police\ComicSan.spritefont">
+      <Name>ComicSan</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\FinDePartie\BoutonAccueilPNG.png">
+      <Name>BoutonAccueilPNG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Ressources\Menus\FinDePartie\LettrageFinDePartie.png">
       <Name>LettrageFinDePartie</Name>
       <Importer>TextureImporter</Importer>
@@ -351,8 +363,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ressources\Menus\FinDePartie\BoutonAccueilPNG.png">
-      <Name>BoutonAccueilPNG</Name>
+    <Compile Include="Ressources\Menus\FinDePartie\LettrageBleusPNG.png">
+      <Name>LettrageBleusPNG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\FinDePartie\LettrageRougePNG.png">
+      <Name>LettrageRougePNG</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

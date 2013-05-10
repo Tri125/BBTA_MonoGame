@@ -7,14 +7,18 @@ using Microsoft.Xna.Framework.Graphics;
 using BBTA.Interface;
 using IndependentResolutionRendering;
 
-namespace BBTA.Classe.Menus
+namespace BBTA.Menus
 {
     public class MenuFinDePartie : MenuArrierePlan
     {
         private Texture2D lettrage;
         private Bouton btnAccueil;
+        private Texture2D lettrageBleu;
+        private Texture2D lettrageRouge;
+        
         private EtatJeu prochainEtat;
         private Color equipePerdante;
+        private Texture2D equipeGagnante;
 
         public MenuFinDePartie(Game game, Color equipePerdante)
             : base(game)
@@ -25,12 +29,17 @@ namespace BBTA.Classe.Menus
 
         protected override void LoadContent()
         {
-            base.LoadContent();
             lettrage = Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\LettrageFinDePartie");
+            lettrageBleu = Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\LettrageBleusPNG");
+            lettrageRouge = Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\LettrageRougePNG");
+
             btnAccueil = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\BoutonAccueilPNG"), new Vector2(1175, 600), null);
             btnAccueil.Clic += new EventHandler(btnAccueil_Clic);
+
+            base.LoadContent();
         }
 
+        //Évènement du bouton accueil
         void btnAccueil_Clic(object sender, EventArgs e)
         {
             prochainEtat = EtatJeu.Accueil;
@@ -40,6 +49,17 @@ namespace BBTA.Classe.Menus
         {
             base.Update(gameTime);
             btnAccueil.Update(null);
+
+            //Déterminer l'équipe gagnante
+            //Si l'équipe rouge est perdante, alors équipe bleue est gagnante
+            if (equipePerdante == Color.Firebrick)
+            {
+                equipeGagnante = lettrageBleu;
+            }
+            else
+            {
+                equipeGagnante = lettrageRouge;
+            }
         }
 
         public EtatJeu ObtenirEtat()
@@ -57,15 +77,10 @@ namespace BBTA.Classe.Menus
             base.Draw(gameTime);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
+            spriteBatch.Draw(equipeGagnante, new Vector2(510, 200), Color.White);
             btnAccueil.Draw(spriteBatch);
 
             spriteBatch.End();
         }
-
-
-
-
-        //Color.Firebrick
-        //Color.Blue
     }
 }

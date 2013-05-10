@@ -9,8 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace BBTA.Classe.GestionAudio
+namespace BBTA.GestionAudio
 {
+    /// <summary>
+    /// GestionMusique est une composante qui charge les ressources audio et le lancement de la musique de fond et son changement.
+    /// </summary>
     public class GestionMusique : DrawableGameComponent
     {
         private AudioEngine moteur;
@@ -18,6 +21,10 @@ namespace BBTA.Classe.GestionAudio
         private WaveBank banqueVague;
         private Cue cue;
 
+        /// <summary>
+        /// Constructeur de base de GestionMusique.
+        /// </summary>
+        /// <param name="jeu">L'objet Game qui s'attache à la composante</param>
         public GestionMusique(Game jeu)
             : base(jeu)
         {
@@ -39,6 +46,10 @@ namespace BBTA.Classe.GestionAudio
             moteur.Update();
         }
 
+        /// <summary>
+        /// Retourne le Cue associé au bon état du jeu.
+        /// </summary>
+        /// <param name="num">Numéro associé à l'enum EtatJeu.</param>
         private Cue ObtenirCue(int num)
         {
             switch (num)
@@ -57,25 +68,35 @@ namespace BBTA.Classe.GestionAudio
             }
         }
 
+
+        /// <summary>
+        /// Événement qui gère le changement de volume des effets sonores.
+        /// </summary>
         public void ChangementVolume(object sender, EventArgs eventArgs)
         {
-            if (sender as Option.Option.InfoSonore != null)
+            //Vérifie si c'est bien un objet de type InfoSonore qui est reçut.
+            Option.Option.InfoSonore info = sender as Option.Option.InfoSonore;
+            if (info != null)
             {
-                Option.Option.InfoSonore info = sender as Option.Option.InfoSonore;
                 AudioCategory categorieAudio = moteur.GetCategory("Music");
+                //Change le volume des sons de la catégorie "Music".
+                //Échelle de 0 à 1.
                 categorieAudio.SetVolume((float)info.Musique / 100);
 
             }
         }
 
 
-
+        /// <summary>
+        /// Événement qui gère le changement de musique selon un changement d'état du jeu.
+        /// </summary>
         public void ChangementEtatJeu(object sender, EventArgs eventArgs)
         {
             if (sender is BBTA.EtatJeu)
             {
-
+                //Obtient la nouvelle musique selon l'état.
                 Cue nouveauCue = ObtenirCue((int)(BBTA.EtatJeu)sender);
+
                 if (cue == null)
                 {
                     cue = nouveauCue;
@@ -83,6 +104,7 @@ namespace BBTA.Classe.GestionAudio
                 }
                 else
                 {
+                    //Si la musique n'est pas la même, alors on arrête celle qui joue et on lance la nouvelle.
                     if (cue.Name != nouveauCue.Name)
                     {
                         cue.Stop(AudioStopOptions.Immediate);

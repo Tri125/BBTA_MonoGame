@@ -7,7 +7,7 @@ using BBTA.Elements;
 using FarseerPhysics.Dynamics;
 using BBTA.Carte;
 
-namespace BBTA.Classe.IA.Robot
+namespace BBTA.IA
 {
     public class SystemeTrajectoire
     {

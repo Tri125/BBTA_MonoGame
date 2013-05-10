@@ -15,10 +15,10 @@ namespace BBTA.Interface
     public class Bouton
     {
         //Variables------------------------------------------------
-        private Texture2D texture;
-        private Rectangle boutonDansSprite;
-        private Rectangle rectangleCollisionBouton;
-        private ButtonState etat = ButtonState.Released;
+        protected Texture2D texture;
+        protected Rectangle boutonDansSprite;
+        protected Rectangle rectangleCollisionBouton;
+        protected ButtonState etat = ButtonState.Released;
         public event EventHandler Clic;
 
         //Propriétés----------------------------------------------
@@ -76,7 +76,7 @@ namespace BBTA.Interface
             {
                 if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released && Clic != null)
                 {
-                    Clic(this, new EventArgs());
+                    LancementClic();
                 }
                 etat = Mouse.GetState().LeftButton;
             }
@@ -95,6 +95,11 @@ namespace BBTA.Interface
                                                 (int)rectangleCollisionBouton.Width, 
                                                 (int)rectangleCollisionBouton.Height);
             spriteBatch.Draw(texture, rectangleCollisionBouton, selection, Color.White);
-        }  
+        }
+
+        protected void LancementClic()
+        {
+            Clic(this, new EventArgs());
+        }
     }
 }
