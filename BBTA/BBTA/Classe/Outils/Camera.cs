@@ -68,6 +68,10 @@ namespace BBTA.Outils
             return transform;
         }
 
+        /// <summary>
+        /// Permet de définir un point vers lequel la caméra se dirigera graduellement.
+        /// </summary>
+        /// <param name="objet">Objet vers lequel se diriger</param>
         public void SeDirigerVers(ObjetPhysique objet)
         {
             doitSeDeplacer = true;
@@ -75,19 +79,30 @@ namespace BBTA.Outils
             distanceParcourir = Vector2.Subtract(ObjetSuivi.ObtenirPosition(), pos);
         }
 
+        /// <summary>
+        /// Permet le déplacement de la caméra.
+        /// Suit un joueur en jeu.
+        /// Permet de déplacer graduellement la caméra vers un point défini.
+        /// Repositionne la caméra pour empêcher de voir à l'extérieur de la carte.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            Vector2 positionIntermediaire = ObjetSuivi.ObtenirPosition();
+            Vector2 positionIntermediaire = ObjetSuivi.ObtenirPosition(); 
             if (doitSeDeplacer)
             {
                 Vector2 deplacement = distanceParcourir;
                 deplacement.Normalize();
                 deplacement *= gameTime.ElapsedGameTime.Milliseconds * VITESSE_TRANSITION;
+                /* Si la distance à parcourir est encore plus grande que le déplacement possible durant l'exécution de cette méthode, 
+                 * alors o se déplace simplement et on réajuste la distance totale à parcourir. */
                 if (distanceParcourir.Length() > deplacement.Length())
                 {
                     distanceParcourir -= deplacement;
                     positionIntermediaire = ObjetSuivi.ObtenirPosition() - distanceParcourir;
                 }
+                /* Si la distance de déplacement possible suffit à se rendre au point désirer, on se positionne immédiatement dessus et
+                 * et on déclanche un événement pour indiquer que la caméra a terminé son déplacement */
                 else
                 {
                     doitSeDeplacer = false;
@@ -100,6 +115,7 @@ namespace BBTA.Outils
             }
             pos = positionIntermediaire;
 
+            //Si la caméra est trop près des extrémités, on réajuste sa position pour ne pas voir à l'extérieur de la carte.
             if (positionIntermediaire.Y + IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f >= hauteurCarte)
             {
                 Pos = new Vector2((int)pos.X, (int)hauteurCarte - IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2f);

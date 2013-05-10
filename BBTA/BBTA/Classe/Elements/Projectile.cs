@@ -30,7 +30,7 @@ namespace BBTA.Elements
         private World mondePhysique;
 
         //Événements et éléments reliés-----------------------------------------------------------------------------------------
-        public delegate void DelegateExplosion(Projectile proejctileExplosant, Vector2 position, int rayonExplosion);
+        public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace BBTA.Elements
         {
             if (explose == true && Explosion != null)
             {
-                Explosion(this, Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
+                Explosion(Conversion.MetreAuPixel(corpsPhysique.Position), Conversion.MetreAuPixel(rayonExplosion));
                 corpsPhysique.Dispose();
             }
             base.Update(gameTime);

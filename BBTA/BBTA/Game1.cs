@@ -154,7 +154,7 @@ namespace BBTA
                     this.Exit();
                 }
 
-                //S'occupe du transfer d'état entre les parties du menu
+                //S'occupe du transfert d'état entre les parties du menu
                 switch (EtatActuel)
                 {
                     case EtatJeu.Accueil:

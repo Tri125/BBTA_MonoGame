@@ -94,7 +94,7 @@ namespace BBTA.Partie_De_Jeu
             }
 
             gestionnaireMenusTir = new GestionnaireMenusTir(jeu);
-            gestionnaireProjectile = new GestionnaireProjectile(jeu, ref mondePhysique);
+            gestionnaireProjectile = new GestionnaireProjectile(jeu);
             //L'affichage des composants autonome est géré par cette classe et non par le jeu lui-même.
             gestionnaireMenusTir.Visible = false;
             gestionnaireProjectile.Visible = false;

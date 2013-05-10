@@ -14,43 +14,76 @@ using BBTA.GestionAudio;
 
 namespace BBTA.Partie_De_Jeu
 {
+    /// <summary>
+    /// Gestionnaire de projectile gère la création de projectiles, leur explosion et détermine quand que la caméra doit cesser d'être sur le projectile.
+    /// Il garde en mémoire les différentes mines au sol.
+    /// </summary>
     public class GestionnaireProjectile:DrawableGameComponent
     {
+        //Ressources-----------------------------------------------------------------------------------------------------------------------------------
         private GestionSon gestionnaireSon;
-        private event EventHandler SonLancementArme;
-        private event EventHandler SonDestructionArme;
-
-        public Matrix MatriceDeCamera { get; set; }
-        private bool enAction = false;
-        public Vector2 Position { get; private set; }
-        private Texture2D texturesProjectiles;
-        private List<Projectile> projectiles = new List<Projectile>();
         private SpriteBatch spriteBatch;
+        private Texture2D texturesProjectiles;
+
+        //Variables------------------------------------------------------------------------------------------------------------------------------------
+        private List<Projectile> projectiles = new List<Projectile>();
+        private bool enAction = false;
+
+        //Propriétés-----------------------------------------------------------------------------------------------------------------------------------
+        public Matrix MatriceDeCamera { get; set; }        
+
+        //Événements et délégués-----------------------------------------------------------------------------------------------------------------------
         public delegate void DelegateExplosion(Vector2 position, int rayonExplosion);
         public event DelegateExplosion Explosion;
         public event EventHandler ProcessusTerminer;
+        private event EventHandler SonLancementArme;
+        private event EventHandler SonDestructionArme;
 
-        public GestionnaireProjectile(Game jeu, ref World mondePhysique)
+        /// <summary>
+        /// Constructeur
+        /// </summary>
+        /// <param name="jeu">Jeu XNA</param>
+        public GestionnaireProjectile(Game jeu)
             : base(jeu)
         {
 
         }
 
+        /// <summary>
+        /// Initialise les variables reliés aux effets sonores.
+        /// </summary>
+        public override void Initialize()
+        {
+            gestionnaireSon = Game.Services.GetService(typeof(GestionSon)) as GestionSon;
+            SonLancementArme += gestionnaireSon.SonLancement;
+            SonDestructionArme += gestionnaireSon.SonExplosion;
+            base.Initialize();
+        }
+
+        /// <summary>
+        /// Chargement du contenu et initialisation des variables utilisant ces ressources
+        /// </summary>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             texturesProjectiles = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\projectiles");
-            gestionnaireSon = Game.Services.GetService(typeof(GestionSon)) as GestionSon;
-            SonLancementArme += gestionnaireSon.SonLancement;
-            SonDestructionArme += gestionnaireSon.SonExplosion;
             base.LoadContent();
         }
 
+        /// <summary>
+        /// Permet de créer le projectile désiré et lui associe tous les événements nécessaires
+        /// </summary>
+        /// <param name="mondePhysique">Monde physique Farseer dans lequel évoluera le projectile</param>
+        /// <param name="position">Position du joueur tirant le projectile</param>
+        /// <param name="vitesse">Vitesse initiale du projectile</param>
+        /// <param name="type">Type du projectile (Grenade, mine, etc.)</param>
         public void CreerProjectile(ref World mondePhysique, Vector2 position, Vector2 vitesse, Armes type)
         {
             Vector2 distanceDepart = vitesse;
             distanceDepart.Normalize();
-            distanceDepart *= 60;
+            distanceDepart *= 60;           /* Le projectile doit être créer à une certaine distance du joueur pour qu'il concorde avec l'extrémité du bazooka et qu'il ne soit pas en 
+                                             * collision avec le joueur lui-même */
+
             switch (type)
             {
                 case Armes.Roquette:
@@ -68,19 +101,42 @@ namespace BBTA.Partie_De_Jeu
             }
             projectiles[projectiles.Count - 1].Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
             projectiles[projectiles.Count - 1].Detruit +=new EventHandler(GestionnaireProjectile_Detruit);
-            enAction = true;
+            enAction = true; //Indique qu'un projectile est en mouvement
             SonLancementArme(type, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Met à jour la position des projectiles.
+        /// </summary>
+        /// <param name="gameTime">Temps de jeu</param>
+        public override void Update(GameTime gameTime)
+        {
+            for(int nbProjectiles = 0; nbProjectiles < projectiles.Count; nbProjectiles++)
+            {
+                projectiles[nbProjectiles].Update(gameTime);
+            }
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Si un projectile explose, alors on le retire de la liste et on déclanche un événement pour indiquer que le jeu peut passer à autre chose.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void GestionnaireProjectile_Detruit(object sender, EventArgs e)
         {
             projectiles.Remove((sender as Projectile));
-            if(ProcessusTerminer != null)
+            if (ProcessusTerminer != null)
             {
                 ProcessusTerminer(this, new EventArgs());
             }
         }
 
+        /// <summary>
+        /// Si la mine se colle au sol, alors on déclanche un événement pour indiquer au jeu de passer à autre chose.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void GestionnaireProjectile_FixationAuSol(object sender, EventArgs e)
         {
             enAction = false;
@@ -90,43 +146,40 @@ namespace BBTA.Partie_De_Jeu
             }
         }
 
-        void projectile_Explosion(Projectile projectileExplosant, Vector2 position, int rayonExplosion)
+        /// <summary>
+        /// Si un projectile explose, on fait entendre les bons effets sonores et on déclanche un événement pour transmettre les informations de l'explosion
+        /// </summary>
+        /// <param name="position">Position de l'explosion</param>
+        /// <param name="rayonExplosion">Rayon de dégats de l'explosion</param>
+        void projectile_Explosion(Vector2 position, int rayonExplosion)
         {
             enAction = false;
             SonDestructionArme(null, new EventArgs());
             Explosion(position, rayonExplosion);
         }
 
+        /// <summary>
+        /// Retourne le projectile en mouvement s'il existe.
+        /// </summary>
+        /// <returns>Projectile en mouvement s'il existe</returns>
         public Projectile ObtenirProjectileEnMouvement()
         {
+            //S'il n'y a aucun projectile en mouvement, on retourne null
             if (projectiles.Count == 0 || enAction == false)
             {
                 return null;
             }
+            //Autrement, on retourne le projectile en mouvement.
             else
             {
-                return projectiles[projectiles.Count-1];
+                return projectiles[projectiles.Count - 1];
             }
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            for(int nbProjectiles = 0; nbProjectiles < projectiles.Count; nbProjectiles++)
-            {
-                projectiles[nbProjectiles].Update(gameTime);
-            }
-
-            if (projectiles.Count > 0)
-            {
-                Position = projectiles[projectiles.Count - 1].ObtenirPosition();
-            }
-            else
-            {
-                Position = Vector2.Zero;
-            }
-            base.Update(gameTime);
-        }
-
+        /// <summary>
+        /// Affiche les divers projectiles à l'écran
+        /// </summary>
+        /// <param name="gameTime">Temps de jeu</param>
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, 
