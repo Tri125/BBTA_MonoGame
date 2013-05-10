@@ -208,6 +208,8 @@ namespace BBTA
                             finPartie = new MenuFinDePartie(this, partie.ObtenirCouleurEquipePerdante());
                             this.Components.Add(finPartie);
                         }
+                        EtatActuel = finPartie.ObtenirEtat();
+                        finPartie.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.Pause:

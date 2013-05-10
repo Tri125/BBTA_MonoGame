@@ -351,6 +351,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ressources\Menus\FinDePartie\BoutonAccueilPNG.png">
+      <Name>BoutonAccueilPNG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\FinDePartie\LettrageFinDePartie.png">
+      <Name>LettrageFinDePartie</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ressources\Menus\FinDePartie\LettrageBleusPNG.png">
+      <Name>LettrageBleusPNG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Ressources\Menus\FinDePartie\LettrageRougePNG.png">
+      <Name>LettrageRougePNG</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Ressources\Carte\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
