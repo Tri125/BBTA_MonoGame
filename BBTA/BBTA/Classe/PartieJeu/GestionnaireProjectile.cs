@@ -14,7 +14,7 @@ using BBTA.GestionAudio;
 
 namespace BBTA.Partie_De_Jeu
 {
-    public class GestionnaireProjectile:DrawableGameComponent, IUtiliseMatriceCamera
+    public class GestionnaireProjectile:DrawableGameComponent
     {
         private GestionSon gestionnaireSon;
         private event EventHandler SonLancementArme;

@@ -9,6 +9,16 @@ using BBTA.Elements;
 
 namespace BBTA.Outils
 {
+    /* =========================================================================================
+     * 
+     * La base de cette caméra provient d'un tutoriel trouvé sur le web.
+     * Auteur: David Amador
+     * Adresse URL: http://www.david-amador.com/2009/10/xna-camera-2d-with-zoom-and-rotation/
+     * Elle fut ensuite modifiée pour satisfaire nos besoins.
+     * 
+     * ========================================================================================= */
+
+
     public class Camera2d
     {
         protected float zoom; // Camera Zoom

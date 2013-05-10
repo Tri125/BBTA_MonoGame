@@ -20,7 +20,10 @@ namespace BBTA.Partie_De_Jeu
         nul
     }
 
-    public class GestionnaireMenusTir:DrawableGameComponent, IUtiliseMatriceCamera
+    /// <summary>
+    /// GestionnaireMenusTir est une classe qui permet de gérer l'ordre des différents menus intervenants dans le processus de tir.
+    /// </summary>
+    public class GestionnaireMenusTir:DrawableGameComponent
     {
         //Modules de tir----------------------------------------------------------
         private IndicateurPuissance indicateur;
