@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace BBTA.Outils
 {
+    /// <summary>
+    /// Conversion est une classe statique permettant de faire des conversion de toute sorte, principalement de pixel/mètres
+    /// </summary>
     static class Conversion
     {
         private const int RATIO_METRE_PIXEL = 40;

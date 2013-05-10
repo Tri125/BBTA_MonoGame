@@ -44,7 +44,7 @@ namespace BBTA.Partie_De_Jeu
         public Matrix MatriceDeCamera { get; set; }
         private Vector2 position;
 
-        //Événements--------------------------------------------------------------
+        //Événements et délégués--------------------------------------------------
         public delegate void DelegateProcessusDeTirTerminer(Vector2 position, Vector2 vitesse, Armes type, Armement munitions);
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
@@ -56,60 +56,33 @@ namespace BBTA.Partie_De_Jeu
 
         }
 
+        /// <summary>
+        /// Charge le contenu nécessaire en mémoire et initialise les composants ayant besoin de ressources extérieures.
+        /// </summary>
         protected override void LoadContent()
         {
+            //Chargement des ressources et initialisations--------------------------------------
             spriteBatch = new SpriteBatch(GraphicsDevice);
             indicateur = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
-            indicateur.ForceFinaleDeterminee += new IndicateurPuissance.delegueForceFinaleDeterminee(indicateur_ForceFinaleDeterminee);
             texturesArmes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\armesPanneau");
             selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), 
                                           texturesArmes,
                                           Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur"), 200);
+            viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
+
+            //Association des événement---------------------------------------------------------
             selecteur.ArmeSelectionnee += new SelectionArme.DelegateArmeSelectionnee(selecteur_ArmeSelectionnee);
             selecteur.PanneauFermer += new EventHandler(selecteur_PanneauFermer);
-            viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
             viseur.Verouiller += new EventHandler(viseur_Verouiller);
+            indicateur.ForceFinaleDeterminee += new IndicateurPuissance.delegueForceFinaleDeterminee(indicateur_ForceFinaleDeterminee);
             base.LoadContent();
         }
 
-        public void DemarrerSequenceTir(Vector2 position, Armement munitions)
-        {
-            this.position = position;
-            modeEncours = ModeTir.Selection;
-            selecteur.Position = new Vector2(position.X, position.Y - 50);
-            selecteur.Munitions = munitions;
-            viseur.Position = position;
-            indicateur.Position = new Vector2(position.X, position.Y - 50);
-            selecteur.estOuvert = true;
-        }
-
-        void selecteur_ArmeSelectionnee(Armes armeSelectionnee)
-        {
-            prochainMode = ModeTir.Visee;
-            type = armeSelectionnee;
-        }
-
-
-        void selecteur_PanneauFermer(object sender, EventArgs e)
-        {
-            if (TirAvorte != null && prochainMode == ModeTir.nul)
-            {
-                TirAvorte(this, new EventArgs());
-            }
-        }
-
-        void viseur_Verouiller(object sender, EventArgs e)
-        {
-            prochainMode = ModeTir.DeterminerForce;
-        }
-
-        void indicateur_ForceFinaleDeterminee(int forceFinale)
-        {
-            prochainMode = ModeTir.nul;
-            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle() * forceFinale, type, selecteur.Munitions);
-            forceFinale = 0;
-        }
-
+        /// <summary>
+        /// Permet de déterminer quel menu doit être affiché.
+        /// Ferme et ouvre les différents menus.
+        /// </summary>
+        /// <param name="gameTime">Temps de jeu</param>
         public override void Update(GameTime gameTime)
         {
             switch (modeEncours)
@@ -152,6 +125,71 @@ namespace BBTA.Partie_De_Jeu
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Permet de démarrer le processus de sélection des paramètres de tir en affichant les divers menus associés à cette opération.
+        /// </summary>
+        /// <param name="position">Position du joueur à l'attaque</param>
+        /// <param name="munitions">Armement de l'équipe du joueur</param>
+        public void DemarrerSequenceTir(Vector2 position, Armement munitions)
+        {
+            this.position = position;
+            modeEncours = ModeTir.Selection;
+            selecteur.Position = new Vector2(position.X, position.Y - 50); //Le menu est légèrement au-dessus de la tête du joueur
+            selecteur.Munitions = munitions;
+            viseur.Position = position;
+            indicateur.Position = new Vector2(position.X, position.Y - 50); //Le menu est légèrement au-dessus de la tête du joueur
+            selecteur.estOuvert = true;
+        }
+
+        /// <summary>
+        /// Lorsqu'une arme est sélectionnée dans le menu d'arme, on passe au choix de la direction.
+        /// </summary>
+        /// <param name="armeSelectionnee">Arme choisie</param>
+        void selecteur_ArmeSelectionnee(Armes armeSelectionnee)
+        {
+            prochainMode = ModeTir.Visee;
+            type = armeSelectionnee;
+        }
+
+        /// <summary>
+        /// Lorsque le joueur décide de ne pas choisir une arme, le gestionnaire déclanche un événement pour aviser la partie pour que le joueur puisse se déplacer à nouveau.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void selecteur_PanneauFermer(object sender, EventArgs e)
+        {
+            if (TirAvorte != null && prochainMode == ModeTir.nul)
+            {
+                TirAvorte(this, new EventArgs());
+            }
+        }
+
+        /// <summary>
+        /// Lorsque le joueur a décidé son angle de tir, on passe au choix de la vitesse du projectile.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void viseur_Verouiller(object sender, EventArgs e)
+        {
+            prochainMode = ModeTir.DeterminerForce;
+        }
+
+        /// <summary>
+        /// Lorsque la vitesse est choisie, les menus sont tous fermés.
+        /// Un événement est déclanché pour indiquer que le choix est fait et que le tir peut se produire.
+        /// </summary>
+        /// <param name="forceFinale">Vitesse finale</param>
+        void indicateur_ForceFinaleDeterminee(int forceFinale)
+        {
+            prochainMode = ModeTir.nul;
+            ProcessusDeTirTerminer(Conversion.PixelAuMetre(position), viseur.ObtenirAngle() * forceFinale, type, selecteur.Munitions);
+            forceFinale = 0;
+        }
+
+        /// <summary>
+        /// Affiche le bon menu à l'écran
+        /// </summary>
+        /// <param name="gameTime">Temps du jeu</param>
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, 
