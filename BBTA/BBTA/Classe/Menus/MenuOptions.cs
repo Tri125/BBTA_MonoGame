@@ -125,7 +125,7 @@ namespace BBTA.Menus
 
         void EventInput_KeyDown(object sender, EventInput.KeyEventArgs e)
         {
-            boutonEnAttente.touche = e.KeyCode;
+            boutonEnAttente.Touche = e.KeyCode;
             boutonEnAttente.EcouteTouche -= new EventInput.KeyEventHandler(EventInput_KeyDown);
             EventInput.EventInput.KeyDown -= new EventInput.KeyEventHandler(EventInput_KeyDown);
             boutonEnAttente = null;
@@ -147,12 +147,12 @@ namespace BBTA.Menus
         {
             sliderEffet.DeplacementPourcentage((float)OptionJeu.InformationSonore.EffetSonore / 100);
             sliderMusique.DeplacementPourcentage((float)OptionJeu.InformationSonore.Musique / 100);
-
-            btnDroite.touche = Game1.chargeurOption.OptionActive.InformationTouche.Droite;
-            btnGauche.touche = Game1.chargeurOption.OptionActive.InformationTouche.Gauche;
-            btnPause.touche = Game1.chargeurOption.OptionActive.InformationTouche.Pause;
-            btnSaut.touche = Game1.chargeurOption.OptionActive.InformationTouche.Saut;
-            btnTir.touche = Game1.chargeurOption.OptionActive.InformationTouche.Tir;
+            
+            btnDroite.Touche = Game1.chargeurOption.OptionActive.InformationTouche.Droite;
+            btnGauche.Touche = Game1.chargeurOption.OptionActive.InformationTouche.Gauche;
+            btnPause.Touche = Game1.chargeurOption.OptionActive.InformationTouche.Pause;
+            btnSaut.Touche = Game1.chargeurOption.OptionActive.InformationTouche.Saut;
+            btnTir.Touche = Game1.chargeurOption.OptionActive.InformationTouche.Tir;
 
             prochainEtat = EtatJeu.Accueil;
         }
@@ -211,11 +211,11 @@ namespace BBTA.Menus
             OptionJeu.InformationSonore.EffetSonore = sliderEffet.ObtenirPourcentage();
             OptionJeu.InformationSonore.Musique = sliderMusique.ObtenirPourcentage();
 
-            OptionJeu.InformationTouche.Droite = btnDroite.touche;
-            OptionJeu.InformationTouche.Gauche = btnGauche.touche;
-            OptionJeu.InformationTouche.Pause = btnPause.touche;
-            OptionJeu.InformationTouche.Saut = btnSaut.touche;
-            OptionJeu.InformationTouche.Tir = btnTir.touche;
+            OptionJeu.InformationTouche.Droite = btnDroite.Touche;
+            OptionJeu.InformationTouche.Gauche = btnGauche.Touche;
+            OptionJeu.InformationTouche.Pause = btnPause.Touche;
+            OptionJeu.InformationTouche.Saut = btnSaut.Touche;
+            OptionJeu.InformationTouche.Tir = btnTir.Touche;
 
             Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
             ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
@@ -226,11 +226,11 @@ namespace BBTA.Menus
             sliderEffet.DeplacementPourcentage((float)Game1.chargeurOption.OptionDefaut.InformationSonore.EffetSonore / 100);
             sliderMusique.DeplacementPourcentage((float)Game1.chargeurOption.OptionDefaut.InformationSonore.Musique / 100);
 
-            btnDroite.touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Droite;
-            btnGauche.touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Gauche;
-            btnPause.touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Pause;
-            btnSaut.touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Saut;
-            btnTir.touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Tir;
+            btnDroite.Touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Droite;
+            btnGauche.Touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Gauche;
+            btnPause.Touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Pause;
+            btnSaut.Touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Saut;
+            btnTir.Touche = Game1.chargeurOption.OptionDefaut.InformationTouche.Tir;
         }
 
     }
