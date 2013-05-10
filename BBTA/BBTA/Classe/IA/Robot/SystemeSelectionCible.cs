@@ -5,11 +5,11 @@ using System.Text;
 
 namespace BBTA.IA
 {
-    public class SystemeSelectionCible
-    {
-        public SystemeSelectionCible()
-        {
+    //public class SystemeSelectionCible
+    //{
+    //    public SystemeSelectionCible()
+    //    {
 
-        }
-    }
+    //    }
+    //}
 }
