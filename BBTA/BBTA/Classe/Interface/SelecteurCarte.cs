@@ -19,7 +19,7 @@ namespace BBTA.Interface
     /// La carte est générée en temps réel (ce n'est pas une simple image)
     /// Le chargement de carte n'est pas gérer par lui, mais bien par le chargeur de carte dans la classe principale du jeu.
     /// </summary>
-    public class SelecteurCarte:DrawableGameComponent
+    public class SelecteurCarte : DrawableGameComponent
     {
         //Ressources utilisées pour l'affichage------------------------------------------------------------------------------------
         private SpriteBatch spriteBatch;
@@ -48,7 +48,7 @@ namespace BBTA.Interface
         /// <param name="jeu">Classe principale du jeu</param>
         /// <param name="dimensions">Espace occupé par le composant à l'écran. (la taille de la carte sera maximizée sur la hauteur)</param>
         public SelecteurCarte(Game jeu, Rectangle dimensions)
-            :base(jeu)
+            : base(jeu)
         {
             this.dimensions = dimensions;
             this.nomCartes = new List<string>();
@@ -66,9 +66,6 @@ namespace BBTA.Interface
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
             parDessus = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\Carte");
-            //Création de la carte.
-            carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne, Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
-            estChargee = true;
             base.LoadContent();
         }
 
@@ -79,33 +76,37 @@ namespace BBTA.Interface
         /// <param name="gameTime">Temps de jeu</param>
         public override void Update(GameTime gameTime)
         {
+
             //L'état de la souris est conversé en mémoire pour vérifier l'immobilisation de la roulette.
             sourisAvant = sourisMaintenant;
-            sourisMaintenant = Mouse.GetState();            
+            sourisMaintenant = Mouse.GetState();
 
             nomCartes = Game1.chargeurCarte.NomCartes;
 
-            //Selon le sens de roulement de la mollette, on charge les cartes appropirées.            
-            if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < nomCartes.Count() - 1)
+            if (!Game1.chargeurCarte.AucuneCarte)
             {
-                Game1.chargeurCarte.CarteSuivante();
-                numCarteEnCours++;
-                estChargee = false;
-            }
-            else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
-            {
-                Game1.chargeurCarte.CartePrecedente();
-                numCarteEnCours--;
-                estChargee = false;
-            }            
+                //Selon le sens de roulement de la mollette, on charge les cartes appropirées.            
+                if (sourisMaintenant.ScrollWheelValue < sourisAvant.ScrollWheelValue && numCarteEnCours < nomCartes.Count() - 1)
+                {
+                    Game1.chargeurCarte.CarteSuivante();
+                    numCarteEnCours++;
+                    estChargee = false;
+                }
+                else if (sourisMaintenant.ScrollWheelValue > sourisAvant.ScrollWheelValue && numCarteEnCours > 0)
+                {
+                    Game1.chargeurCarte.CartePrecedente();
+                    numCarteEnCours--;
+                    estChargee = false;
+                }
 
-            //Lorsque la mollette est immbilisée, on crée la carte sélectionnée.
-            if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
-            {
-                deplacementHorizontalCarte = 0;
-                carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
-                    Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
-                estChargee = true;
+                //Lorsque la mollette est immbilisée, on crée la carte sélectionnée.
+                if (sourisMaintenant.ScrollWheelValue == sourisAvant.ScrollWheelValue && estChargee == false)
+                {
+                    deplacementHorizontalCarte = 0;
+                    carte = new CarteJeu(Game1.chargeurCarte.InfoTuileTab(), Game1.chargeurCarte.InformationCarte().NbColonne,
+                        Game1.chargeurCarte.InformationCarte().NbRange, arriereplan, blocs, new FarseerPhysics.Dynamics.World(Vector2.Zero), 40);
+                    estChargee = true;
+                }
             }
             base.Update(gameTime);
         }
@@ -128,22 +129,27 @@ namespace BBTA.Interface
 
             //Ratio de réduction de taille en fonction des dimensions spécifiées
             float ratio = (float)ecranEntier.Width / IndependentResolutionRendering.Resolution.getVirtualViewport().Width;
-            GraphicsDevice.Viewport = new Viewport(new Rectangle((int)(dimensions.X * ratio + ecranEntier.X),(int)(dimensions.Y * ratio + ecranEntier.Y),
-                                                                 (int)(dimensions.Width*ratio), (int)(dimensions.Height*ratio)));
+            GraphicsDevice.Viewport = new Viewport(new Rectangle((int)(dimensions.X * ratio + ecranEntier.X), (int)(dimensions.Y * ratio + ecranEntier.Y),
+                                                                 (int)(dimensions.Width * ratio), (int)(dimensions.Height * ratio)));
 
             //Ratio de réduction en focntion de l'indépendance de résolution (taille de l'écran)
             float echelle = (float)dimensions.Height / IndependentResolutionRendering.Resolution.getVirtualViewport().Height;
-            Matrix redimmensionnemnet = Matrix.CreateTranslation(new Vector3(deplacementHorizontalCarte*ratio, 0, 0)) * Matrix.CreateScale(echelle) ;
+            Matrix redimmensionnemnet = Matrix.CreateTranslation(new Vector3(deplacementHorizontalCarte * ratio, 0, 0)) * Matrix.CreateScale(echelle);
+
 
             //Affichage de la carte
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Resolution.getTransformationMatrix() * redimmensionnemnet);
-            carte.Draw(spriteBatch, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width/ 2 - deplacementHorizontalCarte, 
-                                                IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2));
-            spriteBatch.End();
 
-            //Affichage des noms de cartes et des textures d'interface par dessus.
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
-            spriteBatch.Draw(parDessus, Vector2.Zero, Color.White);
+            if (!Game1.chargeurCarte.AucuneCarte)
+            {
+                carte.Draw(spriteBatch, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - deplacementHorizontalCarte,
+                                                    IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2));
+                spriteBatch.End();
+
+                //Affichage des noms de cartes et des textures d'interface par dessus.
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Resolution.getTransformationMatrix());
+                spriteBatch.Draw(parDessus, Vector2.Zero, Color.White);
+            }
             foreach (string nomCarte in nomCartes)
             {
                 Vector2 position = new Vector2(dimensions.X + dimensions.Width / 2 - police.MeasureString(nomCarte).X / 2,
@@ -155,14 +161,17 @@ namespace BBTA.Interface
             //Le viewport est remis à sa valeur d'origine
             GraphicsDevice.Viewport = ecranEntier;
 
-            //Défilement horizontal de la carte pour la voir entièrement (s'il elle est trop longue pour le viewport
-            if (carte.ObtenirTailleCarte().Right + deplacementHorizontalCarte > IndependentResolutionRendering.Resolution.getVirtualViewport().Width/2)
+            if (!Game1.chargeurCarte.AucuneCarte)
             {
-                deplacementHorizontalCarte--;
-            }
-            else
-            {
-                deplacementHorizontalCarte = 0;
+                //Défilement horizontal de la carte pour la voir entièrement (s'il elle est trop longue pour le viewport
+                if (carte.ObtenirTailleCarte().Right + deplacementHorizontalCarte > IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2)
+                {
+                    deplacementHorizontalCarte--;
+                }
+                else
+                {
+                    deplacementHorizontalCarte = 0;
+                }
             }
 
             base.Draw(gameTime);
