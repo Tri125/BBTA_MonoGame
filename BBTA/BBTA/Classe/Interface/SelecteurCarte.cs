@@ -62,7 +62,7 @@ namespace BBTA.Interface
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //Cahrgement des ressources
-            police = Game.Content.Load<SpriteFont>(@"PoliceIndicateur");
+            police = Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur");
             blocs = Game.Content.Load<Texture2D>(@"Ressources\blocs");
             arriereplan = Game.Content.Load<Texture2D>(@"Ressources\HoraireNico");
             parDessus = Game.Content.Load<Texture2D>(@"Ressources\Menus\Configuration\Carte");
