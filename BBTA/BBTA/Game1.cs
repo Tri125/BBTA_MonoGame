@@ -65,6 +65,9 @@ namespace BBTA
         static public BBTA_ConstructeurOption chargeurOption = new BBTA_ConstructeurOption();
         public Game1()
         {
+            Window.AllowUserResizing = false;
+            Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
+
             graphics = new GraphicsDeviceManager(this);
             Window.Title = "Bang Bang Total Annihilation";
             //Initialisation de la résolution indépendante de l'affichage.
@@ -117,6 +120,11 @@ namespace BBTA
             TesteGraphe = new OutilGraphe(this);
 
             base.Initialize();
+        }
+
+        void Window_ClientSizeChanged(object sender, EventArgs e)
+        {
+            Resolution.Init(ref graphics);
         }
 
         protected override void LoadContent()
