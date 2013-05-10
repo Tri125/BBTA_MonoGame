@@ -12,9 +12,11 @@ namespace BBTA.Menus
     public class MenuFinDePartie : MenuArrierePlan
     {
         private Texture2D lettrage;
-        private Bouton btnAccueil;
         private Texture2D lettrageBleu;
         private Texture2D lettrageRouge;
+        private Bouton btnAccueil;
+        private Bouton btnRecommencer;
+
         
         private EtatJeu prochainEtat;
         private Color equipePerdante;
@@ -36,6 +38,9 @@ namespace BBTA.Menus
             btnAccueil = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\BoutonAccueilPNG"), new Vector2(1175, 600), null);
             btnAccueil.Clic += new EventHandler(btnAccueil_Clic);
 
+            btnRecommencer = new Bouton(Game.Content.Load<Texture2D>(@"Ressources\Menus\FinDePartie\BoutonRecommencerPNG"), new Vector2(1175, 800), null);
+            btnRecommencer.Clic += new EventHandler(btnRecommencer_Clic);
+
             base.LoadContent();
         }
 
@@ -45,10 +50,17 @@ namespace BBTA.Menus
             prochainEtat = EtatJeu.Accueil;
         }
 
+        //Évènement du bouton recommencer
+        void btnRecommencer_Clic(object sender, EventArgs e)
+        {
+            prochainEtat = EtatJeu.Jeu;
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             btnAccueil.Update(null);
+            btnRecommencer.Update(null);
 
             //Déterminer l'équipe gagnante
             //Si l'équipe rouge est perdante, alors équipe bleue est gagnante
@@ -79,6 +91,7 @@ namespace BBTA.Menus
             spriteBatch.Draw(lettrage, Vector2.Zero, Color.White);
             spriteBatch.Draw(equipeGagnante, new Vector2(510, 200), Color.White);
             btnAccueil.Draw(spriteBatch);
+            btnRecommencer.Draw(spriteBatch);
 
             spriteBatch.End();
         }
