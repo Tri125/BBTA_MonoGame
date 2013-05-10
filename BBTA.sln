@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BBTA", "BBTA\BBTA\BBTA.cspr
 EndProject
 Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "BBTAContent", "BBTA\BBTAContent\BBTAContent.contentproj", "{CCB3D7B0-0661-403B-80BD-C68FD5303850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNATileMapEditor", "EditeurBBTA\XNATileMapEditor.csproj", "{2EB931BC-6FC9-49DA-8964-C4E510EB3231}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditeurBBTA", "EditeurBBTA\EditeurBBTA.csproj", "{2EB931BC-6FC9-49DA-8964-C4E510EB3231}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

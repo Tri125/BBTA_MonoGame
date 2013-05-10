@@ -200,8 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BBTAContent\BBTAContent.contentproj">
-      <Name>BBTAContent</Name>
+      <Name>BBTAContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{CCB3D7B0-0661-403B-80BD-C68FD5303850}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
