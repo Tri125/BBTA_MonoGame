@@ -55,6 +55,7 @@ namespace BBTA
         private MenuOptions option;
         private MenuConfiguration config;
         private MenuFinDePartie finPartie;
+        private MenuPause pause;
 
         //On construit plusieurs objet static public pour que des classes externes puissent avoir accèss aux outils.
         //Game1.cs est construit immédiatement après Program.cs, alors nous sommes assuré que les classes externes n'auront jamais
@@ -109,6 +110,9 @@ namespace BBTA
 
             //Etat configuration
             config = new MenuConfiguration(this);
+
+            //Etat pause
+            pause = new MenuPause(this);
 
             TesteGraphe = new OutilGraphe(this);
 
@@ -196,7 +200,9 @@ namespace BBTA
                                     chargeurCarte.InformationCarte().NbRange), config.NbSoldatsJ1, config.NbSoldatsJ2);
                             }
                             this.Components.Add(partie);
+                            this.Components.Add(pause);
                         }
+                        partie.Enabled = true;
                         EtatActuel = partie.ObtenirEtat();
                         partie.RemiseAZeroEtat();
                         break;
@@ -213,6 +219,12 @@ namespace BBTA
                         break;
 
                     case EtatJeu.Pause:
+                        pause.Enabled = true;
+                        pause.Visible = true;
+                        partie.Enabled = false;
+                        EtatActuel = pause.ObtenirEtat();
+                        pause.RemiseAZeroEtat();
+
                         break;
                 }
                 //On détecte un changement d'état.
@@ -220,6 +232,8 @@ namespace BBTA
                 if (EtatActuel != EtatPrecedent)
                 {
                     ChangementEtat(this.EtatActuel, EventArgs.Empty);
+                    pause.Enabled = false;
+                    pause.Visible = false;
                 }
                 base.Update(gameTime);
             }

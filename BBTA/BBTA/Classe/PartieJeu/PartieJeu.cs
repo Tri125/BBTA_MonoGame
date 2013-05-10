@@ -51,6 +51,7 @@ namespace BBTA.Partie_De_Jeu
         private int[] carteTuile;
         private List<Equipe> equipes = new List<Equipe>();
         private Equipe equipeActive;
+        private Option.Option.ParametreTouche optionClavier = Game1.chargeurOption.OptionActive.InformationTouche;
 
         //Caméra-------------------------------------------------------------------------------------------------------------------------
         private bool EstEnTransition = false; //Signifie que la caméra se déplace
@@ -167,6 +168,12 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="gameTime">Temps de jeu</param>
         public override void Update(GameTime gameTime)
         {
+            KeyboardState clavier = Keyboard.GetState(); //État actuel du clavier
+            if (clavier.IsKeyDown(optionClavier.Pause))
+            {
+                prochainEtat = EtatJeu.Pause;
+            }
+
             //Mise à jour du monde physique Farseer
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);
 
