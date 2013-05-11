@@ -51,7 +51,6 @@ namespace BBTA.Menus
             prochainEtat = EtatJeu.Configuration;
 
             //Affichage de la carte que le joueur sélectionne
-            Game1.chargeurCarte.LancementChargement();
             carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900));
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
@@ -108,7 +107,10 @@ namespace BBTA.Menus
         //Évênement du bouton confirmer
         void btnConfirmer_Clic(object sender, EventArgs e)
         {
-            prochainEtat = EtatJeu.Jeu;
+            if (!Game1.chargeurCarte.AucuneCarte)
+            {
+                prochainEtat = EtatJeu.Jeu;
+            }
         }
         void btnRetour_Clic(object sender, EventArgs e)
         {
@@ -153,17 +155,25 @@ namespace BBTA.Menus
         public override void Update(GameTime gameTime)
         {
             //Nombre de soldats
-            nbSoldatsMin = Game1.chargeurCarte.InformationCarte().NbJoueurMin / 2;
-            nbSoldatsMax = Game1.chargeurCarte.InformationCarte().NbJoueurMax / 2;
-            if (nbSoldatsMax != nbPrecedentMax)
+            if (!Game1.chargeurCarte.AucuneCarte)
             {
-                nbPrecedentMax = nbSoldatsMax;
+                nbSoldatsMin = Game1.chargeurCarte.InformationCarte().NbJoueurMin / 2;
+                nbSoldatsMax = Game1.chargeurCarte.InformationCarte().NbJoueurMax / 2;
+                if (nbSoldatsMax != nbPrecedentMax)
+                {
+                    nbPrecedentMax = nbSoldatsMax;
+                }
+                if (nbSoldatsMin != nbPrecedentMin)
+                {
+                    nbPrecedentMin = nbSoldatsMin;
+                    nbSoldatsJ1 = nbSoldatsMin;
+                    nbSoldatsJ2 = nbSoldatsMin;
+                }
             }
-            if (nbSoldatsMin != nbPrecedentMin)
+            else
             {
-                nbPrecedentMin = nbSoldatsMin;
-                nbSoldatsJ1 = nbSoldatsMin;
-                nbSoldatsJ2 = nbSoldatsMin;
+                nbSoldatsJ1 = 0;
+                nbSoldatsJ2 = 0;
             }
             
             //Bouton

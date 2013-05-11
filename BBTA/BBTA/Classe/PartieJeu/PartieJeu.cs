@@ -341,6 +341,7 @@ namespace BBTA.Partie_De_Jeu
         public void ChangementEquipe()
         {
             equipeActive.FinTour();
+            gestionnaireMenusTir.ForceAnnule();
             equipeActive = equipes[(equipes.IndexOf(equipeActive) + 1) % equipes.Count()];
             equipeActive.DebutTour();
         }

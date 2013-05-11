@@ -19,7 +19,7 @@ namespace BBTA.Elements
     public class Roquette : Projectile
     {
         //Constantes------------------------------------------------------------------------------------------------------------------
-        private const int RAYON_EXPLOSION_MAX = 5;
+        private const int RAYON_EXPLOSION_MAX = 3;
 
         /// <summary>
         /// Constructeur

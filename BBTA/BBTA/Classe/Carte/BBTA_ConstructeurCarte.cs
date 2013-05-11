@@ -40,6 +40,20 @@ namespace EditeurCarteXNA
 
         public bool ChargementReussis { get { return chargementReussis; } }
         public List<string> NomCartes { get { return nomCartes; } }
+        public bool AucuneCarte
+        {
+            get
+            {
+                if (chemin.Count == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Constructeur de BBTA_ConstructeurCarte.
@@ -206,6 +220,11 @@ namespace EditeurCarteXNA
                 {
                     nomCartes.Add(carte.InformationCarte.NomCarte);
                 }
+            }
+
+            if (nomCartes.Count == 0 && chemin.Count == 0)
+            {
+                nomCartes.Add("Aucune Carte");
             }
         }
 
