@@ -24,10 +24,13 @@ namespace BBTA.Elements
 
         //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
         private Timer compteRebours = new Timer(200);
-        private int tempsDepuisLumierePrecedente = 0; 
+        private int tempsDepuisLumierePrecedente = 0;
         private int tempsDepuisLancement = 0;
         private bool active = false;
         private bool coller = false;
+        //Position du bloc au-dessous de la mine----------------------------------------------------------------------------------
+        private Vector2 blocAuDessous;
+
         //Cosntantes--------------------------------------------------------------------------------------------------------------
         public const int RAYON_EXPLOSION = 2;
         private const int DELAI_LUMIERE = 200; //Délai pour l'intermitance du petit indicateur lumineux de la mine
@@ -116,9 +119,17 @@ namespace BBTA.Elements
                 {
                     //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                     AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1f), corpsPhysique.Position + new Vector2(1f));
-                    bool objetRencontrer = false;//Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
+                    bool blocAuDessousEstDetecter = false;
+                    //Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
                     mondePhysique.QueryAABB(Fixture =>
                     {
+
+                        //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                        if (Fixture.Body.Position == blocAuDessous)
+                        {
+                            blocAuDessousEstDetecter = true;
+                            return false;
+                        }
                         //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
                         //Note : les projectiles sont aussi pris en compte.
                         if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
@@ -128,12 +139,15 @@ namespace BBTA.Elements
                         }
                         else
                         {
-                            objetRencontrer = true;
                             return true;
                         }
                     },
                                             ref detectionAutourMine);
-
+                    //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                    if (blocAuDessousEstDetecter == false)
+                    {
+                        explose = true;
+                    }
 
                 }
             }
@@ -169,6 +183,7 @@ namespace BBTA.Elements
             //Elle est désormais immobile.
             corpsPhysique.IgnoreGravity = true;
             corpsPhysique.LinearVelocity = Vector2.Zero;
+            blocAuDessous = fixtureB.Body.Position;
             coller = true;
             tempsDepuisLancement = DELAI_ACTIVATION;
             //La mine s'oriente en fonction de l'angle de la surface qu'elle frappe et du côté qu'elle le fait.
