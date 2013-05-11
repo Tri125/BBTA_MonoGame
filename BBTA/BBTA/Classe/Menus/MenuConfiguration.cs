@@ -51,7 +51,6 @@ namespace BBTA.Menus
             prochainEtat = EtatJeu.Configuration;
 
             //Affichage de la carte que le joueur sélectionne
-            Game1.chargeurCarte.LancementChargement();
             carte = new SelecteurCarte(game, new Rectangle(0, 0, 800, 900));
             Game.Components.ComponentAdded += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
             Game.Components.ComponentRemoved += new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);

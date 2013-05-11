@@ -191,6 +191,7 @@ namespace BBTA
                         if (!this.Components.Contains(config))
                         {
                             this.Components.Clear();
+                            chargeurCarte.LancementChargement();
                             this.Components.Add(config);
                         }
                         EtatActuel = config.ObtenirEtat();

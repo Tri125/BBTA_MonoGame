@@ -108,6 +108,10 @@ namespace BBTA.Interface
                     estChargee = true;
                 }
             }
+            else
+            {
+                numCarteEnCours = 0;
+            }
             base.Update(gameTime);
         }
 
