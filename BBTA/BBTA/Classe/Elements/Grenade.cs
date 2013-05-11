@@ -18,7 +18,7 @@ namespace BBTA.Elements
     public class Grenade:Projectile
     {
         //Constantes----------------------------------------------------------------------------------
-        public const int RAYON_EXPLOSION = 4;
+        public const int RAYON_EXPLOSION = 2;
 
         //Variables reliées au processus d'explosion de la grenade------------------------------------
         private Timer compteReboursExplosion = new Timer(4000);
