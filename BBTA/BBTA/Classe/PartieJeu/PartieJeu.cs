@@ -33,7 +33,7 @@ namespace BBTA.Partie_De_Jeu
     public class PartieJeu : DrawableGameComponent
     {
         //Compte à rebours d'un tour ----------------------------------------------------------------------------------------------------
-        private const int TEMPS_TOUR_DEFAUT = 5000; //Temps d'un tour par défaut
+        private const int TEMPS_TOUR_DEFAUT = 30000; //Temps d'un tour par défaut
         private readonly int tempsTour;
         private int tempsEcouler;
         private Timer compteReboursApresTir = new Timer(2000); 
