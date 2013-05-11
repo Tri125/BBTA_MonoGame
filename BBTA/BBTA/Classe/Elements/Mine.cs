@@ -24,11 +24,14 @@ namespace BBTA.Elements
 
         //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
         private Timer compteRebours = new Timer(200);
-        private int tempsDepuisLumierePrecedente = 0;
-
+        private int tempsDepuisLumierePrecedente = 0; 
+        private int tempsDepuisLancement = 0;
+        private bool active = false;
+        private bool coller = false;
         //Cosntantes--------------------------------------------------------------------------------------------------------------
-        public const int RAYON_EXPLOSION = 4;
+        public const int RAYON_EXPLOSION = 2;
         private const int DELAI_LUMIERE = 200; //Délai pour l'intermitance du petit indicateur lumineux de la mine
+        private const int DELAI_ACTIVATION = 2000; //Délai avant l'activation d'une mine une fois lancé
 
         //Événements--------------------------------------------------------------------------------------------------------------
         public event EventHandler FixationAuSol;
@@ -74,51 +77,65 @@ namespace BBTA.Elements
         {
             //L'image de la mine est modifiée si le délai de temps est expiré.
             tempsDepuisLumierePrecedente += gameTime.ElapsedGameTime.Milliseconds;
-            if (tempsDepuisLumierePrecedente > DELAI_LUMIERE)
-            {
-                tempsDepuisLumierePrecedente -= DELAI_LUMIERE;
-                //Le rectangle de sélection de l'image de la spritesheet est décalé en fonction de l'état actuel du témoin lumineux.
-                if (positionSpriteSheet.X == 3)
-                {
-                    positionSpriteSheet.Offset(texture.Width / 2, 0);
-                }
-                else
-                {
-                    positionSpriteSheet.Offset(-texture.Width / 2, 0);
-                }
-            }
+
             //Si la mine est en mouvement dans les airs, son orientation suit celle de sa vitesse.
             if (corpsPhysique.LinearVelocity != Vector2.Zero)
             {
                 corpsPhysique.Rotation = (float)Math.Atan2(corpsPhysique.LinearVelocity.Y, corpsPhysique.LinearVelocity.X);
             }
 
-            /* Si la mine n'obéit plus aux lois de la gravité, cela signifie qu'elle est fixée au sol. 
-             * Ainsi, à partir de ce moment, on peut détecter les objets aux alentours pour savoir si elle doit exploser.
-             * De même, la détection du bloc derrière elle est effectuée
-             */
-            if (corpsPhysique.IgnoreGravity)
+            tempsDepuisLancement -= gameTime.ElapsedGameTime.Milliseconds;
+            if (coller == true && tempsDepuisLancement <= 0)
             {
-                //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
-                AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
-                bool objetRencontrer = false;//Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
-                mondePhysique.QueryAABB(Fixture =>
+                active = true;
+            }
+
+            if (active)
+            {
+                tempsDepuisLancement += gameTime.ElapsedGameTime.Milliseconds;
+                if (tempsDepuisLumierePrecedente > DELAI_LUMIERE)
                 {
-                    //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
-                    //Note : les projectiles sont aussi pris en compte.
-                    if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
+                    tempsDepuisLumierePrecedente -= DELAI_LUMIERE;
+                    //Le rectangle de sélection de l'image de la spritesheet est décalé en fonction de l'état actuel du témoin lumineux.
+                    if (positionSpriteSheet.X == 3)
                     {
-                        compteRebours.Start();
-                        return false;
+                        positionSpriteSheet.Offset(texture.Width / 2, 0);
                     }
                     else
                     {
-                        objetRencontrer = true;
-                        return true;
+                        positionSpriteSheet.Offset(-texture.Width / 2, 0);
                     }
-                },
-                                        ref detectionAutourMine);
+                }
 
+
+                /* Si la mine n'obéit plus aux lois de la gravité, cela signifie qu'elle est fixée au sol. 
+                 * Ainsi, à partir de ce moment, on peut détecter les objets aux alentours pour savoir si elle doit exploser.
+                 * De même, la détection du bloc derrière elle est effectuée
+                 */
+                if (corpsPhysique.IgnoreGravity)
+                {
+                    //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
+                    AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1f), corpsPhysique.Position + new Vector2(1f));
+                    bool objetRencontrer = false;//Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
+                    mondePhysique.QueryAABB(Fixture =>
+                    {
+                        //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
+                        //Note : les projectiles sont aussi pris en compte.
+                        if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
+                        {
+                            compteRebours.Start();
+                            return false;
+                        }
+                        else
+                        {
+                            objetRencontrer = true;
+                            return true;
+                        }
+                    },
+                                            ref detectionAutourMine);
+
+
+                }
             }
             if (corpsPhysique.LinearVelocity.Length() == 0 && FixationAuSol != null && compteRebours.Enabled == false)
             {
@@ -152,6 +169,8 @@ namespace BBTA.Elements
             //Elle est désormais immobile.
             corpsPhysique.IgnoreGravity = true;
             corpsPhysique.LinearVelocity = Vector2.Zero;
+            coller = true;
+            tempsDepuisLancement = DELAI_ACTIVATION;
             //La mine s'oriente en fonction de l'angle de la surface qu'elle frappe et du côté qu'elle le fait.
             if (contact.Manifold.LocalPoint.Y < 0)
             {
