@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BBTA.Elements;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,13 +17,10 @@ namespace BBTA.Elements
     /// <summary>
     /// Les mines dans BBTA sont des projectiles qui explosent lorsqu'un joueur est trop près de celle-ci et en aucun autre temps.
     /// </summary>
-    public class Mine:Projectile
+    public class Mine : Projectile
     {
         //Variables issues du moteur physique Farseer-----------------------------------------------------------------------------
         private World mondePhysique; //Servira à détecter les joueurs trop près
-
-        //Position du bloc au-dessous de la mine----------------------------------------------------------------------------------
-        private Vector2 blocAuDessous;
 
         //Variables reliées au compte à rebours-----------------------------------------------------------------------------------
         private Timer compteRebours = new Timer(200);
@@ -46,12 +44,23 @@ namespace BBTA.Elements
         /// <param name="texture">Texture de la mine qui sera affichée à l'écran</param>
         public Mine(ref World mondePhysique, Texture2D texture, Rectangle positionSpriteSheet, Vector2 positionDepart, Vector2 vitesse)
             : base(mondePhysique, new CircleShape(Conversion.PixelAuMetre(7), 5), texture, positionSpriteSheet, positionDepart, vitesse, RAYON_EXPLOSION)
-
         {
             this.mondePhysique = mondePhysique;
+            //corpsPhysique.ApplyLinearImpulse(direction * vitesse);
             corpsPhysique.OnCollision += new OnCollisionEventHandler(corpsPhysique_OnCollision);
             compteRebours.Elapsed += new ElapsedEventHandler(compteRebours_Elapsed);
         }
+
+        /// <summary>
+        /// Expiration du compte à rebours.  Le processus d'explosion démarre
+        /// </summary>
+        /// <param name="sender">Mine</param>
+        /// <param name="e"></param>
+        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            explose = true;
+        }
+
 
         /// <summary>
         /// Met à jour la mine.
@@ -71,14 +80,13 @@ namespace BBTA.Elements
                 //Le rectangle de sélection de l'image de la spritesheet est décalé en fonction de l'état actuel du témoin lumineux.
                 if (positionSpriteSheet.X == 3)
                 {
-                    positionSpriteSheet.Offset(texture.Width/2, 0);
+                    positionSpriteSheet.Offset(texture.Width / 2, 0);
                 }
                 else
                 {
                     positionSpriteSheet.Offset(-texture.Width / 2, 0);
                 }
             }
-
             //Si la mine est en mouvement dans les airs, son orientation suit celle de sa vitesse.
             if (corpsPhysique.LinearVelocity != Vector2.Zero)
             {
@@ -93,38 +101,42 @@ namespace BBTA.Elements
             {
                 //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
                 AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1.5f), corpsPhysique.Position + new Vector2(1.5f));
-                bool blocAuDessousEstDetecter = false; //Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
+                bool objetRencontrer = false;//Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
                 mondePhysique.QueryAABB(Fixture =>
-                                        {
-                                            //S'il n'y a plus de blocs au dessous, la mine disparaît.
-                                            if (Fixture.Body.Position == blocAuDessous)
-                                            {
-                                                blocAuDessousEstDetecter = true;
-                                                return false;
-                                            }
-
-                                            //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
-                                            //Note : les projectiles sont aussi pris en compte.
-                                            if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
-                                            {
-                                                compteRebours.Start();
-                                                return false;
-                                            }
-                                            else
-                                            {
-                                                return true; //On continue de chercher
-                                            }
-
-                                        },
-                                        ref detectionAutourMine);
-                //Explosion de la mine s'il n'y a plus de bloc en-dessous.
-                if (blocAuDessousEstDetecter == false)
                 {
-                    explose = true;
-                }
+                    //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
+                    //Note : les projectiles sont aussi pris en compte.
+                    if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
+                    {
+                        compteRebours.Start();
+                        return false;
+                    }
+                    else
+                    {
+                        objetRencontrer = true;
+                        return true;
+                    }
+                },
+                                        ref detectionAutourMine);
+
+            }
+            if (corpsPhysique.LinearVelocity.Length() == 0 && FixationAuSol != null && compteRebours.Enabled == false)
+            {
+                FixationAuSol(this, new EventArgs());
+                FixationAuSol = null;
             }
 
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Dessine la mine correctement à l'écran
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,
+                             Color.White, corpsPhysique.Rotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
         }
 
         /// <summary>
@@ -139,11 +151,7 @@ namespace BBTA.Elements
         {
             //Elle est désormais immobile.
             corpsPhysique.IgnoreGravity = true;
-            corpsPhysique.LinearVelocity = Vector2.Zero; 
-
-            //On retient en mémoire la position du bloc en-dessous pour vérifier dans le Update s'il est toujours là.
-            blocAuDessous = fixtureB.Body.Position;
-
+            corpsPhysique.LinearVelocity = Vector2.Zero;
             //La mine s'oriente en fonction de l'angle de la surface qu'elle frappe et du côté qu'elle le fait.
             if (contact.Manifold.LocalPoint.Y < 0)
             {
@@ -161,34 +169,7 @@ namespace BBTA.Elements
             {
                 corpsPhysique.Rotation = MathHelper.Pi;
             }
-
-            //Un événement est déclanché pour indiquer que la mine est désormais positionnée et qu'elle n'est plus en vol.
-            if (FixationAuSol != null)
-            {
-                FixationAuSol(this, new EventArgs());
-            }
-
             return true;
-        }
-
-        /// <summary>
-        /// Expiration du compte à rebours.  Le processus d'explosion démarre
-        /// </summary>
-        /// <param name="sender">Mine</param>
-        /// <param name="e"></param>
-        void compteRebours_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            explose = true;
-        }
-
-        /// <summary>
-        /// Dessine la mine correctement à l'écran
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture, ObtenirPosition(), positionSpriteSheet,
-                             Color.White, corpsPhysique.Rotation, new Vector2(positionSpriteSheet.Width / 2, positionSpriteSheet.Height / 2), 1, retourner, 0);
         }
     }
 }
