@@ -123,17 +123,17 @@ namespace BBTA.Elements
                     mondePhysique.QueryAABB(Fixture =>
                     {
 
-                        //S'il n'y a plus de blocs au dessous, la mine disparaît.
-                        if (Fixture.Body.Position == blocAuDessous)
-                        {
-                            blocAuDessousEstDetecter = true;
-                            return false;
-                        }
                         //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
                         //Note : les projectiles sont aussi pris en compte.
                         if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
                         {
                             compteRebours.Start();
+                            return false;
+                        }
+                        //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                        if (Fixture.Body.Position == blocAuDessous)
+                        {
+                            blocAuDessousEstDetecter = true;
                             return false;
                         }
                         else
@@ -206,3 +206,4 @@ namespace BBTA.Elements
         }
     }
 }
+
