@@ -44,6 +44,14 @@ namespace BBTA.Interface
             positionIndicateur = new Vector2(0, POSITION_INITIALE_INDICATEUR);
         }
 
+        public void RemiseAZero()
+        {
+            tirEstCommence = false;
+            forceDepart = 1; //La vitesse minimale est de 1.
+            tempsEcouleDepuisDernierPalier = 0;
+            positionIndicateur = new Vector2(0, POSITION_INITIALE_INDICATEUR);
+        }
+
         /// <summary>
         /// Met à jour le composant. 
         /// Gère l'animation lors du déploiement du menu

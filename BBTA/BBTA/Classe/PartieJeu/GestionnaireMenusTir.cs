@@ -49,7 +49,6 @@ namespace BBTA.Partie_De_Jeu
         public event DelegateProcessusDeTirTerminer ProcessusDeTirTerminer;
         public event EventHandler TirAvorte;
 
-
         public GestionnaireMenusTir(Game jeu)
             : base(jeu)
         {
@@ -162,6 +161,26 @@ namespace BBTA.Partie_De_Jeu
             {
                 TirAvorte(this, new EventArgs());
             }
+        }
+
+        public void ForceAnnule()
+        {
+            TirAvorte(this, new EventArgs());
+            selecteur.estOuvert = false;
+            if (viseur != null)
+            {
+                viseur.estOuvert = false;
+            }
+            if (indicateur != null)
+            {
+                indicateur.estOuvert = false;
+                indicateur.RemiseAZero();
+            }
+            if (arme != null)
+            {
+                arme.estOuvert = false;
+            }
+
         }
 
         /// <summary>
