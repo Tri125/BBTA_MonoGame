@@ -176,10 +176,10 @@ namespace BBTA.Elements
             if (direction.Length() < rayonExplosion)
             {
                 direction.Normalize();
-                //Détermine le ration entre le rayon maximal et la distance de l'acteur
-                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion); 
+                //Détermine le ratio entre le rayon maximal et la distance de l'acteur
+                float distanceExplosion = rayonExplosion / Vector2.Distance(Conversion.MetreAuPixel(corpsPhysique.Position), lieuExplosion);
                 corpsPhysique.ApplyLinearImpulse(direction * distanceExplosion); //Un impulsion est appliquée
-                pointDeVie -= distanceExplosion * 4; //Des points de vie sont perdus.
+                pointDeVie -= distanceExplosion * 50; //Des points de vie sont perdus.
                 monTour = false;
                 if (pointDeVie < 0)
                 {

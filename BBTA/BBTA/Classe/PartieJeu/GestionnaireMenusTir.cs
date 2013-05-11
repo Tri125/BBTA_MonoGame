@@ -186,6 +186,23 @@ namespace BBTA.Partie_De_Jeu
             forceFinale = 0;
         }
 
+        public void FermetureManuelleMenus()
+        {
+            switch (modeEncours)
+            {
+                case ModeTir.Selection:
+                    selecteur.estOuvert = false;
+                    break;
+                case ModeTir.Visee:
+                    viseur.estOuvert = false;
+                    break;
+                case ModeTir.DeterminerForce:
+                    indicateur.estOuvert = false;
+                    break;
+            }
+            prochainMode = ModeTir.nul;
+        }
+
         /// <summary>
         /// Affiche le bon menu à l'écran
         /// </summary>

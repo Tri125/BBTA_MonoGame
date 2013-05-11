@@ -125,6 +125,7 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="e"></param>
         void GestionnaireProjectile_Detruit(object sender, EventArgs e)
         {
+            enAction = false;
             projectiles.Remove((sender as Projectile));
             if (ProcessusTerminer != null)
             {

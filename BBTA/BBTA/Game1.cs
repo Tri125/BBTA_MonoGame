@@ -224,7 +224,6 @@ namespace BBTA
                         partie.Enabled = false;
                         EtatActuel = pause.ObtenirEtat();
                         pause.RemiseAZeroEtat();
-
                         break;
                 }
                 //On détecte un changement d'état.

@@ -76,7 +76,7 @@ namespace BBTA.Interface
             }
 
             //Si la souris est positionnée sur le bouton...
-            if(rectangleCollisionBouton.Contains(IndependentResolutionRendering.Resolution.MouseHelper.PositionSourisCamera(matriceCamera.Value)))
+            if (rectangleCollisionBouton.Contains(IndependentResolutionRendering.Resolution.MouseHelper.PositionSourisCamera(matriceCamera.Value)))
             {
                 //Et qu'elle relâche le clic, alors un événement indiquant un clic est déclanché.
                 if (etat == ButtonState.Pressed && Mouse.GetState().LeftButton == ButtonState.Released && Clic != null)
@@ -84,6 +84,10 @@ namespace BBTA.Interface
                     LancementClic();
                 }
                 etat = Mouse.GetState().LeftButton;
+            }
+            else
+            {
+                etat = ButtonState.Released;
             }
         }
 
