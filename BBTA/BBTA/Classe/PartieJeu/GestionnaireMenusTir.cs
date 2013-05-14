@@ -16,14 +16,14 @@ namespace BBTA.Partie_De_Jeu
     {
         Selection,
         Visee,
-        DeterminerForce, 
+        DeterminerForce,
         nul
     }
 
     /// <summary>
     /// GestionnaireMenusTir est une classe qui permet de gérer l'ordre des différents menus intervenants dans le processus de tir.
     /// </summary>
-    public class GestionnaireMenusTir:DrawableGameComponent
+    public class GestionnaireMenusTir : DrawableGameComponent
     {
         //Modules de tir----------------------------------------------------------
         private IndicateurPuissance indicateur;
@@ -64,7 +64,7 @@ namespace BBTA.Partie_De_Jeu
             spriteBatch = new SpriteBatch(GraphicsDevice);
             indicateur = new IndicateurPuissance(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Puissance"));
             texturesArmes = Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\armesPanneau");
-            selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"), 
+            selecteur = new SelectionArme(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\panneauSelecteurArme"),
                                           texturesArmes,
                                           Game.Content.Load<SpriteFont>(@"Police\PoliceIndicateur"), 200);
             viseur = new ViseurVisuel(Game.Content.Load<Texture2D>(@"Ressources\InterfaceEnJeu\Viseur"));
@@ -88,7 +88,7 @@ namespace BBTA.Partie_De_Jeu
             {
                 case ModeTir.Selection:
                     selecteur.Update(gameTime, MatriceDeCamera);
-                    if (selecteur.estOuvert == false && selecteur. estDeploye == false)
+                    if (selecteur.estOuvert == false && selecteur.estDeploye == false)
                     {
                         modeEncours = prochainMode;
                         viseur.estOuvert = true;
@@ -166,7 +166,7 @@ namespace BBTA.Partie_De_Jeu
         public void ForceAnnule()
         {
             TirAvorte(this, new EventArgs());
-            selecteur.estOuvert = false;
+            
             if (viseur != null)
             {
                 viseur.estOuvert = false;
@@ -175,12 +175,21 @@ namespace BBTA.Partie_De_Jeu
             {
                 indicateur.estOuvert = false;
                 indicateur.RemiseAZero();
+
             }
             if (arme != null)
             {
                 arme.estOuvert = false;
             }
-
+            if (selecteur.estOuvert)
+            {
+                selecteur.estOuvert = false;
+            }
+            else
+            {
+                modeEncours = ModeTir.nul;
+                prochainMode = ModeTir.nul;
+            }
         }
 
         /// <summary>
@@ -228,8 +237,8 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="gameTime">Temps du jeu</param>
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(SpriteSortMode.Immediate, 
-                              BlendState.AlphaBlend, null, null, null, null, 
+            spriteBatch.Begin(SpriteSortMode.Immediate,
+                              BlendState.AlphaBlend, null, null, null, null,
                               Resolution.getTransformationMatrix() * MatriceDeCamera);
             switch (modeEncours)
             {
@@ -249,6 +258,6 @@ namespace BBTA.Partie_De_Jeu
             }
             spriteBatch.End();
             base.Draw(gameTime);
-        } 
+        }
     }
 }
