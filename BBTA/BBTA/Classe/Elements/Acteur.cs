@@ -139,9 +139,7 @@ namespace BBTA.Elements
                 if (fixtureB.Body.UserData is Bloc) //Si l'objet avec lequel l'acteur est en collision est un Bloc
                 {
                     //Alors on s'assure que le bloc est sous le joueur
-                    if (contact.Manifold.LocalNormal.Y < 0 &&
-                       fixtureA.Body.Position.X >= fixtureB.Body.Position.X - (fixtureB.Body.UserData as Bloc).Taille/2 &&
-                       fixtureA.Body.Position.X <= fixtureB.Body.Position.X + (fixtureB.Body.UserData as Bloc).Taille/2)
+                    if (contact.Manifold.LocalNormal.Y < 0 && (fixtureB.Body.UserData as Bloc).blocAuDessus == false)
                     {
                         estAuSol = true;
                     }

@@ -39,6 +39,7 @@ namespace BBTA.Elements
         //Propriétés---------------------------------------------------------------------------------------------
         public TypeBloc Type { get { return type; } }
         public float Taille { get { return taille; } }
+        public bool blocAuDessus { get; set; }
 
         //Événements
         public event EventHandler AnimationDestructionTerminee;
