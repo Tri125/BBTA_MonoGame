@@ -26,6 +26,8 @@ namespace BBTA.Elements
 
         //Variables permettant de déterminer l'état dans lequel il est et l'exécution ou non de certaines actions-
         private bool veutSeDeplacer = false;
+        private Vector2 vieillePosition;
+        private bool seDeplace = false;
         public bool monTour = false;
 
         //Constantes----------------------------------------------------------------------------------------------
@@ -76,6 +78,12 @@ namespace BBTA.Elements
         /// <param name="gameTime">Temps du jeu</param>
         public override void Update(GameTime gameTime)
         {
+            seDeplace = false;
+            if (vieillePosition != ObtenirPosition())
+            {
+                seDeplace = true;
+            }
+            vieillePosition = ObtenirPosition();
             if (monTour == true)
             {
                 if (veutSeDeplacer == true && estAuSol == true)
@@ -160,8 +168,15 @@ namespace BBTA.Elements
         /// </summary>
         protected void Tirer()
         {
-            TirDemande(this, new EventArgs());
-            enModeTir = true;
+            if (!seDeplace)
+            {
+                TirDemande(this, new EventArgs());
+                enModeTir = true;
+            }
+            else
+            {
+                Console.WriteLine("Acteur::Tirer() : Acteur est en déplacement, ne peux pas tirer.");
+            }
         }
 
         /// <summary>
