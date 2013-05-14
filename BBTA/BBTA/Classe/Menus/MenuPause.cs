@@ -22,6 +22,9 @@ namespace BBTA.Menus
         private Bouton btnQuitter;
 
         private EtatJeu prochainEtat;
+        public bool enTransition;
+        public bool enAccueil;
+
         /// <summary>
         /// Constructeur de base pour le menu fin de partie
         /// Met le module invisible par défaut
@@ -57,12 +60,14 @@ namespace BBTA.Menus
         void btnContinuer_Clic(object sender, EventArgs e)
         {
             prochainEtat = EtatJeu.Jeu;
+            enTransition = true;
         }
 
         //Évènement du bouton accueil
         void btnAccueil_Clic(object sender, EventArgs e)
         {
             prochainEtat = EtatJeu.Accueil;
+            enAccueil = true;
         }
 
         //Évènement du bouton quitter

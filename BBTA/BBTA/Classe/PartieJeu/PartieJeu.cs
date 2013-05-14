@@ -66,7 +66,33 @@ namespace BBTA.Partie_De_Jeu
 
         //Logique du jeu-----------------------------------------------------------------------------------------------------------------
         private EtatJeu prochainEtat;
-        
+        private bool enPause;
+
+
+
+        public void Pause()
+        {
+            if (!enPause)
+            {
+                enPause = true;
+                Enabled = false;
+                return;
+            }
+            Console.WriteLine("PartieJeu::Pause(): Déjà en pause.");
+        }
+
+        public void Reprendre()
+        {
+            if (enPause)
+            {
+                enPause = false;
+                Enabled = true;
+                return;
+            }
+            Console.WriteLine("PartieJeu::Reprendre(): N'est pas en pause.");
+        }
+
+
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -169,10 +195,6 @@ namespace BBTA.Partie_De_Jeu
         public override void Update(GameTime gameTime)
         {
             KeyboardState clavier = Keyboard.GetState(); //État actuel du clavier
-            if (clavier.IsKeyDown(optionClavier.Pause))
-            {
-                prochainEtat = EtatJeu.Pause;
-            }
 
             //Mise à jour du monde physique Farseer
             mondePhysique.Step((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f);

@@ -75,7 +75,7 @@ namespace BBTA
             //Résolution virtuelle interne.
             Resolution.SetVirtualResolution(1440, 900);
             //La résolution de la fenêtre de jeu présenté à l'utilisateur
-            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
+            Resolution.SetResolution(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
                 GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, false);
             this.IsMouseVisible = true;
             this.IsFixedTimeStep = false;
@@ -103,7 +103,7 @@ namespace BBTA
             this.Components.Add(gestionnaireSon);
             //On enregistre gestionnaireSon en tant que Services. Cela permet aux classes externes de consommer gestionnaireSon
             //sans avoir de référence ou de paramètre.
-            Services.AddService(typeof (GestionSon), gestionnaireSon);
+            Services.AddService(typeof(GestionSon), gestionnaireSon);
 
             //Etat Accueil
             acc = new MenuAccueil(this);
@@ -133,7 +133,7 @@ namespace BBTA
             ChangementEtat(this.EtatActuel, EventArgs.Empty);
             //Pour le menu des options de configuration, on donne en paramètre le gestionnaire de son et celui de la musique
             //pour lié les événements correspondant au contrôle du volume.
-            option.InitControlAudio(gestionnaireMusique , gestionnaireSon);
+            option.InitControlAudio(gestionnaireMusique, gestionnaireSon);
             base.LoadContent();
         }
 
@@ -211,9 +211,14 @@ namespace BBTA
                             this.Components.Add(partie);
                             this.Components.Add(pause);
                         }
-                        partie.Enabled = true;
-                        EtatActuel = partie.ObtenirEtat();
-                        partie.RemiseAZeroEtat();
+                        //partie.Enabled = true;
+                        //EtatActuel = partie.ObtenirEtat();
+                        if (Keyboard.GetState().IsKeyDown(chargeurOption.OptionActive.InformationTouche.Pause))
+                        {
+                            partie.Pause();
+                            EtatActuel = EtatJeu.Pause;
+                        }
+                        //partie.RemiseAZeroEtat();
                         break;
 
                     case EtatJeu.FinDePartie:
@@ -230,9 +235,30 @@ namespace BBTA
                     case EtatJeu.Pause:
                         pause.Enabled = true;
                         pause.Visible = true;
-                        partie.Enabled = false;
-                        EtatActuel = pause.ObtenirEtat();
-                        pause.RemiseAZeroEtat();
+                        //partie.Enabled = false;
+                        //EtatActuel = pause.ObtenirEtat();
+                        if (pause.enTransition)
+                        {
+                            pause.enTransition = false;
+                            partie.Reprendre();
+                            EtatActuel = EtatJeu.Jeu;
+                            pause.Enabled = false;
+                            pause.Visible = false;
+                        }
+                        else
+                        {
+                            if (pause.enAccueil)
+                            {
+                                pause.enTransition = false;
+                                pause.enAccueil = false;
+                                partie.Reprendre();
+                                EtatActuel = EtatJeu.Accueil;
+                                pause.Enabled = false;
+                                pause.Visible = false;
+                            }
+                        }
+
+                        // pause.RemiseAZeroEtat();
                         break;
                 }
                 //On détecte un changement d'état.
@@ -240,8 +266,6 @@ namespace BBTA
                 if (EtatActuel != EtatPrecedent)
                 {
                     ChangementEtat(this.EtatActuel, EventArgs.Empty);
-                    pause.Enabled = false;
-                    pause.Visible = false;
                 }
                 base.Update(gameTime);
             }
