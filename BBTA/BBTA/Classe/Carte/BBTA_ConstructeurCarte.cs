@@ -30,7 +30,7 @@ namespace EditeurCarteXNA
         private BBTA_Carte carte;
         //private BBTA_Carte[] carteTampon;
         //Position actuel dans la liste de chemin.
-        private int positionChemin = -1;
+        private int positionChemin;
         private XmlTextReader lecteur = null;
         private XmlTextWriter ecriveur = null;
         private XmlSerializer serializer = null;
@@ -64,6 +64,7 @@ namespace EditeurCarteXNA
         /// <param name="dossierCarte">string nom du dossier où la recherche des fichiers s'effectuera.</param>
         public BBTA_ConstructeurCarte(uint memoireTampon, string extensionCarte, string dossierCarte)
         {
+            positionChemin = 0;
             //this.MEMOIRE_TAMPON = memoireTampon;
             this.EXTENSION = extensionCarte;
             this.DOSSIER_CARTE = dossierCarte;
@@ -79,8 +80,10 @@ namespace EditeurCarteXNA
             initialiser = true;
             ChercheFichierCarte();
             TesteFichierCarte();
-            //Pour charger la toute première carte
-            CarteSuivante();
+            if (positionChemin < chemin.Count())
+            {
+                LectureCarte(chemin[positionChemin]);
+            }
         }
 
         /// <summary>
