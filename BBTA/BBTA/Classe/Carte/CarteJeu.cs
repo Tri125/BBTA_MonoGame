@@ -116,11 +116,15 @@ namespace BBTA.Carte
 
         public void Update(GameTime gameTime)
         {
-            foreach (Bloc item in blocs)
+            for (int nbBlocs = 0; nbBlocs < blocs.Length; nbBlocs++)
             {
-                if (item != null)
+                if (blocs[nbBlocs] != null)
                 {
-                    item.Update(gameTime);
+                    if (nbBlocs > largeur && blocs[nbBlocs - largeur] != null)
+                    {
+                        blocs[nbBlocs].blocAuDessus = true;
+                    }
+                    blocs[nbBlocs].Update(gameTime);
                 }
             }
         }
