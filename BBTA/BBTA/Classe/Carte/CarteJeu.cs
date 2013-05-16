@@ -124,6 +124,10 @@ namespace BBTA.Carte
                     {
                         blocs[nbBlocs].blocAuDessus = true;
                     }
+                    else
+                    {
+                        blocs[nbBlocs].blocAuDessus = false;
+                    }
                     blocs[nbBlocs].Update(gameTime);
                 }
             }

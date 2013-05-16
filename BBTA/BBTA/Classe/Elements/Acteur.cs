@@ -129,8 +129,11 @@ namespace BBTA.Elements
         /// </summary>
         protected void Sauter()
         {
-            estAuSol = false;
-            corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
+            if ((int)corpsPhysique.LinearVelocity.Y == 0)
+            {
+                estAuSol = false;
+                corpsPhysique.ApplyLinearImpulse(new Vector2(0, -FORCE_MOUVEMENT_VERTICAL));
+            }
         }
 
         /// <summary>
@@ -147,7 +150,7 @@ namespace BBTA.Elements
                 if (fixtureB.Body.UserData is Bloc) //Si l'objet avec lequel l'acteur est en collision est un Bloc
                 {
                     //Alors on s'assure que le bloc est sous le joueur
-                    if (contact.Manifold.LocalNormal.Y < 0 && (fixtureB.Body.UserData as Bloc).blocAuDessus == false)
+                    if (contact.Manifold.LocalNormal.Y < 0 && (fixtureB.Body.UserData as Bloc).blocAuDessus == false && corpsPhysique.LinearVelocity.Y >= 0)
                     {
                         estAuSol = true;
                     }
