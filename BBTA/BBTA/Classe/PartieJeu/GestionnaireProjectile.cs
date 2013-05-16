@@ -81,7 +81,7 @@ namespace BBTA.Partie_De_Jeu
         {
             Vector2 distanceDepart = vitesse;
             distanceDepart.Normalize();
-            distanceDepart *= 60;           /* Le projectile doit être créer à une certaine distance du joueur pour qu'il concorde avec l'extrémité du bazooka et qu'il ne soit pas en 
+            distanceDepart *= 50;           /* Le projectile doit être créer à une certaine distance du joueur pour qu'il concorde avec l'extrémité du bazooka et qu'il ne soit pas en 
                                              * collision avec le joueur lui-même */
 
             switch (type)
@@ -90,10 +90,10 @@ namespace BBTA.Partie_De_Jeu
                     projectiles.Add(new Roquette(mondePhysique, texturesProjectiles, new Rectangle(1, 4, 18, 12), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
                     break;
                 case Armes.Grenade:
-                    projectiles.Add(new Grenade(mondePhysique, texturesProjectiles, new Rectangle(1, 19, 18, 22), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
+                    projectiles.Add(new Grenade(mondePhysique, texturesProjectiles, new Rectangle(1, 19, 18, 22), position, vitesse));
                     break;
                 case Armes.Mine:
-                    projectiles.Add(new Mine(ref mondePhysique, texturesProjectiles, new Rectangle(3, 45, 14, 22), position + Conversion.PixelAuMetre(distanceDepart), vitesse));
+                    projectiles.Add(new Mine(ref mondePhysique, texturesProjectiles, new Rectangle(3, 45, 14, 22), position, vitesse));
                     (projectiles[projectiles.Count - 1] as Mine).FixationAuSol += new EventHandler(GestionnaireProjectile_FixationAuSol);
                     break;
                 default:
