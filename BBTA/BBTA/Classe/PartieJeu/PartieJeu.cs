@@ -246,20 +246,26 @@ namespace BBTA.Partie_De_Jeu
                 if (mondePhysique.BodyList[nbCorps].Position.Y  > Conversion.PixelAuMetre(carte.ObtenirTailleCarte().Height)+2)
                 {
                     //Si l'acteur est tombé dans le vide, changement d'équipe
+                    bool changementDequipeLieu = false;
                     if (mondePhysique.BodyList[nbCorps] == equipeActive.JoueurActif.ObtenirCorpsPhysique())
                     {
                         if (EstEnTransition == false)
                         {
                             ChangementEquipe();
+                            changementDequipeLieu = true;
                             EstEnTransition = true;
                         }
                     }
                     else if (mondePhysique.BodyList[nbCorps].UserData is Projectile)
                     {
                         ChangementEquipe();
+                        changementDequipeLieu = true;
                     }
 
-                    camPartie.SeDirigerVers(equipeActive.JoueurActif);
+                    if(changementDequipeLieu == true)
+                    {
+                        camPartie.SeDirigerVers(equipeActive.JoueurActif);
+                    }
                     mondePhysique.RemoveBody(mondePhysique.BodyList[nbCorps]);
                     mondePhysique.BodyList[nbCorps].IsDisposed = true; //Lorsque l'objet détenant ce corps entrera dans son Update, il se détruira.
                 }
@@ -403,7 +409,7 @@ namespace BBTA.Partie_De_Jeu
             //Affichage de la carte et des joueurs.
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, 
                               Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
-            carte.Draw(spriteBatch, camPartie.Pos);
+            carte.Draw(spriteBatch, camPartie.Pos, GraphicsDevice.Viewport);
             foreach (Equipe equipe in equipes)
             {
                 equipe.Draw(spriteBatch);

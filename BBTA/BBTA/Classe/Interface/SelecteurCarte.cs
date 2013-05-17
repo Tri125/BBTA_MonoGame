@@ -146,7 +146,7 @@ namespace BBTA.Interface
 
             if (!Game1.chargeurCarte.AucuneCarte)
             {
-                carte.Draw(spriteBatch, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - deplacementHorizontalCarte,
+                carte.Previsualisation(spriteBatch, GraphicsDevice, new Vector2(IndependentResolutionRendering.Resolution.getVirtualViewport().Width / 2 - deplacementHorizontalCarte,
                                                     IndependentResolutionRendering.Resolution.getVirtualViewport().Height / 2));
                 spriteBatch.End();
 
