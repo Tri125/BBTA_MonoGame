@@ -204,7 +204,7 @@ namespace BBTA.Partie_De_Jeu
             {
                 equipe.Update(gameTime);
                 //Vérifier perdant
-                if (equipe.DeterminerEquipePerdante())
+                if (equipe.ObtenirEtatDefaite())
                 {
                     equipePerdante = equipe.couleur;
                     prochainEtat = EtatJeu.FinDePartie;
