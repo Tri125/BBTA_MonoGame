@@ -169,7 +169,10 @@ namespace BBTA.Partie_De_Jeu
             }
             else
             {
-                JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
+                if (equipiers.Count != 0)
+                {
+                    JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
+                }
             }
         }
         //Lorsque le tour est fini, le joueurActif est désactivé
@@ -188,7 +191,10 @@ namespace BBTA.Partie_De_Jeu
             //Sinon, on prend un joueur au hasard.
             else
             {
-                JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
+                if (equipiers.Count != 0)
+                {
+                    JoueurActif = equipiers[(equipiers.IndexOf(JoueurActif) + 1) % equipiers.Count()];
+                }
             }
             JoueurActif.monTour = true;
         }
