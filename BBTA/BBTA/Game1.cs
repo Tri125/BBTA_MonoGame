@@ -212,7 +212,7 @@ namespace BBTA
                             this.Components.Add(pause);
                         }
                         //partie.Enabled = true;
-                        //EtatActuel = partie.ObtenirEtat();
+                        EtatActuel = partie.ObtenirEtat();
                         if (Keyboard.GetState().IsKeyDown(chargeurOption.OptionActive.InformationTouche.Pause))
                         {
                             partie.Pause();

@@ -36,7 +36,6 @@ namespace BBTA.Partie_De_Jeu
         private const int TEMPS_TOUR_DEFAUT = 30000; //Temps d'un tour par défaut
         private readonly int tempsTour;
         private int tempsEcouler;
-        private Timer compteReboursApresTir = new Timer(2000); 
 
         //Ressources et variables pour l'affichage --------------------------------------------------------------------------------------
         private SpriteBatch spriteBatch;
@@ -278,15 +277,8 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="e"></param>
         void gestionnaireProjectile_ProcessusTerminer(object sender, EventArgs e)
         {
-            //Un délai existe pour empêcher de se diriger immédiatement vers le joueur suivant et laisser le temps de voir les dégats.
-            //Si il y a eu explosion, le chronomètre est déjà démarré, nul besoin de le faire à nouveau.
-            if (compteReboursApresTir.Enabled == false)
-            {
-                compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
-                compteReboursApresTir.Start();
-
-                ChangementEquipe();
-            }
+            ChangementEquipe();
+            camPartie.SeDirigerVers(equipeActive.JoueurActif);
             EstEnTransition = true;
         }
 
@@ -309,26 +301,12 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="rayonExplosion">Rayon de l'explosion</param>
         void gestionnaireProjectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            compteReboursApresTir.Elapsed += new ElapsedEventHandler(compteReboursApresTir_Elapsed);
-            compteReboursApresTir.Start();
             EstEnTransition = true;
             foreach (Equipe equipe in equipes)
             {
                 equipe.RecevoirDegats(position, rayonExplosion);
             }
             carte.Explosion(position, rayonExplosion);
-            ChangementEquipe();
-        }
-
-        /// <summary>
-        /// Lorsque le chronomètre après un tir est terminé, la caméra se déplace vers le prochain joueur.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void compteReboursApresTir_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            compteReboursApresTir.Stop();
-            camPartie.SeDirigerVers(equipeActive.JoueurActif);
         }
 
         /// <summary>

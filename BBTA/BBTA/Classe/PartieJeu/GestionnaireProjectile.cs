@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 using IndependentResolutionRendering;
 using BBTA.Outils;
 using BBTA.GestionAudio;
+using System.Timers;
 
 namespace BBTA.Partie_De_Jeu
 {
@@ -24,6 +25,7 @@ namespace BBTA.Partie_De_Jeu
         private GestionSon gestionnaireSon;
         private SpriteBatch spriteBatch;
         private Texture2D texturesProjectiles;
+        private Timer rebours = new Timer();
 
         //Variables------------------------------------------------------------------------------------------------------------------------------------
         private List<Projectile> projectiles = new List<Projectile>();
@@ -46,7 +48,18 @@ namespace BBTA.Partie_De_Jeu
         public GestionnaireProjectile(Game jeu)
             : base(jeu)
         {
+            rebours.AutoReset = true;
+            rebours.Elapsed += new ElapsedEventHandler(rebours_Elapsed);
+        }
 
+        void rebours_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            enAction = false;
+            rebours.Stop();
+            if (ProcessusTerminer != null)
+            {
+                ProcessusTerminer(this, new EventArgs());
+            }
         }
 
         /// <summary>
@@ -125,12 +138,7 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="e"></param>
         void GestionnaireProjectile_Detruit(object sender, EventArgs e)
         {
-            enAction = false;
             projectiles.Remove((sender as Projectile));
-            if (ProcessusTerminer != null)
-            {
-                ProcessusTerminer(this, new EventArgs());
-            }
         }
 
         /// <summary>
@@ -140,11 +148,9 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="e"></param>
         void GestionnaireProjectile_FixationAuSol(object sender, EventArgs e)
         {
-            enAction = false;
-            if (ProcessusTerminer != null)
-            {
-                ProcessusTerminer(this, new EventArgs());
-            }
+            rebours.Stop();
+            rebours.Interval = 3000;
+            rebours.Start();
         }
 
         /// <summary>
@@ -154,9 +160,27 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="rayonExplosion">Rayon de dégats de l'explosion</param>
         void projectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            enAction = false;
             SonDestructionArme(null, new EventArgs());
             Explosion(position, rayonExplosion);
+            rebours.Stop();
+            bool yaGrenade = false;
+            foreach (Projectile item in projectiles)
+            {
+                if (item is Grenade)
+                {
+                    yaGrenade = true;
+                    break;
+                }
+            }
+            if (yaGrenade)
+            {
+                rebours.Interval = 4500;
+            }
+            else
+            {
+                rebours.Interval = 2000;
+            }
+            rebours.Start();
         }
 
         /// <summary>

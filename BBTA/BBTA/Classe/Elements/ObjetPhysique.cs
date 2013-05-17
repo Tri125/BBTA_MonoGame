@@ -46,6 +46,11 @@ namespace BBTA.Elements
                 Detruit(this, new EventArgs());
             }
         }
+
+        protected void DetruireDeForce()
+        {
+            Detruit(this, new EventArgs());
+        }
         
         /// <summary>
         /// Permet de dessiner l'objet à l'écran.
