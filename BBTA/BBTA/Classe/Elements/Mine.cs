@@ -38,6 +38,8 @@ namespace BBTA.Elements
         //Événements--------------------------------------------------------------------------------------------------------------
         public event EventHandler FixationAuSol;
 
+        public bool ExplosionEnclanchee { get; private set; }
+
         /// <summary>
         /// Constructeur
         /// </summary>
@@ -116,38 +118,7 @@ namespace BBTA.Elements
                  */
                 if (corpsPhysique.IgnoreGravity)
                 {
-                    //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
-                    AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1f), corpsPhysique.Position + new Vector2(1f));
-                    bool blocAuDessousEstDetecter = false;
-                    //Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
-                    mondePhysique.QueryAABB(Fixture =>
-                    {
-
-                        //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
-                        //Note : les projectiles sont aussi pris en compte.
-                        if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
-                        {
-                            compteRebours.Start();
-                            return false;
-                        }
-                        //S'il n'y a plus de blocs au dessous, la mine disparaît.
-                        if (Fixture.Body.Position == blocAuDessous)
-                        {
-                            blocAuDessousEstDetecter = true;
-                            return false;
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    },
-                                            ref detectionAutourMine);
-                    //S'il n'y a plus de blocs au dessous, la mine disparaît.
-                    if (blocAuDessousEstDetecter == false)
-                    {
-                        explose = true;
-                    }
-
+                    ExplosionAvoisinante();
                 }
             }
             if (corpsPhysique.LinearVelocity.Length() == 0 && FixationAuSol != null && compteRebours.Enabled == false)
@@ -203,6 +174,43 @@ namespace BBTA.Elements
                 corpsPhysique.Rotation = MathHelper.Pi;
             }
             return true;
+        }
+
+        public void ExplosionAvoisinante()
+        {
+            //Aire où la détection est effectuée.  Carré 3x3 blocs centré sur la mine.
+            AABB detectionAutourMine = new AABB(corpsPhysique.Position - new Vector2(1f), corpsPhysique.Position + new Vector2(1f));
+            bool blocAuDessousEstDetecter = false;
+            //Si à la fin du processus de détection cette variable est toujours fausse, c'est qu'il n'y a plus de bloc sous la mine.
+            mondePhysique.QueryAABB(Fixture =>
+            {
+
+                //Si c'est un objet qui se déplacer et que ce n'est pas la mine elle-même, le processus d'explosion est démarré.
+                //Note : les projectiles sont aussi pris en compte.
+                if (Fixture.Body.BodyType == BodyType.Dynamic && Fixture.Body != corpsPhysique)
+                {
+                    compteRebours.Start();
+                    ExplosionEnclanchee = true;
+                    return false;
+                }
+                //S'il n'y a plus de blocs au dessous, la mine disparaît.
+                if (Fixture.Body.Position == blocAuDessous)
+                {
+                    blocAuDessousEstDetecter = true;
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            },
+                                    ref detectionAutourMine);
+            //S'il n'y a plus de blocs au dessous, la mine disparaît.
+            if (blocAuDessousEstDetecter == false)
+            {
+                explose = true;
+                ExplosionEnclanchee = true;
+            }
         }
     }
 }

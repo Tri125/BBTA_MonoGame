@@ -199,7 +199,7 @@ namespace BBTA.Elements
                 monTour = false;
                 if (pointDeVie < 0)
                 {
-                    corpsPhysique.Dispose(); //Le corps physique est supprimé du monde physique, ce qui aura pour conséquence de tuer le joueur.
+                    DetruireDeForce();
                 }
             }
         }
