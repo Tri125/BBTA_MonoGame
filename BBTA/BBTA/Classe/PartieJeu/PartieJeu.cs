@@ -248,8 +248,11 @@ namespace BBTA.Partie_De_Jeu
                     //Si l'acteur est tombé dans le vide, changement d'équipe
                     if (mondePhysique.BodyList[nbCorps] == equipeActive.JoueurActif.ObtenirCorpsPhysique())
                     {
-                        EstEnTransition = true;
-                        ChangementEquipe();
+                        if (EstEnTransition == false)
+                        {
+                            ChangementEquipe();
+                            EstEnTransition = true;
+                        }
                         camPartie.SeDirigerVers(equipeActive.JoueurActif);
                     }
 
