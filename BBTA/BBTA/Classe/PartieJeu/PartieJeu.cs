@@ -256,7 +256,7 @@ namespace BBTA.Partie_De_Jeu
                             EstEnTransition = true;
                         }
                     }
-                    else if (mondePhysique.BodyList[nbCorps].UserData is Projectile)
+                    else if (mondePhysique.BodyList[nbCorps].UserData is Projectile && !EstEnTransition)
                     {
                         ChangementEquipe();
                         changementDequipeLieu = true;
