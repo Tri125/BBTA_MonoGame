@@ -193,6 +193,10 @@ namespace BBTA.Elements
                     ExplosionEnclanchee = true;
                     return false;
                 }
+                else
+                {
+                    return true;
+                }
                 //S'il n'y a plus de blocs au dessous, la mine disparaît.
                 if (Fixture.Body.Position == blocAuDessous)
                 {
