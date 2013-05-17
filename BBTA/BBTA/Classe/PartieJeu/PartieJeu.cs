@@ -409,7 +409,7 @@ namespace BBTA.Partie_De_Jeu
             //Affichage de la carte et des joueurs.
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, 
                               Resolution.getTransformationMatrix() * camPartie.get_transformation(GraphicsDevice));
-            carte.Draw(spriteBatch, camPartie.Pos, GraphicsDevice.Viewport);
+            carte.Draw(spriteBatch, camPartie.Pos);
             foreach (Equipe equipe in equipes)
             {
                 equipe.Draw(spriteBatch);
