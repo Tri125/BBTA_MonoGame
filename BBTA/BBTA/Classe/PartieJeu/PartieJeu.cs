@@ -253,9 +253,13 @@ namespace BBTA.Partie_De_Jeu
                             ChangementEquipe();
                             EstEnTransition = true;
                         }
-                        camPartie.SeDirigerVers(equipeActive.JoueurActif);
+                    }
+                    else if (mondePhysique.BodyList[nbCorps].UserData is Projectile)
+                    {
+                        ChangementEquipe();
                     }
 
+                    camPartie.SeDirigerVers(equipeActive.JoueurActif);
                     mondePhysique.RemoveBody(mondePhysique.BodyList[nbCorps]);
                     mondePhysique.BodyList[nbCorps].IsDisposed = true; //Lorsque l'objet détenant ce corps entrera dans son Update, il se détruira.
                 }

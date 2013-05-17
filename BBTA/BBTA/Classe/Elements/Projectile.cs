@@ -53,6 +53,7 @@ namespace BBTA.Elements
             corpsPhysique.Position = positionDepart;
             corpsPhysique.BodyType = BodyType.Dynamic;
             corpsPhysique.LinearVelocity = vitesse;
+            corpsPhysique.UserData = this;
         }
 
         /// <summary>
