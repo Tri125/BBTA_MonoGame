@@ -35,7 +35,7 @@ namespace BBTA
         Pause = 5           //État que le joueur accède lorsqu'il est en jeu -> Jeu, Accueil ou Quitter
     }
 
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class Game1 : Game
     {
         //État initial du jeu
         EtatJeu EtatActuel = EtatJeu.Accueil;
@@ -45,10 +45,10 @@ namespace BBTA
         MouseState avant;
         MouseState now;
         private OutilGraphe TesteGraphe;
-        private GestionMusique gestionnaireMusique;
+        //private GestionMusique gestionnaireMusique;
         //Évènement utilisé pour communiquer un changement d'état du jeu gestionnaire de musique.
-        private event EventHandler ChangementEtat;
-        private GestionSon gestionnaireSon;
+        //private event EventHandler ChangementEtat;
+        //private GestionSon gestionnaireSon;
 
         private MenuAccueil acc;
         private PartieJeu partie;
@@ -95,15 +95,15 @@ namespace BBTA
             // TODO: Add your initialization logic here
             EventInput.EventInput.Initialize(Window);
 
-            gestionnaireMusique = new GestionMusique(this);
-            this.Components.Add(gestionnaireMusique);
-            ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
+            //gestionnaireMusique = new GestionMusique(this);
+            //this.Components.Add(gestionnaireMusique);
+            //ChangementEtat += gestionnaireMusique.ChangementEtatJeu;
 
-            gestionnaireSon = new GestionSon(this);
-            this.Components.Add(gestionnaireSon);
+            //gestionnaireSon = new GestionSon(this);
+            //this.Components.Add(gestionnaireSon);
             //On enregistre gestionnaireSon en tant que Services. Cela permet aux classes externes de consommer gestionnaireSon
             //sans avoir de référence ou de paramètre.
-            Services.AddService(typeof(GestionSon), gestionnaireSon);
+            //Services.AddService(typeof(GestionSon), gestionnaireSon);
 
             //Etat Accueil
             acc = new MenuAccueil(this);
@@ -130,10 +130,10 @@ namespace BBTA
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ChangementEtat(this.EtatActuel, EventArgs.Empty);
+            //ChangementEtat(this.EtatActuel, EventArgs.Empty);
             //Pour le menu des options de configuration, on donne en paramètre le gestionnaire de son et celui de la musique
             //pour lié les événements correspondant au contrôle du volume.
-            option.InitControlAudio(gestionnaireMusique, gestionnaireSon);
+            //option.InitControlAudio(gestionnaireMusique, gestionnaireSon);
             base.LoadContent();
         }
 
@@ -144,8 +144,8 @@ namespace BBTA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            gestionnaireMusique.Update(gameTime);
-            gestionnaireSon.Update(gameTime);
+            //gestionnaireMusique.Update(gameTime);
+            //gestionnaireSon.Update(gameTime);
 
             EtatPrecedent = EtatActuel;
             //Ne roule plus la boucle principale Update si la fenêtre perd le focus.
@@ -265,7 +265,7 @@ namespace BBTA
                 //On signale le gestionnaire de musique par un événement pour jouer une musique approprié.
                 if (EtatActuel != EtatPrecedent)
                 {
-                    ChangementEtat(this.EtatActuel, EventArgs.Empty);
+                    //ChangementEtat(this.EtatActuel, EventArgs.Empty);
                 }
                 base.Update(gameTime);
             }
