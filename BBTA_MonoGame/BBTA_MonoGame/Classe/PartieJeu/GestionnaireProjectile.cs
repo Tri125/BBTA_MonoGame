@@ -67,9 +67,9 @@ namespace BBTA.Partie_De_Jeu
         /// </summary>
         public override void Initialize()
         {
-            gestionnaireSon = Game.Services.GetService(typeof(GestionSon)) as GestionSon;
-            SonLancementArme += gestionnaireSon.SonLancement;
-            SonDestructionArme += gestionnaireSon.SonExplosion;
+            //gestionnaireSon = Game.Services.GetService(typeof(GestionSon)) as GestionSon;
+            //SonLancementArme += gestionnaireSon.SonLancement;
+            //SonDestructionArme += gestionnaireSon.SonExplosion;
             base.Initialize();
         }
 
@@ -115,7 +115,7 @@ namespace BBTA.Partie_De_Jeu
             projectiles[projectiles.Count - 1].Explosion += new Projectile.DelegateExplosion(projectile_Explosion);
             projectiles[projectiles.Count - 1].Detruit +=new EventHandler(GestionnaireProjectile_Detruit);
             enAction = true; //Indique qu'un projectile est en mouvement
-            SonLancementArme(type, EventArgs.Empty);
+            //SonLancementArme(type, EventArgs.Empty);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace BBTA.Partie_De_Jeu
         /// <param name="rayonExplosion">Rayon de dégats de l'explosion</param>
         void projectile_Explosion(Vector2 position, int rayonExplosion)
         {
-            SonDestructionArme(null, new EventArgs());
+            //SonDestructionArme(null, new EventArgs());
             Explosion(position, rayonExplosion);
             rebours.Stop();
             bool yaGrenade = false;

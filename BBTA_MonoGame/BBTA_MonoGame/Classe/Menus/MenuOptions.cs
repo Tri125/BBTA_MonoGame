@@ -249,7 +249,7 @@ namespace BBTA.Menus
             OptionJeu.InformationTouche.Tir = btnTir.Touche;
 
             Game1.chargeurOption.EnregistrementUtilisateur(ref OptionJeu);
-            ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
+            //ChangementVolume(Game1.chargeurOption.OptionActive.InformationSonore, EventArgs.Empty);
         }
 
         /// <summary>
