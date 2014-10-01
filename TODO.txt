@@ -5,3 +5,5 @@
 -Générer un graph au chargement de la partie pour le système d'IA.
 
 -Programmer le système d'IA.
+
+-Faire un parallax pour l'image d'arrière plan.
