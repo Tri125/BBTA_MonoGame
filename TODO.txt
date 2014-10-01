@@ -1,0 +1,7 @@
+-Régler un problème avec les flèches dans le menu de sélection de niveau qui fait que le clique de la sourit n'est pas détecté.
+
+-Rendre le menu de sélection de niveau capable d'utiliser la sourit au lieu de la roulette de la sourit.
+
+-Générer un graph au chargement de la partie pour le système d'IA.
+
+-Programmer le système d'IA.
