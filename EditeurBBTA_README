@@ -1,0 +1,30 @@
+To create a map for "Bang Bang Total Annihilation" start XNATileMapEditor.exe
+Choose the size of the map that you want to create, a size of 20 x 50 is considered small.
+Click on "Nouvelle carte"  (New Map) to set the grid.
+
+Give a name to your map, the minimum number of players for the map, and the maximum number of players
+for the map.
+
+Each tile contain a number, the number indicate the tile type in BBTA.
+
+Currently supported types are:
+
+0   empty
+1   dirt
+-1  spawn point
+
+Be sure to verify that the number of spawn points match your recommended maximum number of players.
+
+Left click on a tile to increment the ID of the tile, right click on it to decrement the ID.
+
+When you are happy, set an output name for your map (Nom de sortie) and click "Sauvegarde" (Save).
+
+Be sure to include the .xml extension to the output name.
+
+Ie:  "Monster.xml" will create a xml file with the name "Monster".
+If you forget to add the extension you can manually add it, but the game will only load compatible *.xml files.
+
+
+The tile editor will create your file in the same folder that the program is located.
+
+Move your map to the "Carte Jeu" folder of BBTA.
