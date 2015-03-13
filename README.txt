@@ -1,7 +1,7 @@
-[!alt](https://i.imgur.com/wipkF8G.png)
-[!alt](https://i.imgur.com/GJ6ZOZP.png)
-[!alt](https://i.imgur.com/QVF6SnE.png)
-[!alt](https://i.imgur.com/t5Yu0fH.png)
+![alt tag](https://i.imgur.com/wipkF8G.png)
+![alt tag](https://i.imgur.com/GJ6ZOZP.png)
+![alt tag](https://i.imgur.com/QVF6SnE.png)
+![alt tag](https://i.imgur.com/t5Yu0fH.png)
 
 Controls are:
 A key aim right
