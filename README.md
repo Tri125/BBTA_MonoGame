@@ -1,3 +1,7 @@
+A small clone of the video game Worms Armageddon originally written with the XNA 4.0 framework, now ported to MonoGame.
+
+Un petit clone du jeu vidéo Worms Armageddon originallement écrit à l'aide du framework XNA 4.0, maintenant sous MonoGame.
+
 ![alt tag](https://i.imgur.com/wipkF8G.png)
 
 ![alt tag](https://i.imgur.com/GJ6ZOZP.png)
